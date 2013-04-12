@@ -40,6 +40,7 @@ FeatureEnvy:
   - Ashikawa::Core::Index#parse_raw_index
   - Ashikawa::Core::Query#allowed_options
   - Ashikawa::Core::Query#prepare_request_data
+  - Ashikawa::Core::Cursor#parse_documents_cursor
   enabled: true
 ClassVariable:
   exclude: []
