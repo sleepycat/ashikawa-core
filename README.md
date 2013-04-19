@@ -62,3 +62,4 @@ If you want to contribute to the project, see CONTRIBUTING.md for details. It co
 * Lucas Dohmen ([@moonglum](https://github.com/moonglum)): Developer
 * Tobias Eilert ([@EinLama](https://github.com/EinLama)): Contributor
 * Markus Schirp ([@mbj](https://github.com/mbj)): Contributor
+* Ettore Berardi ([@ettomatic](https://github.com/ettomatic)): Contributor
