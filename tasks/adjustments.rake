@@ -10,7 +10,6 @@ Rake::Task["ci"].clear
 # * Acceptance, no integration tests
 # * Special Case: ArangoDB needed for Acceptance Tests
 
-
 desc 'Run all specs'
 task :spec => %w[ spec:unit spec:acceptance ]
 
@@ -39,8 +38,8 @@ end
 # * On the CI, ArangoDB is already running so use the special acceptance task
 
 namespace :ci do
-  desc 'Run all metrics except mutant'
-  task :metrics => %w[ metrics:verify_measurements metrics:flog metrics:flay metrics:reek metrics:roodi ]
+  desc 'Run all metrics except mutant and reek'
+  task :metrics => %w[ metrics:coverage spec:integration metrics:yardstick:verify metrics:flog metrics:flay ]
 end
 
 desc 'Run all metrics and specs'
