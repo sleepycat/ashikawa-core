@@ -1,10 +1,11 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 
-if ENV['COVERAGE'] == 'true'
-  require 'simplecov'
-  require 'coveralls'
+require 'simplecov'
+require 'coveralls'
 
+unless defined?(Guard)
+  # Do not run SimpleCov in Guard
   SimpleCov.formatter = Coveralls::SimpleCov::Formatter
   SimpleCov.start do
     command_name     'spec:unit'
