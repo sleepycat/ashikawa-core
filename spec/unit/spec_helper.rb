@@ -1,6 +1,19 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 
+if ENV['COVERAGE'] == 'true'
+  require 'simplecov'
+  require 'coveralls'
+
+  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+  SimpleCov.start do
+    command_name     'spec:unit'
+    add_filter       'config'
+    add_filter       'spec'
+    minimum_coverage 99
+  end
+end
+
 # Helper to simulate Server Responses. Parses the fixtures in the spec folder
 require 'multi_json'
 def server_response(path)

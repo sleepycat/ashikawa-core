@@ -39,8 +39,18 @@ end
 
 namespace :ci do
   desc 'Run all metrics except mutant and reek'
-  task :metrics => %w[ metrics:coverage spec:integration metrics:yardstick:verify metrics:flog metrics:flay ]
+  task :metrics => %w[
+    metrics:coverage
+    spec:integration
+    metrics:yardstick:verify
+    metrics:flog
+    metrics:flay
+  ]
 end
 
 desc 'Run all metrics and specs'
-task :ci => %w[ spec:unit spec:acceptance_with_running_arangodb ci:metrics ]
+task :ci => %w[
+  spec:unit
+  spec:acceptance_with_running_arangodb
+  ci:metrics
+]
