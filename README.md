@@ -64,3 +64,4 @@ If you want to contribute to the project, see CONTRIBUTING.md for details. It co
 * Tobias Eilert ([@EinLama](https://github.com/EinLama)): Contributor
 * Markus Schirp ([@mbj](https://github.com/mbj)): Contributor
 * Ettore Berardi ([@ettomatic](https://github.com/ettomatic)): Contributor
+* Samuel Richardson ([@Rodeoclash](https://github.com/Rodeoclash)): Contributor
