@@ -55,7 +55,7 @@ module Ashikawa
 
         begin
           @current.each do |raw_document|
-            yield raw_document.has_key?("_from") && raw_document.has_key?("_to") ? Edge.new(@database, raw_document) : Document.new(@database, raw_document)
+            yield parse_raw_document(raw_document)
           end
         end while next_batch
         nil
@@ -72,6 +72,26 @@ module Ashikawa
       end
 
       private
+
+      # Parse a raw document and return a Document or Edge for it
+      #
+      # @param [Hash] raw_document
+      # @return Document | Edge
+      def parse_raw_document(raw_document)
+        detect_document_class_for(raw_document).new(@database, raw_document)
+      end
+
+      # Detect if a raw document is a document or edge and return the class
+      #
+      # @param [Hash] raw_document
+      # @return class
+      def detect_document_class_for(raw_document)
+        if raw_document.has_key?("_from") && raw_document.has_key?("_to")
+          Edge
+        else
+          Document
+        end
+      end
 
       # Pull the raw data from the cursor into this object
       #
