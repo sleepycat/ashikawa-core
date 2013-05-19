@@ -9,6 +9,10 @@ if ENV['COVERAGE'] == 'true'
     add_filter       'spec'
     minimum_coverage 100
   end
+
+  require 'coveralls'
+
+  Coveralls.wear!
 end
 
 require 'ashikawa-core'
