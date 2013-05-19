@@ -77,6 +77,7 @@ module Ashikawa
       #
       # @param [Hash] raw_document
       # @return Document | Edge
+      # @api private
       def parse_raw_document(raw_document)
         detect_document_class_for(raw_document).new(@database, raw_document)
       end
@@ -85,6 +86,7 @@ module Ashikawa
       #
       # @param [Hash] raw_document
       # @return class
+      # @api private
       def detect_document_class_for(raw_document)
         if raw_document.has_key?("_from") && raw_document.has_key?("_to")
           Edge

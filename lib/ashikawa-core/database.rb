@@ -2,13 +2,11 @@ require "ashikawa-core/exceptions/client_error/resource_not_found/collection_not
 require "ashikawa-core/collection"
 require "ashikawa-core/connection"
 require "ashikawa-core/cursor"
+require "ashikawa-core/configuration"
 require "forwardable"
 
 module Ashikawa
   module Core
-    # Configuration of Ashikawa::Core
-    Configuration = Struct.new(:url, :connection, :logger, :adapter)
-
     # An ArangoDB database
     class Database
       COLLECTION_TYPES = {
