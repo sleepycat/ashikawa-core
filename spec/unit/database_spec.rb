@@ -107,14 +107,26 @@ describe Ashikawa::Core::Database do
       subject.authenticate_with :username => "user", :password => "password"
     end
 
-    it "should fetch all available collections" do
+    it "should fetch all available non-system collections" do
       @connection.stub(:send_request) {|path| server_response("collections/all") }
       @connection.should_receive(:send_request).with("collection")
 
-      Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/all")["collections"][0])
-      Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/all")["collections"][1])
+      (0..1).each do |k|
+        Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/all")["collections"][k])
+      end
 
       subject.collections.length.should == 2
+    end
+
+    it "should fetch all available collections if you set admin to system to true" do
+      @connection.stub(:send_request) {|path| server_response("collections/all") }
+      @connection.should_receive(:send_request).with("collection")
+
+      (0..6).each do |k|
+        Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/all")["collections"][k])
+      end
+
+      subject.collections(true).length.should == 7
     end
 
     it "should create a non volatile collection by default" do

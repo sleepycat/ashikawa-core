@@ -56,9 +56,10 @@ module Ashikawa
       #   database["a"]
       #   database["b"]
       #   database.collections # => [ #<Collection name="a">, #<Collection name="b">]
-      def collections
-        response = send_request("collection")
-        response["collections"].map { |collection| Ashikawa::Core::Collection.new(self, collection) }
+      def collections(system = false)
+        raw_collections = send_request("collection")["collections"]
+        raw_collections.delete_if { |collection| collection["name"].start_with?("_") } unless system
+        parse_raw_collections(raw_collections)
       end
 
       # Create a Collection based on name
@@ -126,6 +127,17 @@ module Ashikawa
           :logger => logger,
           :adapter => adapter
         })
+      end
+
+      # Parse a raw collection
+      #
+      # @param [Array] raw_collections
+      # @return [Array]
+      # @api private
+      def parse_raw_collections(raw_collections)
+        raw_collections.map { |collection|
+          Ashikawa::Core::Collection.new(self, collection)
+        }
       end
     end
   end
