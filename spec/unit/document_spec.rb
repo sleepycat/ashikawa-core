@@ -66,6 +66,16 @@ describe Ashikawa::Core::Document do
       hash.should be_instance_of Hash
       hash["first_name"].should == subject["first_name"]
     end
+
+    it "should be refreshable" do
+      database.should_receive(:send_request).with("document/#{raw_data['_id']}", {}).and_return {
+        { "name" => "Jeff" }
+      }
+
+      refreshed_subject = subject.refresh!
+      refreshed_subject.should == subject
+      subject["name"].should == "Jeff"
+    end
   end
 
   describe "initialized document without ID" do

@@ -361,7 +361,7 @@ module Ashikawa
       def create_document(attributes)
         raise "Can't create a document in an edge collection" if @content_type == :edge
         response = send_request_for_content(:post => attributes)
-        Document.new(@database, response)
+        Document.new(@database, response).refresh!
       end
 
       alias :<< :create_document
@@ -378,7 +378,7 @@ module Ashikawa
       def create_edge(from, to, attributes)
         raise "Can't create an edge in a document collection" if @content_type == :document
         response = send_request("edge?collection=#{@id}&from=#{from.id}&to=#{to.id}", :post => attributes)
-        Edge.new(@database, response)
+        Edge.new(@database, response).refresh!
       end
 
       # Add an index to the collection

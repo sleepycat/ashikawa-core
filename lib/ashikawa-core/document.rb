@@ -112,9 +112,17 @@ module Ashikawa
       #   document = Ashikawa::Core::Document.new(database, raw_document)
       #   document['occupation'] = 'Not occupied'
       #   document.save
-      def save()
+      def save
         check_if_persisted!
         send_request_for_document(:put => @content)
+      end
+
+      # Get a fresh version of this document from the database
+      #
+      # @return self
+      # @api public
+      def refresh!
+        parse_raw_document(send_request_for_document)
       end
 
       protected

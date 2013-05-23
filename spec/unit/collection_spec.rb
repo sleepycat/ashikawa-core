@@ -151,10 +151,23 @@ describe Ashikawa::Core::Collection do
         @database.stub(:send_request).with("document?collection=60768679", :post => { "name" => "The Dude" }).and_return do
           server_response('documents/new-example_1-137249191')
         end
-        @database.stub(:send_request).with("document/60768679/333", :post => { "name" => "The Dude" }).and_return { server_response('documents/example_1-137249191') }
+        @database.stub(:send_request).with("document/60768679/333", :post => {
+          "name" => "The Dude"
+        }).and_return {
+          {
+            "_id" => "example_1/137249191",
+            "_rev" => "137249191",
+            "_key" => "137249191"
+          }
+        }
+        @database.stub(:send_request).with("document/60768679/333", {}).and_return { server_response('documents/example_1-137249191') }
 
         # Documents need to get initialized:
-        Ashikawa::Core::Document.should_receive(:new)
+        Ashikawa::Core::Document.should_receive(:new).and_return {
+          document = double
+          document.should_receive(:refresh!)
+          document
+        }
 
         subject.create_document({"name" => "The Dude"})
       end
@@ -166,7 +179,11 @@ describe Ashikawa::Core::Collection do
         @database.stub(:send_request).with("document/60768679/333").and_return { server_response('documents/example_1-137249191') }
 
         # Documents need to get initialized:
-        Ashikawa::Core::Document.should_receive(:new)
+        Ashikawa::Core::Document.should_receive(:new).and_return {
+          document = double
+          document.should_receive(:refresh!)
+          document
+        }
 
         subject << {"name" => "The Dude"}
       end
@@ -248,7 +265,11 @@ describe Ashikawa::Core::Collection do
       to_double.stub(:id => "2")
 
       # Documents need to get initialized:
-      Ashikawa::Core::Edge.should_receive(:new)
+      Ashikawa::Core::Edge.should_receive(:new).and_return {
+        document = double
+        document.should_receive(:refresh!)
+        document
+      }
 
       subject.create_edge(from_double, to_double, {"name" => "The Dude"})
     end

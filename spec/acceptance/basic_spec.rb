@@ -162,5 +162,15 @@ describe "Basics" do
         collection[123].delete
       }.to raise_exception Ashikawa::Core::DocumentNotFoundException
     end
+
+    it "should be possible to refresh a document" do
+      changed_document = collection[document_key]
+      changed_document["name"] = "New Name"
+      changed_document.save
+
+      subject["name"].should == "The Dude"
+      subject.refresh!
+      subject["name"].should == "New Name"
+    end
   end
 end
