@@ -333,8 +333,8 @@ module Ashikawa
       # @return Document
       # @api public
       # @example Fetch the document with the ID 12345
-      #   document = collection[12345]
-      def [](document_id)
+      #   document = collection.fetch(12345)
+      def fetch(document_id)
         response = send_request_for_content_id(document_id)
         @content_class.new(@database, response)
       end
