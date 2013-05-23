@@ -71,9 +71,9 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.first_example({ "color" => "red"}) # => #<Document id=2444 color="red">
       def first_example(example = {})
-        simple_query_request("simple/first-example",
-          { :example => example },
-          [:example])
+        request_data = prepare_request_data({ :example => example, :collection => collection.name })
+        server_response = send_request("simple/first-example", { :put => request_data })
+        Document.new(database, server_response["document"])
       end
 
       # Looks for documents in a collection based on location

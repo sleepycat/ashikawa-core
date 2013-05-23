@@ -103,11 +103,7 @@ module Ashikawa
       def parse_raw_cursor(raw_cursor)
         @id       = raw_cursor['id']
         @has_more = raw_cursor['hasMore']
-        if raw_cursor['result']
-          parse_documents_cursor(raw_cursor)
-        elsif raw_cursor['document']
-          parse_document_cursor(raw_cursor)
-        end
+        parse_documents_cursor(raw_cursor)
         self
       end
 
@@ -119,16 +115,6 @@ module Ashikawa
       def parse_documents_cursor(raw_cursor)
         @current = raw_cursor['result']
         @length  = raw_cursor['count'].to_i if raw_cursor.has_key?('count')
-      end
-
-      # Parse the cursor for a single document
-      #
-      # @param [Hash] raw_cursor
-      # @return self
-      # @api private
-      def parse_document_cursor(raw_cursor)
-        @current = [raw_cursor['document']]
-        @length  = 1
       end
 
       # Get a new batch from the server
