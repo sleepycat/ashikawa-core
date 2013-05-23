@@ -1,12 +1,16 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 
+# Do not run SimpleCov in Guard
 unless defined?(Guard)
   require 'simplecov'
   require 'coveralls'
 
-  # Do not run SimpleCov in Guard
-  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+    SimpleCov::Formatter::HTMLFormatter,
+    Coveralls::SimpleCov::Formatter
+  ]
+
   SimpleCov.start do
     command_name     'spec:unit'
     add_filter       'config'
