@@ -149,6 +149,26 @@ describe Ashikawa::Core::Database do
       subject.create_collection("volatile_collection", :is_volatile => true)
     end
 
+    it "should create an autoincrement collection when asked" do
+      @connection.should_receive(:send_request).with("collection",
+        :post => { :name => "autoincrement_collection", :keyOptions => {
+          :type => "autoincrement",
+          :offset => 0,
+          :increment => 10,
+          :allowUserKeys => false
+        }
+      })
+
+      Ashikawa::Core::Collection.should_receive(:new)
+
+      subject.create_collection("autoincrement_collection", :key_options => {
+        :type => :autoincrement,
+        :offset => 0,
+        :increment => 10,
+        :allow_user_keys => false
+      })
+    end
+
     it "should create an edge collection when asked" do
       @connection.stub(:send_request) { |path| server_response("collections/60768679") }
       @connection.should_receive(:send_request).with("collection",

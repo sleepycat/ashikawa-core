@@ -73,10 +73,7 @@ module Ashikawa
       #   database = Ashikawa::Core::Database.new("http://localhost:8529")
       #   database.create_collection("a", :isVolatile => true) # => #<Collection name="a">
       def create_collection(collection_identifier, opts={})
-        params = { :name => collection_identifier }
-        params[:isVolatile] = true if opts[:is_volatile] == true
-        params[:type] = COLLECTION_TYPES[opts[:content_type]] if opts.has_key?(:content_type)
-        response = send_request("collection", :post => params)
+        response = send_request("collection", :post => translate_params(collection_identifier, opts))
         Ashikawa::Core::Collection.new(self, response)
       end
 
@@ -114,6 +111,8 @@ module Ashikawa
         Query.new(self)
       end
 
+      private
+
       # Setup the connection object
       #
       # @param [String] url
@@ -138,6 +137,34 @@ module Ashikawa
         raw_collections.map { |collection|
           Ashikawa::Core::Collection.new(self, collection)
         }
+      end
+
+      # Translate the key options into the required format
+      #
+      # @param [Hash] key_options
+      # @return [Hash]
+      # @api private
+      def translate_key_options(key_options)
+        {
+          :type => key_options[:type].to_s,
+          :offset => key_options[:offset],
+          :increment => key_options[:increment],
+          :allowUserKeys => key_options[:allow_user_keys]
+        }
+      end
+
+      # Translate the params into the required format
+      #
+      # @param [String] collection_identifier
+      # @param [Hash] opts
+      # @return [Hash]
+      # @api private
+      def translate_params(collection_identifier, opts)
+        params = { :name => collection_identifier }
+        params[:isVolatile] = true if opts[:is_volatile] == true
+        params[:type] = COLLECTION_TYPES[opts[:content_type]] if opts.has_key?(:content_type)
+        params[:keyOptions] = translate_key_options(opts[:key_options]) if opts.has_key?(:key_options)
+        params
       end
     end
   end

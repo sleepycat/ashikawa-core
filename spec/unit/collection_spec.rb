@@ -122,6 +122,16 @@ describe Ashikawa::Core::Collection do
       subject.wait_for_sync = true
     end
 
+    it "should check for the key options" do
+      raw_key_options = double
+      @database.should_receive(:send_request).with("collection/60768679/properties", {}).and_return { { "keyOptions" => raw_key_options } }
+
+      key_options = double
+      Ashikawa::Core::KeyOptions.stub(:new).with(raw_key_options).and_return { key_options }
+
+      subject.key_options.should == key_options
+    end
+
     it "should change its name" do
       @database.stub(:send_request).with("collection/60768679/rename", :put => {"name" => "my_new_name"})
       @database.should_receive(:send_request).with("collection/60768679/rename", :put => {"name" => "my_new_name"})

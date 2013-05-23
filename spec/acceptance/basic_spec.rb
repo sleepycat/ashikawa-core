@@ -38,6 +38,20 @@ describe "Basics" do
       subject["volatile_collection"].volatile?.should be_true
     end
 
+    it "should create an autoincrementing collection" do
+      subject.create_collection("autoincrement_collection", :is_volatile => true, :key_options => {
+        :type => :autoincrement,
+        :increment => 10,
+        :allow_user_keys => false
+      })
+      key_options = subject["autoincrement_collection"].key_options
+
+      key_options.type.should == "autoincrement"
+      key_options.offset.should == 0
+      key_options.increment.should == 10
+      key_options.allow_user_keys.should == false
+    end
+
     it "should be possible to create an edge collection" do
       subject.create_collection("edge_collection", :content_type => :edge)
       subject["edge_collection"].content_type.should == :edge

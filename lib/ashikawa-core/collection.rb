@@ -5,6 +5,7 @@ require "ashikawa-core/cursor"
 require "ashikawa-core/query"
 require "ashikawa-core/status"
 require "ashikawa-core/figure"
+require "ashikawa-core/key_options"
 require "forwardable"
 
 module Ashikawa
@@ -203,6 +204,17 @@ module Ashikawa
       #   collection.wait_for_sync = true
       def wait_for_sync=(new_value)
         send_information_to_server(:properties, :waitForSync, new_value)
+      end
+
+      # Get information about the type of keys of this collection
+      #
+      # @return [KeyOptions]
+      # @api public
+      # @example Check if this collection has autoincrementing keys
+      #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
+      #   collection.key_options.type # => "autoincrement"
+      def key_options
+        KeyOptions.new(get_information_from_server(:properties, :keyOptions))
       end
 
       # Returns the number of documents in the collection
