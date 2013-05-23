@@ -14,7 +14,7 @@ describe Ashikawa::Core::Connection do
 
   it "should send a get request" do
     request_stub.get("/_api/my/path") do
-      [200, response_headers, MultiJson.dump({ "name" => "dude" })]
+      [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
     subject.send_request "my/path"
@@ -25,7 +25,7 @@ describe Ashikawa::Core::Connection do
   it "should send a post request" do
     request_stub.post("/_api/my/path") do |request|
       request[:body].should == "{\"name\":\"new_collection\"}"
-      [200, response_headers, MultiJson.dump({ "name" => "dude" })]
+      [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
     subject.send_request "my/path", :post => { :name => 'new_collection' }
@@ -36,7 +36,7 @@ describe Ashikawa::Core::Connection do
   it "should send a put request" do
     request_stub.put("/_api/my/path") do |request|
       request[:body].should == '{"name":"new_collection"}'
-      [200, response_headers, MultiJson.dump({ "name" => "dude" })]
+      [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
     subject.send_request "my/path", :put => { :name => 'new_collection' }
@@ -46,7 +46,7 @@ describe Ashikawa::Core::Connection do
 
   it "should send a delete request" do
     request_stub.delete("/_api/my/path") do |request|
-      [200, response_headers, MultiJson.dump({ "name" => "dude" })]
+      [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
     subject.send_request "my/path", :delete => { }
@@ -57,7 +57,7 @@ describe Ashikawa::Core::Connection do
   it "should write JSON request" do
     request_stub.post("/_api/my/path") do |req|
       req[:body].should == "{\"test\":1}"
-      [200, response_headers, MultiJson.dump({ "name" => "dude" })]
+      [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
     subject.send_request("my/path", :post => { "test" => 1})
@@ -101,7 +101,7 @@ describe Ashikawa::Core::Connection do
       pending "Find out how to check for basic auth via Faraday Stubs"
 
       request_stub.get("/_api/my/path") do |request|
-        [200, response_headers, MultiJson.dump({ "name" => "dude" })]
+        [200, response_headers, JSON.generate({ "name" => "dude" })]
       end
 
       subject.authenticate_with :username => "user", :password => "pass"
@@ -218,7 +218,7 @@ describe Ashikawa::Core::Connection do
 
     it "should log a get request" do
       request_stub.get("/_api/test") do
-        [200, response_headers, MultiJson.dump({:a => 1})]
+        [200, response_headers, JSON.generate({:a => 1})]
       end
       logger.should_receive(:info).with("GET #{ARANGO_HOST}/_api/test ")
       logger.should_receive(:info).with("200 {\"a\":1}")
@@ -229,7 +229,7 @@ describe Ashikawa::Core::Connection do
       pending "This fails on 1.8.7 for unknown reasons. Will investigate." if RUBY_VERSION == "1.8.7"
 
       request_stub.post("/_api/test") do
-        [201, response_headers, MultiJson.dump({:b => 2})]
+        [201, response_headers, JSON.generate({:b => 2})]
       end
       logger.should_receive(:info).with("POST #{ARANGO_HOST}/_api/test {:a=>2}")
       logger.should_receive(:info).with("201 {\"b\":2}")

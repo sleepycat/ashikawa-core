@@ -1,5 +1,5 @@
 require "faraday"
-require "multi_json"
+require "json"
 require "ashikawa-core/exceptions/client_error"
 require "ashikawa-core/exceptions/client_error/resource_not_found"
 require "ashikawa-core/exceptions/client_error/resource_not_found/index_not_found"
@@ -64,9 +64,9 @@ module Ashikawa
       # @return [Hash] The parsed body
       # @api private
       def parse_json(env)
-        raise MultiJson::LoadError unless json_content_type?(env[:response_headers]["content-type"])
-        MultiJson.load(env[:body])
-      rescue MultiJson::LoadError
+        raise JSON::ParserError unless json_content_type?(env[:response_headers]["content-type"])
+        JSON.parse(env[:body])
+      rescue JSON::ParserError
         raise Ashikawa::Core::JsonError
       end
 
