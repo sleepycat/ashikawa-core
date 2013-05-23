@@ -140,6 +140,34 @@ describe Ashikawa::Core::Collection do
         subject.fetch(333)
       end
 
+      it "should receive a document by ID via []" do
+        @database.stub(:send_request).with("document/60768679/333", {}).and_return { server_response('documents/example_1-137249191') }
+        @database.should_receive(:send_request).with("document/60768679/333", {})
+
+        # Documents need to get initialized:
+        Ashikawa::Core::Document.should_receive(:new)
+
+        subject[333]
+      end
+
+      it "should throw an exception when the document was not found during a fetch" do
+        @database.stub(:send_request).and_return {
+          raise Ashikawa::Core::DocumentNotFoundException
+        }
+
+        expect {
+          subject.fetch(123)
+        }.to raise_exception Ashikawa::Core::DocumentNotFoundException
+      end
+
+      it "should return nil when the document was not found when using []" do
+        @database.stub(:send_request).and_return {
+          raise Ashikawa::Core::DocumentNotFoundException
+        }
+
+        subject[123].should == nil
+      end
+
       it "should replace a document by ID" do
         @database.stub(:send_request).with("document/60768679/333", :put => {"name" => "The Dude"})
         @database.should_receive(:send_request).with("document/60768679/333", :put => {"name" => "The Dude"})

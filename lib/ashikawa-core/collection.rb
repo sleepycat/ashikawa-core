@@ -339,6 +339,19 @@ module Ashikawa
         @content_class.new(@database, response)
       end
 
+      # Fetch a certain document by its ID, return nil if the document does not exist
+      #
+      # @param [Integer] document_id the id of the document
+      # @return Document
+      # @api public
+      # @example Fetch the document with the ID 12345
+      #   document = collection[12345]
+      def [](document_id)
+        fetch(document_id)
+      rescue DocumentNotFoundException
+        nil
+      end
+
       # Replace a document by its ID
       #
       # @param [Integer] document_id the id of the document
