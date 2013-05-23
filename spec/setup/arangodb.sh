@@ -11,7 +11,7 @@ if [ ! -d "$DIR/$NAME" ]; then
   echo "wget http://www.arangodb.org/travisCI/$NAME.tar.gz"
   wget http://www.arangodb.org/travisCI/$NAME.tar.gz
   echo "tar zxf $NAME.tar.gz"
-  tar zxf $NAME.tar.gz
+  tar zvxf $NAME.tar.gz
 fi
 
 ARCH=$(arch)
@@ -25,8 +25,7 @@ if [ "$ARCH" == "x86_64" ]; then
   ARANGOD="${ARANGOD}_x86_64"
 fi
 
-# (re-)create database directory
-rm -rf ${TMP_DIR}
+# create database directory
 mkdir ${TMP_DIR}
 
 echo "Starting arangodb '${ARANGOD}'"
@@ -36,8 +35,10 @@ ${ARANGOD} \
   --configuration none  \
   --server.endpoint tcp://127.0.0.1:8529 \
   --javascript.startup-directory ${ARANGODB_DIR}/js \
-  --javascript.modules-path ${ARANGODB_DIR}/js/server/modules:${ARANGODB_DIR}/js/common/modules \
-  --javascript.action-directory ${ARANGODB_DIR}/js/actions/system  \
+  --server.admin-directory ${ARANGODB_DIR}/html/admin \
+  --javascript.modules-path ${ARANGODB_DIR}/js/server/modules:${ARANGODB_DIR}/js/common/modules:${ARANGODB_DIR}/js/node \
+  --javascript.package-path ${ARANGODB_DIR}/js/npm:${ARANGODB_DIR}/js/common/test-data/modules \
+  --javascript.action-directory ${ARANGODB_DIR}/js/actions  \
   --database.maximal-journal-size 1048576  \
   --server.disable-admin-interface true \
   --server.disable-authentication true \
