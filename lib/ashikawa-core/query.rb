@@ -11,12 +11,16 @@ module Ashikawa
     class Query
       extend Forwardable
 
-      ALLOWED_KEYS_FOR_ALL        = [:limit, :skip]
-      ALLOWED_KEYS_FOR_BY_EXAMPLE = [:limit, :skip, :example]
-      ALLOWED_KEYS_FOR_NEAR       = [:latitude, :longitude, :distance, :skip, :limit, :geo]
-      ALLOWED_KEYS_FOR_WITHIN     = [:latitude, :longitude, :radius, :distance, :skip, :limit, :geo]
-      ALLOWED_KEYS_FOR_IN_RANGE   = [:attribute, :left, :right, :closed, :limit, :skip]
-      ALLOWED_KEYS_FOR_EXECUTE    = [:query, :count, :batch_size]
+      ALLOWED_KEYS_FOR_PATH = {
+        "simple/all"           => [:limit, :skip, :collection],
+        "simple/by-example"    => [:limit, :skip, :example, :collection],
+        "simple/near"          => [:latitude, :longitude, :distance, :skip, :limit, :geo, :collection],
+        "simple/within"        => [:latitude, :longitude, :radius, :distance, :skip, :limit, :geo, :collection],
+        "simple/range"         => [:attribute, :left, :right, :closed, :limit, :skip, :collection],
+        "cursor"               => [:query, :count, :batch_size, :collection],
+        "query"                => [:query],
+        "simple/first-example" => [:example, :collection]
+      }
 
       # Delegate sending requests to the connection
       def_delegator :@connection, :send_request
@@ -45,7 +49,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.all # => #<Cursor id=33>
       def all(options={})
-        simple_query_request("simple/all", options, ALLOWED_KEYS_FOR_ALL)
+        simple_query_request("simple/all", options)
       end
 
       # Looks for documents in a collection which match the given criteria
@@ -61,10 +65,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.by_example({ "color" => "red" }, :options => { :limit => 1 }) #=> #<Cursor id=2444>
       def by_example(example={}, options={})
-        simple_query_request("simple/by-example",
-          { :example => example }.merge(options),
-          ALLOWED_KEYS_FOR_BY_EXAMPLE
-          )
+        simple_query_request("simple/by-example", { :example => example }.merge(options))
       end
 
       # Looks for one document in a collection which matches the given criteria
@@ -77,7 +78,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.first_example({ "color" => "red"}) # => #<Document id=2444 color="red">
       def first_example(example = {})
-        request_data = prepare_request_data({ :example => example, :collection => collection.name })
+        request_data = prepare_request_data("simple/first-example", { :example => example, :collection => collection.name })
         server_response = send_request("simple/first-example", { :put => request_data })
         Document.new(database, server_response["document"])
       end
@@ -97,7 +98,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.near(:latitude => 37.331693, :longitude => -122.030468)
       def near(options={})
-        simple_query_request("simple/near", options, ALLOWED_KEYS_FOR_NEAR)
+        simple_query_request("simple/near", options)
       end
 
       # Looks for documents in a collection within a radius
@@ -116,8 +117,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.within(:latitude => 37.331693, :longitude => -122.030468, :radius => 100)
       def within(options={})
-        simple_query_request("simple/within", options, ALLOWED_KEYS_FOR_WITHIN)
-
+        simple_query_request("simple/within", options)
       end
 
       # Looks for documents in a collection with an attribute between two values
@@ -135,7 +135,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.within(:latitude => 37.331693, :longitude => -122.030468, :radius => 100)
       def in_range(options={})
-        simple_query_request("simple/range", options, ALLOWED_KEYS_FOR_IN_RANGE)
+        simple_query_request("simple/range", options)
       end
 
       # Send an AQL query to the database
@@ -149,7 +149,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.execute("FOR u IN users LIMIT 2") # => #<Cursor id=33>
       def execute(query, options = {})
-        post_request("cursor", options.merge({ :query => query }), ALLOWED_KEYS_FOR_EXECUTE)
+        wrapped_request("cursor", :post, options.merge({ :query => query }))
       end
 
       # Test if an AQL query is valid
@@ -161,7 +161,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.valid?("FOR u IN users LIMIT 2") # => true
       def valid?(query)
-        !!post_request("query", { :query => query })
+        !!wrapped_request("query", :post, { :query => query })
       rescue Ashikawa::Core::BadSyntax
         false
       end
@@ -191,19 +191,12 @@ module Ashikawa
       # @param [Array<Symbol>] allowed_keys
       # @return [Hash] The filtered Hash
       # @api private
-      def allowed_options(options, allowed_keys)
+      def prepare_request_data(path, options)
+        allowed_keys = ALLOWED_KEYS_FOR_PATH.fetch(path)
         options.keep_if { |key, _| allowed_keys.include?(key) }
-      end
-
-      # Transforms the keys into the required format
-      #
-      # @param [Hash] request_data
-      # @return [Hash] Cleaned request data
-      # @api private
-      def prepare_request_data(request_data)
-        Hash[request_data.map { |key, value|
+        Hash[options.map { |key, value|
           [key.to_s.gsub(/_(.)/) { $1.upcase }, value]
-        }].reject { |_, value| value.nil? }
+        }]
       end
 
       # Send a simple query to the server
@@ -214,11 +207,8 @@ module Ashikawa
       # @return [String] Server response
       # @raise [NoCollectionProvidedException] If you provided a database, no collection
       # @api private
-      def simple_query_request(path, request_data, allowed_keys)
-        request_data = request_data.merge({ :collection => collection.name })
-        put_request(path,
-          request_data,
-          allowed_keys << :collection)
+      def simple_query_request(path, request_data)
+        wrapped_request(path, :put, request_data.merge({ :collection => collection.name }))
       end
 
       # Perform a wrapped request
@@ -229,33 +219,10 @@ module Ashikawa
       # @param [Array] allowed_keys Keys allowed in request_data, if nil: All keys are allowed
       # @return [Cursor]
       # @api private
-      def wrapped_request(path, request_method, request_data, allowed_keys)
-        request_data = allowed_options(request_data, allowed_keys) unless allowed_keys.nil?
-        request_data = prepare_request_data(request_data)
+      def wrapped_request(path, request_method, request_data)
+        request_data = prepare_request_data(path, request_data)
         server_response = send_request(path, { request_method => request_data })
         Cursor.new(database, server_response)
-      end
-
-      # Perform a wrapped put request
-      #
-      # @param [String] path The path for the request
-      # @param [Hash] request_data The data send to the database
-      # @param [Array] allowed_keys Keys allowed in request_data, if nil: All keys are allowed
-      # @return [Cursor]
-      # @api private
-      def put_request(path, request_data, allowed_keys = nil)
-        wrapped_request(path, :put, request_data, allowed_keys)
-      end
-
-      # Perform a wrapped post request
-      #
-      # @param [String] path The path for the request
-      # @param [Hash] request_data The data send to the database
-      # @param [Array] allowed_keys Keys allowed in request_data, if nil: All keys are allowed
-      # @return [Cursor]
-      # @api private
-      def post_request(path, request_data, allowed_keys = nil)
-        wrapped_request(path, :post, request_data, allowed_keys)
       end
     end
   end
