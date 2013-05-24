@@ -226,8 +226,6 @@ describe Ashikawa::Core::Connection do
     end
 
     it "should log a post request" do
-      pending "This fails on 1.8.7 for unknown reasons. Will investigate." if RUBY_VERSION == "1.8.7"
-
       request_stub.post("/_api/test") do
         [201, response_headers, JSON.generate({:b => 2})]
       end

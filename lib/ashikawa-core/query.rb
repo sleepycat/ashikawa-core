@@ -3,7 +3,6 @@ require 'ashikawa-core/document'
 require 'ashikawa-core/exceptions/no_collection_provided'
 require 'ashikawa-core/exceptions/client_error/bad_syntax'
 require 'forwardable'
-require 'backports'
 
 module Ashikawa
   module Core
