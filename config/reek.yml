@@ -26,8 +26,7 @@ FeatureEnvy:
   exclude: []
 IrresponsibleModule:
   enabled: true
-  exclude:
-  - Ashikawa::Core::KeyOptions
+  exclude: []
 LongParameterList:
   enabled: true
   exclude:

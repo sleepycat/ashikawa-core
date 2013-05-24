@@ -1,5 +1,6 @@
 module Ashikawa
   module Core
+    # Options for controlling keys of a collection
     class KeyOptions
       # Either traditional or autoincrement
       #
