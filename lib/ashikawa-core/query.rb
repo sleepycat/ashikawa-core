@@ -77,9 +77,9 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.first_example({ "color" => "red"}) # => #<Document id=2444 color="red">
       def first_example(example = {})
-        request_data = prepare_request_data("simple/first-example", { :example => example, :collection => collection.name })
-        server_response = send_request("simple/first-example", { :put => request_data })
-        Document.new(database, server_response["document"])
+        request = prepare_request("simple/first-example", { :example => example, :collection => collection.name })
+        response = send_request("simple/first-example", { :put => request })
+        Document.new(database, response["document"])
       end
 
       # Looks for documents in a collection based on location
@@ -190,7 +190,7 @@ module Ashikawa
       # @param [Array<Symbol>] allowed_keys
       # @return [Hash] The filtered Hash
       # @api private
-      def prepare_request_data(path, options)
+      def prepare_request(path, options)
         allowed_keys = ALLOWED_KEYS_FOR_PATH.fetch(path)
         options.keep_if { |key, _| allowed_keys.include?(key) }
         Hash[options.map { |key, value|
@@ -201,27 +201,27 @@ module Ashikawa
       # Send a simple query to the server
       #
       # @param [String] path The path for the request
-      # @param [Hash] request_data The data send to the database
+      # @param [Hash] request The data send to the database
       # @param [Array<Symbol>] allowed_keys The keys allowed for this request
       # @return [String] Server response
       # @raise [NoCollectionProvidedException] If you provided a database, no collection
       # @api private
-      def simple_query_request(path, request_data)
-        wrapped_request(path, :put, request_data.merge({ :collection => collection.name }))
+      def simple_query_request(path, request)
+        wrapped_request(path, :put, request.merge({ :collection => collection.name }))
       end
 
       # Perform a wrapped request
       #
       # @param [String] path The path for the request
       # @param [Symbol] request_method The request method to perform
-      # @param [Hash] request_data The data send to the database
-      # @param [Array] allowed_keys Keys allowed in request_data, if nil: All keys are allowed
+      # @param [Hash] request The data send to the database
+      # @param [Array] allowed_keys Keys allowed in request, if nil: All keys are allowed
       # @return [Cursor]
       # @api private
-      def wrapped_request(path, request_method, request_data)
-        request_data = prepare_request_data(path, request_data)
-        server_response = send_request(path, { request_method => request_data })
-        Cursor.new(database, server_response)
+      def wrapped_request(path, request_method, request)
+        request = prepare_request(path, request)
+        response = send_request(path, { request_method => request })
+        Cursor.new(database, response)
       end
     end
   end

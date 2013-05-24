@@ -433,8 +433,8 @@ module Ashikawa
       #   people = database['people']
       #   people.index(1244) #=> #<Index: id=1244...>
       def index(id)
-        server_response = send_request("index/#{@name}/#{id}")
-        Index.new(self, server_response)
+        response = send_request("index/#{@name}/#{id}")
+        Index.new(self, response)
       end
 
       # Get all indices
