@@ -52,7 +52,7 @@ module Ashikawa
       #   document = Ashikawa::Core::Document.new(database, raw_document)
       #   document.check_if_persisted!
       def check_if_persisted!
-        raise DocumentNotFoundException if @id.nil?
+        raise DocumentNotFoundException if @id == :not_persisted
       end
 
       # Get the value of an attribute of the document
@@ -136,9 +136,9 @@ module Ashikawa
       # @return self
       # @api private
       def parse_raw_document(raw_document)
-        @id       = raw_document['_id']
+        @id       = raw_document['_id'] || :not_persisted
         @key      = raw_document['_key']
-        @revision = raw_document['_rev']
+        @revision = raw_document['_rev'] || :not_persisted
         @content  = raw_document.delete_if { |key, value| key.start_with?("_") }
         self
       end

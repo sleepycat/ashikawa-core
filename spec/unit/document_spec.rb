@@ -29,8 +29,8 @@ describe Ashikawa::Core::Document do
 
   it "should initialize data without ID" do
     document = subject.new database, raw_data_without_id
-    document.id.should == nil
-    document.revision.should == nil
+    document.id.should == :not_persisted
+    document.revision.should == :not_persisted
   end
 
   describe "initialized document with ID" do

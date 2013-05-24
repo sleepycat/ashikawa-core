@@ -3,14 +3,16 @@ Attribute:
   enabled: false
   exclude: []
 BooleanParameter:
-  enabled: false
-  exclude: []
+  enabled: true
+  exclude:
+  - Ashikawa::Core::Database#collections
 ClassVariable:
   enabled: true
   exclude: []
 ControlParameter:
-  enabled: false
-  exclude: []
+  enabled: true
+  exclude:
+  - Ashikawa::Core::Database#collections
 DataClump:
   enabled: false
   exclude: []
@@ -45,7 +47,6 @@ NilCheck:
   enabled: true
   exclude:
   - Ashikawa::Core::Database#setup_new_connection
-  - Ashikawa::Core::Document#check_if_persisted!
 RepeatedConditional:
   enabled: true
   exclude:
