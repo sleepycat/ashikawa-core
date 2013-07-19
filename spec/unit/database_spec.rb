@@ -32,7 +32,7 @@ describe Ashikawa::Core::Database do
       :adapter => nil
     })
 
-    database = subject.new do |config|
+    subject.new do |config|
       config.url = "http://localhost:8529"
     end
   end
@@ -48,7 +48,7 @@ describe Ashikawa::Core::Database do
       :adapter => nil
     })
 
-    database = subject.new do |config|
+    subject.new do |config|
       config.url = "http://localhost:8529"
       config.logger = logger
     end
@@ -65,7 +65,7 @@ describe Ashikawa::Core::Database do
       :adapter => adapter
     })
 
-    database = subject.new do |config|
+    subject.new do |config|
       config.url = "http://localhost:8529"
       config.adapter = adapter
     end
@@ -76,7 +76,7 @@ describe Ashikawa::Core::Database do
     logger = double
 
     expect {
-      database = subject.new do |config|
+      subject.new do |config|
         config.adapter = adapter
         config.logger = logger
       end
