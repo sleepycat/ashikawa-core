@@ -4,6 +4,7 @@ require "ashikawa-core/connection"
 require "ashikawa-core/cursor"
 require "ashikawa-core/configuration"
 require "forwardable"
+require "equalizer"
 
 module Ashikawa
   module Core
@@ -15,6 +16,8 @@ module Ashikawa
       }
 
       extend Forwardable
+
+      include Equalizer.new(:host, :port, :scheme)
 
       # Delegate sending requests to the connection
       def_delegator :@connection, :send_request

@@ -1,5 +1,6 @@
 require 'ashikawa-core/document'
 require 'ashikawa-core/edge'
+require 'equalizer'
 
 module Ashikawa
   module Core
@@ -7,6 +8,8 @@ module Ashikawa
     # It is an enumerable.
     class Cursor
       include Enumerable
+
+      include Equalizer.new(:id)
 
       # The ID of the cursor
       # @return [String]

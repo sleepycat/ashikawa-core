@@ -1,9 +1,12 @@
 require 'ashikawa-core/exceptions/client_error/resource_not_found/document_not_found'
+require 'equalizer'
 
 module Ashikawa
   module Core
     # A certain Document within a certain Collection
     class Document
+      include Equalizer.new(:id, :revision)
+
       # The ID of the document (this includes the Collection prefix)
       #
       # @return [String]

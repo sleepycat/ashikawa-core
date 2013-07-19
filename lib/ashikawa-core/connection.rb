@@ -2,6 +2,7 @@ require "forwardable"
 require "faraday"
 require "null_logger"
 require "uri"
+require "equalizer"
 require "ashikawa-core/request_preprocessor"
 require "ashikawa-core/response_preprocessor"
 
@@ -10,6 +11,8 @@ module Ashikawa
     # A Connection via HTTP to a certain host
     class Connection
       extend Forwardable
+
+      include Equalizer.new(:host, :scheme, :port)
 
       # The host part of the connection
       #

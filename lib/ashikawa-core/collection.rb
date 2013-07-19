@@ -7,12 +7,15 @@ require "ashikawa-core/status"
 require "ashikawa-core/figure"
 require "ashikawa-core/key_options"
 require "forwardable"
+require "equalizer"
 
 module Ashikawa
   module Core
     # A certain Collection within the Database
     class Collection
       extend Forwardable
+
+      include Equalizer.new(:id, :name, :content_type, :database)
 
       CONTENT_TYPES = {
         2 => :document,

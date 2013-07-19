@@ -8,7 +8,7 @@ describe Ashikawa::Core::Database do
     double(Ashikawa::Core::Connection)
     double(Ashikawa::Core::Collection)
     double(Ashikawa::Core::Cursor)
-    @connection = double
+    @connection = double("connection", :host => "localhost", :port => 8529, :scheme => "http")
   end
 
   it "should initialize with a connection" do
