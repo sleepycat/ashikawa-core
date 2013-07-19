@@ -62,7 +62,7 @@ describe Ashikawa::Core::Document do
     end
 
     it "should be convertable to a hash" do
-      hash = subject.to_hash
+      hash = subject.hash
       hash.should be_instance_of Hash
       hash["first_name"].should == subject["first_name"]
     end
@@ -97,6 +97,16 @@ describe Ashikawa::Core::Document do
     it "should not store changes to the database" do
       database.should_not_receive :send_request
       expect { subject.save }.to raise_error Ashikawa::Core::DocumentNotFoundException
+    end
+  end
+
+  describe "Deprecated methods" do
+    subject { Ashikawa::Core::Document.new database, raw_data_without_id }
+
+    it "should mark `to_hash` as deprecated" do
+      subject.should_receive(:hash)
+      subject.should_receive(:warn).with("`to_hash` is deprecated, please use `hash`")
+      subject.to_hash
     end
   end
 end
