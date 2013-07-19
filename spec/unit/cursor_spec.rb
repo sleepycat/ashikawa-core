@@ -5,7 +5,7 @@ describe Ashikawa::Core::Cursor do
   subject { Ashikawa::Core::Cursor }
 
   before :each do
-    @database = double()
+    @database = double
     double Ashikawa::Core::Document
   end
 

@@ -41,7 +41,7 @@ module Ashikawa
       #     config.adapter = my_adapter
       #     config.logger = my_logger
       #   end
-      def initialize()
+      def initialize
         configuration = Ashikawa::Core::Configuration.new
         yield(configuration)
         @connection = configuration.connection || setup_new_connection(configuration.url, configuration.logger, configuration.adapter)
@@ -72,7 +72,7 @@ module Ashikawa
       # @example Create a new, volatile collection
       #   database = Ashikawa::Core::Database.new("http://localhost:8529")
       #   database.create_collection("a", :isVolatile => true) # => #<Collection name="a">
-      def create_collection(collection_identifier, opts={})
+      def create_collection(collection_identifier, opts = {})
         response = send_request("collection", :post => translate_params(collection_identifier, opts))
         Ashikawa::Core::Collection.new(self, response)
       end

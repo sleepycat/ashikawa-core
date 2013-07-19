@@ -522,7 +522,7 @@ module Ashikawa
       #
       # @return [String] Response from the server
       # @api private
-      def send_request_for_this_collection(path, method={})
+      def send_request_for_this_collection(path, method = {})
         send_request("collection/#{id}/#{path}", method)
       end
 

@@ -41,6 +41,7 @@ namespace :ci do
   task :metrics => %w[
     metrics:coverage
     metrics:yardstick:verify
+    metrics:rubocop
     metrics:flog
     metrics:flay
     metrics:reek

@@ -8,18 +8,18 @@ describe Ashikawa::Core::KeyOptions do
     type = double
     offset = double
     increment = double
-    allowUserKeys = double
+    allow_user_keys = double
 
-    keyOptions = subject.new({
+    key_options = subject.new({
       "type" => type,
       "offset" => offset,
       "increment" => increment,
-      "allowUserKeys" => allowUserKeys
+      "allowUserKeys" => allow_user_keys
     })
 
-    keyOptions.type.should == type
-    keyOptions.offset.should == offset
-    keyOptions.increment.should == increment
-    keyOptions.allow_user_keys.should == allowUserKeys
+    key_options.type.should == type
+    key_options.offset.should == offset
+    key_options.increment.should == increment
+    key_options.allow_user_keys.should == allow_user_keys
   end
 end

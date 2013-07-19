@@ -8,7 +8,7 @@ describe Ashikawa::Core::Database do
     double(Ashikawa::Core::Connection)
     double(Ashikawa::Core::Collection)
     double(Ashikawa::Core::Cursor)
-    @connection = double()
+    @connection = double
   end
 
   it "should initialize with a connection" do
@@ -26,7 +26,7 @@ describe Ashikawa::Core::Database do
     Ashikawa::Core::Connection.stub(:new).with("http://localhost:8529", {
       :logger => nil,
       :adapter => nil
-    }).and_return(double())
+    }).and_return(double)
     Ashikawa::Core::Connection.should_receive(:new).with("http://localhost:8529", {
       :logger => nil,
       :adapter => nil
@@ -42,7 +42,7 @@ describe Ashikawa::Core::Database do
     Ashikawa::Core::Connection.stub(:new).with("http://localhost:8529", {
       :logger => logger,
       :adapter => nil
-    }).and_return(double())
+    }).and_return(double)
     Ashikawa::Core::Connection.should_receive(:new).with("http://localhost:8529", {
       :logger => logger,
       :adapter => nil
@@ -59,7 +59,7 @@ describe Ashikawa::Core::Database do
     Ashikawa::Core::Connection.stub(:new).with("http://localhost:8529", {
       :logger => nil,
       :adapter => adapter
-    }).and_return(double())
+    }).and_return(double)
     Ashikawa::Core::Connection.should_receive(:new).with("http://localhost:8529", {
       :logger => nil,
       :adapter => adapter
@@ -96,7 +96,8 @@ describe Ashikawa::Core::Database do
   end
 
   describe "initialized database" do
-    subject { Ashikawa::Core::Database.new do |config|
+    subject {
+      Ashikawa::Core::Database.new do |config|
         config.connection = @connection
       end
     }
@@ -207,7 +208,7 @@ describe Ashikawa::Core::Database do
         end
       end
       @connection.should_receive(:send_request).with("collection/new_collection")
-      @connection.should_receive(:send_request).with("collection", :post => { :name => "new_collection"} )
+      @connection.should_receive(:send_request).with("collection", :post => { :name => "new_collection"})
 
       Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/60768679"))
 

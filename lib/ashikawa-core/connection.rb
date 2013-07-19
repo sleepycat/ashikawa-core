@@ -55,7 +55,7 @@ module Ashikawa
         @connection = Faraday.new("#{api_string}/_api") do |connection|
           connection.request  :ashikawa_request,  logger
           connection.response :ashikawa_response, logger
-          connection.adapter *adapter
+          connection.adapter(*adapter)
         end
       end
 
@@ -113,7 +113,7 @@ module Ashikawa
       # @return [Symbol] The HTTP verb used
       # @api private
       def http_verb(params)
-        [:post, :put, :delete].find { |method_name|
+        [:post, :put, :delete].detect { |method_name|
           params.has_key?(method_name)
         } || :get
       end

@@ -5,7 +5,7 @@ describe Ashikawa::Core::Collection do
   subject { Ashikawa::Core::Collection }
 
   before :each do
-    @database = double()
+    @database = double
   end
 
   it "should have a name" do

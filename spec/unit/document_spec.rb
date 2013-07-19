@@ -2,7 +2,7 @@ require 'unit/spec_helper'
 require 'ashikawa-core/document'
 
 describe Ashikawa::Core::Document do
-  let(:database) { double() }
+  let(:database) { double }
   let(:raw_data) {
     {
       "_id" => "1234567/2345678",

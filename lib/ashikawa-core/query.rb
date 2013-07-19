@@ -47,7 +47,7 @@ module Ashikawa
       # @example Get an array with all documents
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.all # => #<Cursor id=33>
-      def all(options={})
+      def all(options = {})
         simple_query_request("simple/all", options)
       end
 
@@ -63,7 +63,7 @@ module Ashikawa
       # @example Find all documents in a collection that are red
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.by_example({ "color" => "red" }, :options => { :limit => 1 }) #=> #<Cursor id=2444>
-      def by_example(example={}, options={})
+      def by_example(example = {}, options = {})
         simple_query_request("simple/by-example", { :example => example }.merge(options))
       end
 
@@ -96,7 +96,7 @@ module Ashikawa
       # @example Find all documents at Infinite Loop
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.near(:latitude => 37.331693, :longitude => -122.030468)
-      def near(options={})
+      def near(options = {})
         simple_query_request("simple/near", options)
       end
 
@@ -115,7 +115,7 @@ module Ashikawa
       # @example Find all documents within a radius of 100 to Infinite Loop
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.within(:latitude => 37.331693, :longitude => -122.030468, :radius => 100)
-      def within(options={})
+      def within(options = {})
         simple_query_request("simple/within", options)
       end
 
@@ -133,7 +133,7 @@ module Ashikawa
       # @example Find all documents within a radius of 100 to Infinite Loop
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.within(:latitude => 37.331693, :longitude => -122.030468, :radius => 100)
-      def in_range(options={})
+      def in_range(options = {})
         simple_query_request("simple/range", options)
       end
 
