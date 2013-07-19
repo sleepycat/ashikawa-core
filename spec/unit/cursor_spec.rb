@@ -6,7 +6,7 @@ describe Ashikawa::Core::Cursor do
 
   before :each do
     @database = double()
-    mock Ashikawa::Core::Document
+    double Ashikawa::Core::Document
   end
 
   it "should create a cursor for a non-complete batch" do

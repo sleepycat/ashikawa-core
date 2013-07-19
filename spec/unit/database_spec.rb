@@ -5,9 +5,9 @@ describe Ashikawa::Core::Database do
   subject { Ashikawa::Core::Database }
 
   before :each do
-    mock(Ashikawa::Core::Connection)
-    mock(Ashikawa::Core::Collection)
-    mock(Ashikawa::Core::Cursor)
+    double(Ashikawa::Core::Connection)
+    double(Ashikawa::Core::Collection)
+    double(Ashikawa::Core::Cursor)
     @connection = double()
   end
 
@@ -88,7 +88,7 @@ describe Ashikawa::Core::Database do
       config.connection = @connection
     end
 
-    mock Ashikawa::Core::Query
+    double Ashikawa::Core::Query
     Ashikawa::Core::Query.stub(:new)
     Ashikawa::Core::Query.should_receive(:new).exactly(1).times.with(database)
 

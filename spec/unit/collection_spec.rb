@@ -21,7 +21,7 @@ describe Ashikawa::Core::Collection do
   it "should create a query" do
     collection = subject.new @database, server_response("collections/60768679")
 
-    mock Ashikawa::Core::Query
+    double Ashikawa::Core::Query
     Ashikawa::Core::Query.stub(:new)
     Ashikawa::Core::Query.should_receive(:new).exactly(1).times.with(collection)
 
@@ -75,7 +75,7 @@ describe Ashikawa::Core::Collection do
       @database.stub(:send_request).with("collection/60768679/figures", {}).and_return { server_response("collections/60768679-figures") }
       @database.should_receive(:send_request).with("collection/60768679/figures", {}).at_least(1).times
 
-      mock Ashikawa::Core::Figure
+      double Ashikawa::Core::Figure
       Ashikawa::Core::Figure.stub(:new)
       Ashikawa::Core::Figure.should_receive(:new).exactly(1).times.with(server_response("collections/60768679-figures")["figures"])
 
