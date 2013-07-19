@@ -371,9 +371,23 @@ module Ashikawa
       # @return [Hash] parsed JSON response from the server
       # @api public
       # @example Replace the document with the key 12345
-      #   collection[12345] = document
-      def []=(document_key, raw_document)
+      #   collection.replace(12345, document)
+      def replace(document_key, raw_document)
         send_request_for_content_key(document_key, :put => raw_document)
+      end
+
+      # Replace a document by its key
+      #
+      # @param [Integer] document_key the key of the document
+      # @param [Hash] raw_document the data you want to replace it with
+      # @return [Hash] parsed JSON response from the server
+      # @api public
+      # @deprecated Use {#replace} instead.
+      # @example Replace the document with the key 12345
+      #   collection.replace(12345, document)
+      def []=(document_key, raw_document)
+        warn "`[]=` is deprecated, please use `replace`"
+        replace(document_key, raw_document)
       end
 
       # Create a new document with given attributes

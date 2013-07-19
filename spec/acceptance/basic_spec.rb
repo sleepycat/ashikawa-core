@@ -128,7 +128,7 @@ describe "Basics" do
       document_key = document.key
       collection.fetch(document_key)["name"].should == "The Dude"
 
-      collection[document_key] = { :name => "Other Dude", :bowling => true }
+      collection.replace(document_key, { :name => "Other Dude", :bowling => true })
       collection.fetch(document_key)["name"].should == "Other Dude"
     end
 

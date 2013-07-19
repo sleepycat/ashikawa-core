@@ -182,7 +182,7 @@ describe Ashikawa::Core::Collection do
         @database.stub(:send_request).with("document/60768679/333", :put => {"name" => "The Dude"})
         @database.should_receive(:send_request).with("document/60768679/333", :put => {"name" => "The Dude"})
 
-        subject[333] = {"name" => "The Dude"}
+        subject.replace(333, {"name" => "The Dude"})
       end
 
       it "should create a new document" do
@@ -289,7 +289,7 @@ describe Ashikawa::Core::Collection do
       @database.stub(:send_request).with("edge/60768679/333", :put => {"name" => "The Dude"})
       @database.should_receive(:send_request).with("edge/60768679/333", :put => {"name" => "The Dude"})
 
-      subject[333] = {"name" => "The Dude"}
+      subject.replace(333, {"name" => "The Dude"})
     end
 
     it "should create a new edge" do
@@ -323,16 +323,16 @@ describe Ashikawa::Core::Collection do
     subject { Ashikawa::Core::Collection.new @database, { "id" => "60768679", "name" => "example_1" } }
     let(:attributes) { { "test" => 123 } }
 
-    before do
-      @database.stub(:send_request).and_return do
-        server_response('documents/new-example_1-137249191')
-      end
-    end
-
     it "should mark `<<` as deprecated" do
-      subject.should_receive(:create_document).with(attributes)
+      subject.should_receive(:create_document).with(attributes).and_return nil
       subject.should_receive(:warn).with("`<<` is deprecated, please use `create_document`")
       subject << attributes
+    end
+
+    it "should mark `[]=` as deprecated" do
+      subject.should_receive(:replace).with(121, attributes).and_return nil
+      subject.should_receive(:warn).with("`[]=` is deprecated, please use `replace`")
+      subject[121] = attributes
     end
   end
 end
