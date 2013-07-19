@@ -210,7 +210,7 @@ describe Ashikawa::Core::Collection do
         subject.create_document({"name" => "The Dude"})
       end
 
-      it "should create a new document with `<<`" do
+      it "should create a new document" do
         @database.stub(:send_request).with("document?collection=60768679", :post => { "name" => "The Dude" }).and_return do
           server_response('documents/example_1-137249191')
         end
@@ -223,7 +223,7 @@ describe Ashikawa::Core::Collection do
           document
         }
 
-        subject << {"name" => "The Dude"}
+        subject.create_document("name" => "The Dude")
       end
 
       it "should not create a new document" do
@@ -316,6 +316,23 @@ describe Ashikawa::Core::Collection do
       expect {
         subject.create_document({"quote" => "D'ya have to use s'many cuss words?"})
       }.to raise_exception(RuntimeError, "Can't create a document in an edge collection")
+    end
+  end
+
+  describe "Deprecated methods" do
+    subject { Ashikawa::Core::Collection.new @database, { "id" => "60768679", "name" => "example_1" } }
+    let(:attributes) { { "test" => 123 } }
+
+    before do
+      @database.stub(:send_request).and_return do
+        server_response('documents/new-example_1-137249191')
+      end
+    end
+
+    it "should mark `<<` as deprecated" do
+      subject.should_receive(:create_document).with(attributes)
+      subject.should_receive(:warn).with("`<<` is deprecated, please use `create_document`")
+      subject << attributes
     end
   end
 end

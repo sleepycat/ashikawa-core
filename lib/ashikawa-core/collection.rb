@@ -389,7 +389,18 @@ module Ashikawa
         Document.new(@database, response).refresh!
       end
 
-      alias :<< :create_document
+      # Create a new document with given attributes
+      #
+      # @param [Hash] attributes
+      # @return [Document] The created document
+      # @api public
+      # @deprecated Use {#create_document} instead.
+      # @example Create a new document from raw data
+      #   collection << attributes
+      def <<(attributes)
+        warn "`<<` is deprecated, please use `create_document`"
+        create_document(attributes)
+      end
 
       # Create a new edge between two documents with certain attributes
       #

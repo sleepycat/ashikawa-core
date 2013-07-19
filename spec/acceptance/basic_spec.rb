@@ -103,8 +103,8 @@ describe "Basics" do
     it "should be possible to get information about the number of documents" do
       empty_collection = subject["empty_collection"]
       empty_collection.length.should == 0
-      empty_collection << { :name => "testname", :age => 27}
-      empty_collection << { :name => "anderer name", :age => 28}
+      empty_collection.create_document({ :name => "testname", :age => 27})
+      empty_collection.create_document({ :name => "anderer name", :age => 28})
       empty_collection.length.should == 2
       empty_collection.truncate!
       empty_collection.length.should == 0
