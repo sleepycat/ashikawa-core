@@ -4,15 +4,13 @@ Attribute:
   exclude: []
 BooleanParameter:
   enabled: true
-  exclude:
-  - Ashikawa::Core::Database#collections
+  exclude: []
 ClassVariable:
   enabled: true
   exclude: []
 ControlParameter:
   enabled: true
-  exclude:
-  - Ashikawa::Core::Database#collections
+  exclude: []
 DataClump:
   enabled: false
   exclude: []

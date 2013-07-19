@@ -69,6 +69,11 @@ describe "Basics" do
       subject[my_collection.id].name.should == "test_collection"
     end
 
+    it "should be possible to list all system and all non-system collections" do
+      subject.collections.length.should == 0
+      subject.system_collections.length.should > 0
+    end
+
     it "should be possible to load and unload collections" do
       my_collection = subject["test_collection"]
       my_collection.status.loaded?.should be_true

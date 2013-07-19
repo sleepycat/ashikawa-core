@@ -47,7 +47,7 @@ module Ashikawa
         @connection = configuration.connection || setup_new_connection(configuration.url, configuration.logger, configuration.adapter)
       end
 
-      # Returns a list of all collections defined in the database
+      # Returns a list of all non-system collections defined in the database
       #
       # @return [Array<Collection>]
       # @api public
@@ -56,10 +56,19 @@ module Ashikawa
       #   database["a"]
       #   database["b"]
       #   database.collections # => [ #<Collection name="a">, #<Collection name="b">]
-      def collections(system = false)
-        raw_collections = send_request("collection")["collections"]
-        raw_collections.delete_if { |collection| collection["name"].start_with?("_") } unless system
-        parse_raw_collections(raw_collections)
+      def collections
+        all_collections_where { |collection| !collection["name"].start_with?("_") }
+      end
+
+      # Returns a list of all system collections defined in the database
+      #
+      # @return [Array<Collection>]
+      # @api public
+      # @example Get an Array containing the Collections in the database
+      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database.system_collections # => [ #<Collection name="_a">, #<Collection name="_b">]
+      def system_collections
+        all_collections_where { |collection| collection["name"].start_with?("_") }
       end
 
       # Create a Collection based on name
@@ -165,6 +174,18 @@ module Ashikawa
         params[:type] = COLLECTION_TYPES[opts[:content_type]] if opts.has_key?(:content_type)
         params[:keyOptions] = translate_key_options(opts[:key_options]) if opts.has_key?(:key_options)
         params
+      end
+
+      # Get all collections that fulfill a certain criteria
+      #
+      # @yield [raw_collection] Yields the raw collections so you can decide which to keep
+      # @yieldparam [raw_collection] A raw collection
+      # @yieldreturn [Boolean] Should the collection be kept
+      # @api private
+      def all_collections_where(&block)
+        raw_collections = send_request("collection")["collections"]
+        raw_collections.keep_if(&block)
+        parse_raw_collections(raw_collections)
       end
     end
   end

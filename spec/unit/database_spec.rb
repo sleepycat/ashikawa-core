@@ -119,15 +119,13 @@ describe Ashikawa::Core::Database do
       subject.collections.length.should == 2
     end
 
-    it "should fetch all available collections if you set admin to system to true" do
+    it "should fetch all available non-system collections" do
       @connection.stub(:send_request) {|path| server_response("collections/all") }
       @connection.should_receive(:send_request).with("collection")
 
-      (0..6).each do |k|
-        Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/all")["collections"][k])
-      end
+      Ashikawa::Core::Collection.should_receive(:new).exactly(5).times
 
-      subject.collections(true).length.should == 7
+      subject.system_collections.length.should == 5
     end
 
     it "should create a non volatile collection by default" do
