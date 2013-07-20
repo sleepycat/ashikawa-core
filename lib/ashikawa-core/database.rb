@@ -184,6 +184,7 @@ module Ashikawa
       # @yield [raw_collection] Yields the raw collections so you can decide which to keep
       # @yieldparam [raw_collection] A raw collection
       # @yieldreturn [Boolean] Should the collection be kept
+      # @return [Array<Collection>]
       # @api private
       def all_collections_where(&block)
         raw_collections = send_request("collection")["collections"]

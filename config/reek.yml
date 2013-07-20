@@ -18,7 +18,8 @@ DataClump:
   min_clump_size: 2
 DuplicateMethodCall:
   enabled: true
-  exclude: []
+  exclude:
+  - Ashikawa::Core::ResponsePreprocessor#handle_status
   max_calls: 1
   allow_calls: []
 FeatureEnvy:

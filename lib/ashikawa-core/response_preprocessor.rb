@@ -85,12 +85,11 @@ module Ashikawa
       # @return [nil]
       # @api private
       def handle_status(env)
-        status = env[:status]
-        case status
+        case env[:status]
         when BadSyntaxStatus then raise Ashikawa::Core::BadSyntax
         when ResourceNotFoundErrorError then raise resource_not_found_for(env)
-        when ClientErrorStatuses then raise Ashikawa::Core::ClientError, status
-        when ServerErrorStatuses then raise Ashikawa::Core::ServerError, status
+        when ClientErrorStatuses then raise Ashikawa::Core::ClientError, error(env[:body])
+        when ServerErrorStatuses then raise Ashikawa::Core::ServerError, error(env[:body])
         end
       end
 
@@ -102,6 +101,16 @@ module Ashikawa
       def log(env)
         @logger.info("#{env[:status]} #{env[:body]}")
         nil
+      end
+
+      # Read the error message for the request
+      #
+      # @param [String] The raw body of the request
+      # @return [String] The formatted error message
+      # @api private
+      def error(body)
+        parsed_body = JSON.parse(body)
+        "#{parsed_body["errorNum"]}: #{parsed_body["errorMessage"]}"
       end
     end
 

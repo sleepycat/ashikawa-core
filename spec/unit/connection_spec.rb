@@ -112,14 +112,21 @@ describe Ashikawa::Core::Connection do
   end
 
   describe "exception handling" do
+    let(:error_message) { "cannot write file" }
+    let(:error_num) { 15 }
+
     it "should throw a general client error for I'm a teapot" do
       request_stub.get("/_api/bad/request") do
-        [418, response_headers, ""]
+        [
+          418,
+          response_headers,
+          JSON.generate({ "error" => true, "errorNum" => error_num, "errorMessage" => error_message })
+        ]
       end
 
       expect do
         subject.send_request("bad/request")
-      end.to raise_error(Ashikawa::Core::ClientError, /418/)
+      end.to raise_error(Ashikawa::Core::ClientError, "#{error_num}: #{error_message}")
 
       request_stub.verify_stubbed_calls
     end
@@ -138,12 +145,16 @@ describe Ashikawa::Core::Connection do
 
     it "should throw a general server error for the generic server error" do
       request_stub.get("/_api/bad/request") do
-        [500, response_headers, ""]
+        [
+          500,
+          response_headers,
+          JSON.generate({ "error" => true, "errorNum" => error_num, "errorMessage" => error_message })
+        ]
       end
 
       expect do
         subject.send_request("bad/request")
-      end.to raise_error(Ashikawa::Core::ServerError, /500/)
+      end.to raise_error(Ashikawa::Core::ServerError, "#{error_num}: #{error_message}")
 
       request_stub.verify_stubbed_calls
     end
