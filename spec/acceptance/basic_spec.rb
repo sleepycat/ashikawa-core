@@ -69,8 +69,7 @@ describe "Basics" do
       subject[my_collection.id].name.should == "test_collection"
     end
 
-    it "should be possible to list all system and all non-system collections" do
-      subject.collections.length.should == 0
+    it "should be possible to list all system collections" do
       subject.system_collections.length.should > 0
     end
 
