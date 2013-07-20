@@ -5,8 +5,8 @@ require "ashikawa-core/version"
 Gem::Specification.new do |gem|
   gem.name        = "ashikawa-core"
   gem.version     = Ashikawa::Core::VERSION
-  gem.authors     = ["moonglum", "EinLama"]
-  gem.email       = ["me@moonglum.net", "tobias.eilert@me.com"]
+  gem.authors     = ["moonglum"]
+  gem.email       = ["me@moonglum.net"]
   gem.homepage    = "http://triagens.github.com/ashikawa-core"
   gem.summary     = "Ashikawa Core is a wrapper around the ArangoDB REST API"
   gem.description = "Ashikawa Core is a wrapper around the ArangoDB REST API. It provides low level access and will be used in different ArangoDB ODMs and other tools."
