@@ -8,7 +8,9 @@ module Ashikawa
       # @api public
       # @example Get the collections that the transaction writes to
       #   transaction.write_collections # => ["collection_1"]
-      attr_reader :write_collections
+      def write_collections
+        @request_parameters[:collections][:write]
+      end
 
       # The collections the transaction reads from
       #
@@ -16,7 +18,9 @@ module Ashikawa
       # @api public
       # @example Get the collections that the transaction reads from
       #   transaction.read_collections # => ["collection_1"]
-      attr_reader :read_collections
+      def read_collections
+        @request_parameters[:collections][:read]
+      end
 
       # If set to true, the transaction will write all data to disk before returning
       #
@@ -24,7 +28,9 @@ module Ashikawa
       # @api public
       # @example Check, if the transaction waits for sync
       #   transaction.wait_for_sync #=> false
-      attr_reader :wait_for_sync
+      def wait_for_sync
+        @request_parameters[:waitForSync]
+      end
 
       # If set to true, the transaction will write all data to disk before returning
       #
@@ -32,7 +38,9 @@ module Ashikawa
       # @api public
       # @example Activate wait sync
       #   transaction.wait_for_sync = true
-      attr_writer :wait_for_sync
+      def wait_for_sync=(wait_for_sync)
+        @request_parameters[:waitForSync] = wait_for_sync
+      end
 
       # An optional numeric value used to set a timeout for waiting on collection locks
       #
@@ -40,7 +48,9 @@ module Ashikawa
       # @api public
       # @example Check how long the lock timeout is
       #   transaction.lock_timeout # => 30
-      attr_reader :lock_timeout
+      def lock_timeout
+        @request_parameters[:lockTimeout]
+      end
 
       # An optional numeric value used to set a timeout for waiting on collection locks
       #
@@ -48,7 +58,9 @@ module Ashikawa
       # @api public
       # @example Set the lock timeout to 30
       #   transaction.lock_timeout = 30
-      attr_writer :lock_timeout
+      def lock_timeout=(timeout)
+        @request_parameters[:lockTimeout] = timeout
+      end
 
       # Initialize a Transaction
       #
@@ -62,10 +74,11 @@ module Ashikawa
       #     :read => ["collection_1"]
       def initialize(database, action, options)
         @database = database
-        @action = action
-        @write_collections = options[:write]
-        @read_collections = options[:read]
-        @wait_for_sync = false
+        @request_parameters = {
+          :action => action,
+          :collections => parse_options(options),
+          :waitForSync => false
+        }
       end
 
       # Execute the transaction
@@ -75,17 +88,25 @@ module Ashikawa
       # @api public
       # @example Run a Transaction
       #   transaction.execute({ :a => 5 })
-      def execute(action_params = nil)
-        args = {
-          :collections => {},
-          :waitForSync => wait_for_sync,
-          :action => @action
-        }
-        args[:collections][:write] = write_collections unless write_collections.nil?
-        args[:collections][:read] = read_collections unless read_collections.nil?
-        args[:params] = action_params unless action_params.nil?
-        args[:lockTimeout] = lock_timeout unless lock_timeout.nil?
-        @database.send_request("transaction", :post => args)["result"]
+      def execute(action_parameters = :no_params_provided)
+        @request_parameters[:params] = action_parameters unless action_parameters == :no_params_provided
+        response = @database.send_request("transaction", :post => @request_parameters)
+        response["result"]
+      end
+
+      private
+
+      # Parse the read and write collections from the options
+      #
+      # @option options [Array<String>] :write The collections you want to write to
+      # @option options [Array<String>] :read The collections you want to read from
+      # @return [Hash]
+      # @api private
+      def parse_options(options)
+        collections = {}
+        collections[:write] = options[:write] if options.has_key? :write
+        collections[:read] = options[:read] if options.has_key? :read
+        collections
       end
     end
   end

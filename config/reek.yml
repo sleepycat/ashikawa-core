@@ -20,7 +20,6 @@ DuplicateMethodCall:
   enabled: true
   exclude:
   - Ashikawa::Core::ResponsePreprocessor#handle_status
-  - Ashikawa::Core::Transaction#execute
   max_calls: 1
   allow_calls: []
 FeatureEnvy:
@@ -47,7 +46,6 @@ NilCheck:
   enabled: true
   exclude:
   - Ashikawa::Core::Database#setup_new_connection
-  - Ashikawa::Core::Transaction#execute
 RepeatedConditional:
   enabled: true
   exclude:
@@ -64,8 +62,7 @@ TooManyMethods:
   max_methods: 15
 TooManyStatements:
   enabled: true
-  exclude:
-  - Ashikawa::Core::Transaction#execute
+  exclude: []
   max_statements: 5
 UncommunicativeMethodName:
   enabled: true
