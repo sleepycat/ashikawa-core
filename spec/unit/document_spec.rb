@@ -99,14 +99,4 @@ describe Ashikawa::Core::Document do
       expect { subject.save }.to raise_error Ashikawa::Core::DocumentNotFoundException
     end
   end
-
-  describe "Deprecated methods" do
-    subject { Ashikawa::Core::Document.new database, raw_data_without_id }
-
-    it "should mark `to_hash` as deprecated" do
-      subject.should_receive(:hash)
-      subject.should_receive(:warn).with("`to_hash` is deprecated, please use `hash`")
-      subject.to_hash
-    end
-  end
 end

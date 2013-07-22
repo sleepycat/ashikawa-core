@@ -318,21 +318,4 @@ describe Ashikawa::Core::Collection do
       }.to raise_exception(RuntimeError, "Can't create a document in an edge collection")
     end
   end
-
-  describe "Deprecated methods" do
-    subject { Ashikawa::Core::Collection.new @database, { "id" => "60768679", "name" => "example_1" } }
-    let(:attributes) { { "test" => 123 } }
-
-    it "should mark `<<` as deprecated" do
-      subject.should_receive(:create_document).with(attributes).and_return nil
-      subject.should_receive(:warn).with("`<<` is deprecated, please use `create_document`")
-      subject << attributes
-    end
-
-    it "should mark `[]=` as deprecated" do
-      subject.should_receive(:replace).with(121, attributes).and_return nil
-      subject.should_receive(:warn).with("`[]=` is deprecated, please use `replace`")
-      subject[121] = attributes
-    end
-  end
 end

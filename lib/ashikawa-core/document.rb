@@ -107,19 +107,6 @@ module Ashikawa
         @content
       end
 
-      # Convert the document into a hash
-      #
-      # @return [Hash]
-      # @api public
-      # @deprecated Use {#hash} instead.
-      # @example Get the hash representation of a document
-      #   document = Ashikawa::Core::Document.new(database, raw_document)
-      #   document.to_hash #=> { :name => "Lebowski", :occupation => "Not occupied" }
-      def to_hash
-        warn "`to_hash` is deprecated, please use `hash`"
-        hash
-      end
-
       # Save the changes to the database
       #
       # @return [Hash] parsed JSON response from the server

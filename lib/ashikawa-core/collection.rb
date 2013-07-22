@@ -379,20 +379,6 @@ module Ashikawa
         send_request_for_content_key(document_key, :put => raw_document)
       end
 
-      # Replace a document by its key
-      #
-      # @param [Integer] document_key the key of the document
-      # @param [Hash] raw_document the data you want to replace it with
-      # @return [Hash] parsed JSON response from the server
-      # @api public
-      # @deprecated Use {#replace} instead.
-      # @example Replace the document with the key 12345
-      #   collection.replace(12345, document)
-      def []=(document_key, raw_document)
-        warn "`[]=` is deprecated, please use `replace`"
-        replace(document_key, raw_document)
-      end
-
       # Create a new document with given attributes
       #
       # @param [Hash] attributes
@@ -404,19 +390,6 @@ module Ashikawa
         raise "Can't create a document in an edge collection" if @content_type == :edge
         response = send_request_for_content(:post => attributes)
         Document.new(@database, response).refresh!
-      end
-
-      # Create a new document with given attributes
-      #
-      # @param [Hash] attributes
-      # @return [Document] The created document
-      # @api public
-      # @deprecated Use {#create_document} instead.
-      # @example Create a new document from raw data
-      #   collection << attributes
-      def <<(attributes)
-        warn "`<<` is deprecated, please use `create_document`"
-        create_document(attributes)
       end
 
       # Create a new edge between two documents with certain attributes
