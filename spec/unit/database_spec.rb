@@ -8,6 +8,7 @@ describe Ashikawa::Core::Database do
     double(Ashikawa::Core::Connection)
     double(Ashikawa::Core::Collection)
     double(Ashikawa::Core::Cursor)
+    double(Ashikawa::Core::Transaction)
     @connection = double("connection", :host => "localhost", :port => 8529, :scheme => "http")
   end
 
@@ -217,6 +218,15 @@ describe Ashikawa::Core::Database do
       @connection.should_receive(:send_request).with("my/path", :post => { :data => "mydata" })
 
       subject.send_request "my/path", :post => { :data => "mydata" }
+    end
+
+    let(:js_function) { double }
+    let(:collections) { double }
+    let(:transaction) { double }
+
+    it "should create a transaction" do
+      Ashikawa::Core::Transaction.should_receive(:new).with(subject, js_function, collections).and_return { transaction }
+      subject.create_transaction(js_function, collections).should == transaction
     end
   end
 end

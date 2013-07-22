@@ -3,6 +3,7 @@ require "ashikawa-core/collection"
 require "ashikawa-core/connection"
 require "ashikawa-core/cursor"
 require "ashikawa-core/configuration"
+require "ashikawa-core/transaction"
 require "forwardable"
 require "equalizer"
 
@@ -121,6 +122,20 @@ module Ashikawa
       #   database.query.execute "FOR u IN users LIMIT 2" # => #<Cursor id=33>
       def query
         Query.new(self)
+      end
+
+      # Create a new Transaction for this database
+      #
+      # @param [String] action The JS action you want to execute
+      # @options collections [Array<String>] :read The collections you want to read from
+      # @options collections [Array<String>] :write The collections you want to write to
+      # @return [Object] The result of the transaction
+      # @api public
+      # @example Create a new Transaction
+      #   transaction = database.create_transaction("function () { return 5; }", :read => ["collection_1"])
+      #   transaction.execute #=> 5
+      def create_transaction(action, collections)
+        Ashikawa::Core::Transaction.new(self, action, collections)
       end
 
       private
