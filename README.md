@@ -1,6 +1,6 @@
 # Ashikawa Core [![Gem Version](https://badge.fury.io/rb/ashikawa-core.png)](http://badge.fury.io/rb/ashikawa-core) [![Build Status](https://secure.travis-ci.org/triAGENS/ashikawa-core.png?branch=master)](http://travis-ci.org/triAGENS/ashikawa-core) [![Dependency Status](https://gemnasium.com/triAGENS/ashikawa-core.png)](https://gemnasium.com/triAGENS/ashikawa-core) [![Code Climate](https://codeclimate.com/github/triAGENS/ashikawa-core.png)](https://codeclimate.com/github/triAGENS/ashikawa-core) [![Coverage Status](https://coveralls.io/repos/triAGENS/ashikawa-core/badge.png?branch=coverall)](https://coveralls.io/r/triAGENS/ashikawa-core)
 
-Ashikawa Core is a Wrapper around the ArangoDB Rest API. It provides low level access and will be used in different ArangoDB ODMs and other projects related to the database. It is always working with the stable version of ArangoDB, this is currently version **1.3**. If you want to access an ArangoDB instance running version **1.2** or use Ruby 1.8 refer to version [0.7](https://github.com/triAGENS/ashikawa-core/tree/0.7) of this gem (or just update ;) ).
+Ashikawa Core is a Wrapper around the ArangoDB Rest API. It provides low level access and is intended to be used in ArangoDB ODMs and other projects related to the database. It is always working with the stable version of ArangoDB, this is currently version **1.4**. If you want to access an ArangoDB instance running version **1.3** to version [0.8](https://github.com/triAGENS/ashikawa-core/tree/0.8) of this gem (or just update :wink:).
 
 All tests run on Travis CI for the following versions of Ruby:
 
@@ -12,7 +12,19 @@ We also run on JRuby and MRI Head, but they are allowed failures (Please see [Tr
 
 Please note that the [`master`](https://github.com/triAGENS/ashikawa-core) branch is always the stable version released on Ruby Gems and documented on RDoc. If you want the most recent version, please refer to the [`development`](https://github.com/triAGENS/ashikawa-core/tree/development) branch.
 
-## How to Setup a Connection
+## How to install it?
+
+```shell
+gem install ashikawa-core
+```
+
+or, when using bundler:
+
+```ruby
+gem "ashikawa-core", "~> 0.9"
+```
+
+## How to Setup a Connection?
 
 We want to provide you with as much flexibility as possible. So you can choose which adapter to use for HTTP (choose from the adapters available for [Faraday](https://github.com/lostisland/faraday)) and what you want to use for logging (basically anything that has an `info` method that takes a String). It defaults to Net::HTTP and no logging:
 
@@ -47,7 +59,7 @@ database["new_name"].delete
 
 # Issues or Questions
 
-If you find a bug in this gem, please report it on [our tracker](https://github.com/triAGENS/ashikawa-core/issues). If you have a question, just contact us via the [mailing list](https://groups.google.com/forum/?fromgroups#!forum/ashikawa) – we are happy to help you :)
+If you find a bug in this gem, please report it on [our tracker](https://github.com/triAGENS/ashikawa-core/issues). If you have a question, just contact us via the [mailing list](https://groups.google.com/forum/?fromgroups#!forum/ashikawa) – we are happy to help you :smile:
 
 # Contributing
 
