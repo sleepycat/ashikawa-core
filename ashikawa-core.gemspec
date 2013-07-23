@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.license = "Apache License 2.0"
 
   gem.required_ruby_version = '>= 1.9.2'
-  gem.requirements << "ArangoDB, v1.3"
+  gem.requirements << "ArangoDB, v1.4"
 
   gem.rubyforge_project = "ashikawa-core"
 
