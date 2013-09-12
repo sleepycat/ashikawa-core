@@ -7,7 +7,7 @@ Rake::Task["spec"].clear
 Rake::Task["spec:integration"].clear
 
 desc 'Run all specs'
-task :spec => %w[ spec:unit spec:acceptance ]
+task spec: %w[ spec:unit spec:acceptance ]
 
 namespace :spec do
   desc "Run the acceptance tests. Requires ArangoDB to be running."
@@ -38,7 +38,7 @@ Rake::Task["ci:metrics"].clear
 
 namespace :ci do
   desc 'Run all metrics except mutant and reek'
-  task :metrics => %w[
+  task metrics: %w[
     metrics:coverage
     metrics:yardstick:verify
     metrics:rubocop
@@ -49,9 +49,9 @@ namespace :ci do
 end
 
 desc 'Run all metrics and specs'
-task :ci => %w[
+task ci: %w[
   spec
   ci:metrics
 ]
 
-task :default => :ci
+task default: :ci

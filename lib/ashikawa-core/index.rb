@@ -63,7 +63,7 @@ module Ashikawa
       #   index = Ashikawa::Core::Index.new(collection, raw_index)
       #   index.delete
       def delete
-        @collection.send_request("index/#{@id}", :delete => {})
+        @collection.send_request("index/#{@id}", delete: {})
       end
 
       private

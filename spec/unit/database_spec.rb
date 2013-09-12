@@ -9,7 +9,7 @@ describe Ashikawa::Core::Database do
     double(Ashikawa::Core::Collection)
     double(Ashikawa::Core::Cursor)
     double(Ashikawa::Core::Transaction)
-    @connection = double("connection", :host => "localhost", :port => 8529, :scheme => "http")
+    @connection = double("connection", host: "localhost", port: 8529, scheme: "http")
   end
 
   it "should initialize with a connection" do
@@ -25,12 +25,12 @@ describe Ashikawa::Core::Database do
 
   it "should initialize with a connection string" do
     Ashikawa::Core::Connection.stub(:new).with("http://localhost:8529", {
-      :logger => nil,
-      :adapter => nil
+      logger: nil,
+      adapter: nil
     }).and_return(double)
     Ashikawa::Core::Connection.should_receive(:new).with("http://localhost:8529", {
-      :logger => nil,
-      :adapter => nil
+      logger: nil,
+      adapter: nil
     })
 
     subject.new do |config|
@@ -41,12 +41,12 @@ describe Ashikawa::Core::Database do
   it "should initialize with a connection string and logger" do
     logger = double
     Ashikawa::Core::Connection.stub(:new).with("http://localhost:8529", {
-      :logger => logger,
-      :adapter => nil
+      logger: logger,
+      adapter: nil
     }).and_return(double)
     Ashikawa::Core::Connection.should_receive(:new).with("http://localhost:8529", {
-      :logger => logger,
-      :adapter => nil
+      logger: logger,
+      adapter: nil
     })
 
     subject.new do |config|
@@ -58,12 +58,12 @@ describe Ashikawa::Core::Database do
   it "should initialize with a connection string and adapter" do
     adapter = double
     Ashikawa::Core::Connection.stub(:new).with("http://localhost:8529", {
-      :logger => nil,
-      :adapter => adapter
+      logger: nil,
+      adapter: adapter
     }).and_return(double)
     Ashikawa::Core::Connection.should_receive(:new).with("http://localhost:8529", {
-      :logger => nil,
-      :adapter => adapter
+      logger: nil,
+      adapter: adapter
     })
 
     subject.new do |config|
@@ -104,9 +104,9 @@ describe Ashikawa::Core::Database do
     }
 
     it "should delegate authentication to the connection" do
-      @connection.should_receive(:authenticate_with).with({ :username => "user", :password => "password" })
+      @connection.should_receive(:authenticate_with).with({ username: "user", password: "password" })
 
-      subject.authenticate_with :username => "user", :password => "password"
+      subject.authenticate_with username: "user", password: "password"
     end
 
     it "should fetch all available non-system collections" do
@@ -132,7 +132,7 @@ describe Ashikawa::Core::Database do
     it "should create a non volatile collection by default" do
       @connection.stub(:send_request) { |path| server_response("collections/60768679") }
       @connection.should_receive(:send_request).with("collection",
-        :post => { :name => "volatile_collection"})
+        post: { name: "volatile_collection"})
 
       Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/60768679"))
 
@@ -142,41 +142,41 @@ describe Ashikawa::Core::Database do
     it "should create a volatile collection when asked" do
       @connection.stub(:send_request) { |path| server_response("collections/60768679") }
       @connection.should_receive(:send_request).with("collection",
-        :post => { :name => "volatile_collection", :isVolatile => true})
+        post: { name: "volatile_collection", isVolatile: true})
 
       Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/60768679"))
 
-      subject.create_collection("volatile_collection", :is_volatile => true)
+      subject.create_collection("volatile_collection", is_volatile: true)
     end
 
     it "should create an autoincrement collection when asked" do
       @connection.should_receive(:send_request).with("collection",
-        :post => { :name => "autoincrement_collection", :keyOptions => {
-          :type => "autoincrement",
-          :offset => 0,
-          :increment => 10,
-          :allowUserKeys => false
+        post: { name: "autoincrement_collection", keyOptions: {
+          type: "autoincrement",
+          offset: 0,
+          increment: 10,
+          allowUserKeys: false
         }
       })
 
       Ashikawa::Core::Collection.should_receive(:new)
 
-      subject.create_collection("autoincrement_collection", :key_options => {
-        :type => :autoincrement,
-        :offset => 0,
-        :increment => 10,
-        :allow_user_keys => false
+      subject.create_collection("autoincrement_collection", key_options: {
+        type: :autoincrement,
+        offset: 0,
+        increment: 10,
+        allow_user_keys: false
       })
     end
 
     it "should create an edge collection when asked" do
       @connection.stub(:send_request) { |path| server_response("collections/60768679") }
       @connection.should_receive(:send_request).with("collection",
-        :post => { :name => "volatile_collection", :type => 3})
+        post: { name: "volatile_collection", type: 3})
 
       Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/60768679"))
 
-      subject.create_collection("volatile_collection", :content_type => :edge)
+      subject.create_collection("volatile_collection", content_type: :edge)
     end
 
     it "should fetch a single collection if it exists" do
@@ -207,7 +207,7 @@ describe Ashikawa::Core::Database do
         end
       end
       @connection.should_receive(:send_request).with("collection/new_collection")
-      @connection.should_receive(:send_request).with("collection", :post => { :name => "new_collection"})
+      @connection.should_receive(:send_request).with("collection", post: { name: "new_collection"})
 
       Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/60768679"))
 
@@ -215,9 +215,9 @@ describe Ashikawa::Core::Database do
     end
 
     it "should send a request via the connection object" do
-      @connection.should_receive(:send_request).with("my/path", :post => { :data => "mydata" })
+      @connection.should_receive(:send_request).with("my/path", post: { data: "mydata" })
 
-      subject.send_request "my/path", :post => { :data => "mydata" }
+      subject.send_request "my/path", post: { data: "mydata" }
     end
 
     let(:js_function) { double }

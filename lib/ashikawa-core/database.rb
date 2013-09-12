@@ -12,8 +12,8 @@ module Ashikawa
     # An ArangoDB database
     class Database
       COLLECTION_TYPES = {
-        :document => 2,
-        :edge => 3
+        document: 2,
+        edge: 3
       }
 
       extend Forwardable
@@ -86,7 +86,7 @@ module Ashikawa
       #   database = Ashikawa::Core::Database.new("http://localhost:8529")
       #   database.create_collection("a", :isVolatile => true) # => #<Collection name="a">
       def create_collection(collection_identifier, opts = {})
-        response = send_request("collection", :post => translate_params(collection_identifier, opts))
+        response = send_request("collection", post: translate_params(collection_identifier, opts))
         Ashikawa::Core::Collection.new(self, response)
       end
 
@@ -105,7 +105,7 @@ module Ashikawa
         begin
           response = send_request("collection/#{collection_identifier}")
         rescue CollectionNotFoundException
-          response = send_request("collection", :post => { :name => collection_identifier })
+          response = send_request("collection", post: { name: collection_identifier })
         end
 
         Ashikawa::Core::Collection.new(self, response)
@@ -150,8 +150,8 @@ module Ashikawa
       def setup_new_connection(url, logger, adapter)
         raise(ArgumentError, "Please provide either an url or a connection to setup the database") if url.nil?
         Ashikawa::Core::Connection.new(url, {
-          :logger => logger,
-          :adapter => adapter
+          logger: logger,
+          adapter: adapter
         })
       end
 
@@ -173,10 +173,10 @@ module Ashikawa
       # @api private
       def translate_key_options(key_options)
         {
-          :type => key_options[:type].to_s,
-          :offset => key_options[:offset],
-          :increment => key_options[:increment],
-          :allowUserKeys => key_options[:allow_user_keys]
+          type: key_options[:type].to_s,
+          offset: key_options[:offset],
+          increment: key_options[:increment],
+          allowUserKeys: key_options[:allow_user_keys]
         }
       end
 
@@ -187,7 +187,7 @@ module Ashikawa
       # @return [Hash]
       # @api private
       def translate_params(collection_identifier, opts)
-        params = { :name => collection_identifier }
+        params = { name: collection_identifier }
         params[:isVolatile] = true if opts[:is_volatile] == true
         params[:type] = COLLECTION_TYPES[opts[:content_type]] if opts.key?(:content_type)
         params[:keyOptions] = translate_key_options(opts[:key_options]) if opts.key?(:key_options)

@@ -23,8 +23,8 @@ module Ashikawa
       }
 
       CONTENT_CLASS = {
-        :document => Document,
-        :edge => Edge
+        document: Document,
+        edge: Edge
       }
 
       # The name of the collection, must be unique
@@ -278,7 +278,7 @@ module Ashikawa
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.delete
       def delete
-        send_request_for_this_collection("", :delete => {})
+        send_request_for_this_collection("", delete: {})
       end
 
       # Load the collection into memory
@@ -376,7 +376,7 @@ module Ashikawa
       # @example Replace the document with the key 12345
       #   collection.replace(12345, document)
       def replace(document_key, raw_document)
-        send_request_for_content_key(document_key, :put => raw_document)
+        send_request_for_content_key(document_key, put: raw_document)
       end
 
       # Create a new document with given attributes
@@ -388,7 +388,7 @@ module Ashikawa
       #   collection.create_document(attributes)
       def create_document(attributes)
         raise "Can't create a document in an edge collection" if @content_type == :edge
-        response = send_request_for_content(:post => attributes)
+        response = send_request_for_content(post: attributes)
         Document.new(@database, response).refresh!
       end
 
@@ -403,7 +403,7 @@ module Ashikawa
       #   collection.create_edge(node_a, node_b, {"name" => "incredible edge"})
       def create_edge(from, to, attributes)
         raise "Can't create an edge in a document collection" if @content_type == :document
-        response = send_request("edge?collection=#{@id}&from=#{from.id}&to=#{to.id}", :post => attributes)
+        response = send_request("edge?collection=#{@id}&from=#{from.id}&to=#{to.id}", post: attributes)
         Edge.new(@database, response).refresh!
       end
 
@@ -417,7 +417,7 @@ module Ashikawa
       #   people = database['people']
       #   people.add_index(:hash, :on => [:name, :profession])
       def add_index(type, opts)
-        response = send_request("index?collection=#{@id}", :post => {
+        response = send_request("index?collection=#{@id}", post: {
           "type" => type.to_s,
           "fields" => opts[:on].map { |field| field.to_s }
         })
@@ -485,7 +485,7 @@ module Ashikawa
       # @return [Object] The result
       # @api private
       def send_information_to_server(path, key, value)
-        send_request_for_this_collection("#{path}", :put => { key.to_s => value })
+        send_request_for_this_collection("#{path}", put: { key.to_s => value })
       end
 
       # Send a put request with the given command
@@ -494,7 +494,7 @@ module Ashikawa
       # @return [Object] The result
       # @api private
       def send_command_to_server(command)
-        send_request_for_this_collection("#{command}", :put => {})
+        send_request_for_this_collection("#{command}", put: {})
       end
 
       # Send a get request to the server and return a certain attribute

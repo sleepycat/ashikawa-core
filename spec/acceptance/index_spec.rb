@@ -7,13 +7,13 @@ describe "Indices" do
     end
   }
   subject { database["documenttest"] }
-  let(:index) { subject.add_index(:skiplist, :on => [:identifier]) }
+  let(:index) { subject.add_index(:skiplist, on: [:identifier]) }
 
   it "should be possible to set indices" do
     index.delete
 
     expect {
-      subject.add_index :skiplist, :on => [:identifier]
+      subject.add_index :skiplist, on: [:identifier]
     }.to change { subject.indices.length }.by(1)
   end
 

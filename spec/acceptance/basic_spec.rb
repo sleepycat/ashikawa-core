@@ -34,15 +34,15 @@ describe "Basics" do
     end
 
     it "should create a volatile collection" do
-      subject.create_collection("volatile_collection", :is_volatile => true)
+      subject.create_collection("volatile_collection", is_volatile: true)
       subject["volatile_collection"].volatile?.should be_true
     end
 
     it "should create an autoincrementing collection" do
-      subject.create_collection("autoincrement_collection", :is_volatile => true, :key_options => {
-        :type => :autoincrement,
-        :increment => 10,
-        :allow_user_keys => false
+      subject.create_collection("autoincrement_collection", is_volatile: true, key_options: {
+        type: :autoincrement,
+        increment: 10,
+        allow_user_keys: false
       })
       key_options = subject["autoincrement_collection"].key_options
 
@@ -53,7 +53,7 @@ describe "Basics" do
     end
 
     it "should be possible to create an edge collection" do
-      subject.create_collection("edge_collection", :content_type => :edge)
+      subject.create_collection("edge_collection", content_type: :edge)
       subject["edge_collection"].content_type.should == :edge
     end
 
@@ -107,8 +107,8 @@ describe "Basics" do
     it "should be possible to get information about the number of documents" do
       empty_collection = subject["empty_collection"]
       empty_collection.length.should == 0
-      empty_collection.create_document({ :name => "testname", :age => 27})
-      empty_collection.create_document({ :name => "anderer name", :age => 28})
+      empty_collection.create_document({ name: "testname", age: 27})
+      empty_collection.create_document({ name: "anderer name", age: 28})
       empty_collection.length.should == 2
       empty_collection.truncate!
       empty_collection.length.should == 0
@@ -117,7 +117,7 @@ describe "Basics" do
     it "should be possible to update the attributes of a document" do
       collection = subject["documenttests"]
 
-      document = collection.create_document(:name => "The Dude", :bowling => true)
+      document = collection.create_document(name: "The Dude", bowling: true)
       document_key = document.key
       document["name"] = "Other Dude"
       document.save
@@ -128,21 +128,21 @@ describe "Basics" do
     it "should be possible to access and create documents from a collection" do
       collection = subject["documenttests"]
 
-      document = collection.create_document(:name => "The Dude", :bowling => true)
+      document = collection.create_document(name: "The Dude", bowling: true)
       document_key = document.key
       collection.fetch(document_key)["name"].should == "The Dude"
 
-      collection.replace(document_key, { :name => "Other Dude", :bowling => true })
+      collection.replace(document_key, { name: "Other Dude", bowling: true })
       collection.fetch(document_key)["name"].should == "Other Dude"
     end
 
     it "should be possible to create an edge between two documents" do
       nodes = subject.create_collection("nodecollection")
-      edges = subject.create_collection("edgecollection", :content_type => :edge)
+      edges = subject.create_collection("edgecollection", content_type: :edge)
 
-      a = nodes.create_document({:name => "a"})
-      b = nodes.create_document({:name => "b"})
-      e = edges.create_edge(a, b, {:name => "fance_edge"})
+      a = nodes.create_document({name: "a"})
+      b = nodes.create_document({name: "b"})
+      e = edges.create_edge(a, b, {name: "fance_edge"})
 
       e = edges.fetch(e.key)
       e.from_id.should == a.id
@@ -157,7 +157,7 @@ describe "Basics" do
       end
     }
     let(:collection) { database["documenttests"] }
-    subject { collection.create_document(:name => "The Dude") }
+    subject { collection.create_document(name: "The Dude") }
     let(:document_key) { subject.key }
 
     it "should be possible to manipulate documents and save them" do

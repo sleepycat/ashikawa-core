@@ -18,13 +18,13 @@ describe "Transactions" do
 
   it "should create and execute a transaction" do
     transaction = subject.create_transaction(js_function,
-      :write => ["collection_1", "collection_2"],
-      :read =>  ["collection_3"]
+      write: ["collection_1", "collection_2"],
+      read:  ["collection_3"]
     )
 
     transaction.wait_for_sync = true
     transaction.lock_timeout = 14
 
-    transaction.execute({ :a => 5 }).should == 5
+    transaction.execute({ a: 5 }).should == 5
   end
 end

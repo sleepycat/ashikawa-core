@@ -64,7 +64,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.by_example({ "color" => "red" }, :options => { :limit => 1 }) #=> #<Cursor id=2444>
       def by_example(example = {}, options = {})
-        simple_query_request("simple/by-example", { :example => example }.merge(options))
+        simple_query_request("simple/by-example", { example: example }.merge(options))
       end
 
       # Looks for one document in a collection which matches the given criteria
@@ -77,8 +77,8 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.first_example({ "color" => "red"}) # => #<Document id=2444 color="red">
       def first_example(example = {})
-        request = prepare_request("simple/first-example", { :example => example, :collection => collection.name })
-        response = send_request("simple/first-example", { :put => request })
+        request = prepare_request("simple/first-example", { example: example, collection: collection.name })
+        response = send_request("simple/first-example", { put: request })
         Document.new(database, response["document"])
       end
 
@@ -148,7 +148,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.execute("FOR u IN users LIMIT 2") # => #<Cursor id=33>
       def execute(query, options = {})
-        wrapped_request("cursor", :post, options.merge({ :query => query }))
+        wrapped_request("cursor", :post, options.merge({ query: query }))
       end
 
       # Test if an AQL query is valid
@@ -160,7 +160,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.valid?("FOR u IN users LIMIT 2") # => true
       def valid?(query)
-        !!wrapped_request("query", :post, { :query => query })
+        !!wrapped_request("query", :post, { query: query })
       rescue Ashikawa::Core::BadSyntax
         false
       end
@@ -207,7 +207,7 @@ module Ashikawa
       # @raise [NoCollectionProvidedException] If you provided a database, no collection
       # @api private
       def simple_query_request(path, request)
-        wrapped_request(path, :put, request.merge({ :collection => collection.name }))
+        wrapped_request(path, :put, request.merge({ collection: collection.name }))
       end
 
       # Perform a wrapped request

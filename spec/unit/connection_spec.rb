@@ -4,7 +4,7 @@ require 'ashikawa-core/connection'
 describe Ashikawa::Core::Connection do
   let(:request_stub) { Faraday::Adapter::Test::Stubs.new }
   let(:response_headers) { {"content-type" => "application/json; charset=utf-8" } }
-  subject { Ashikawa::Core::Connection.new(ARANGO_HOST, :adapter => [:test, request_stub]) }
+  subject { Ashikawa::Core::Connection.new(ARANGO_HOST, adapter: [:test, request_stub]) }
 
   it "should have a scheme, hostname and port" do
     subject.scheme.should == "http"
@@ -28,7 +28,7 @@ describe Ashikawa::Core::Connection do
       [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
-    subject.send_request "my/path", :post => { :name => 'new_collection' }
+    subject.send_request "my/path", post: { name: 'new_collection' }
 
     request_stub.verify_stubbed_calls
   end
@@ -39,7 +39,7 @@ describe Ashikawa::Core::Connection do
       [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
-    subject.send_request "my/path", :put => { :name => 'new_collection' }
+    subject.send_request "my/path", put: { name: 'new_collection' }
 
     request_stub.verify_stubbed_calls
   end
@@ -49,7 +49,7 @@ describe Ashikawa::Core::Connection do
       [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
-    subject.send_request "my/path", :delete => { }
+    subject.send_request "my/path", delete: { }
 
     request_stub.verify_stubbed_calls
   end
@@ -60,7 +60,7 @@ describe Ashikawa::Core::Connection do
       [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
-    subject.send_request("my/path", :post => { "test" => 1})
+    subject.send_request("my/path", post: { "test" => 1})
     request_stub.verify_stubbed_calls
   end
 
@@ -79,22 +79,22 @@ describe Ashikawa::Core::Connection do
     end
 
     it "should tell if authentication is enabled" do
-      subject.authenticate_with :username => "testuser", :password => "testpassword"
+      subject.authenticate_with username: "testuser", password: "testpassword"
       subject.authentication?.should be_true
     end
 
     it "should only accept username & password pairs" do
       expect {
-        subject.authenticate_with :username => "kitty"
+        subject.authenticate_with username: "kitty"
       }.to raise_error(ArgumentError)
 
       expect {
-        subject.authenticate_with :password => "cheezburger?"
+        subject.authenticate_with password: "cheezburger?"
       }.to raise_error(ArgumentError)
     end
 
     it "should allow chaining" do
-      subject.authenticate_with(:username => "a", :password => "b").should == subject
+      subject.authenticate_with(username: "a", password: "b").should == subject
     end
 
     it "should send the authentication data with every GET request" do
@@ -104,7 +104,7 @@ describe Ashikawa::Core::Connection do
         [200, response_headers, JSON.generate({ "name" => "dude" })]
       end
 
-      subject.authenticate_with :username => "user", :password => "pass"
+      subject.authenticate_with username: "user", password: "pass"
       subject.send_request "my/path"
 
       request_stub.verify_stubbed_calls
@@ -224,12 +224,12 @@ describe Ashikawa::Core::Connection do
     let(:request_stub) { Faraday::Adapter::Test::Stubs.new }
     let(:logger) { double }
     subject {
-      Ashikawa::Core::Connection.new(ARANGO_HOST, :adapter => [:test, request_stub], :logger => logger)
+      Ashikawa::Core::Connection.new(ARANGO_HOST, adapter: [:test, request_stub], logger: logger)
     }
 
     it "should log a get request" do
       request_stub.get("/_api/test") do
-        [200, response_headers, JSON.generate({:a => 1})]
+        [200, response_headers, JSON.generate({a: 1})]
       end
       logger.should_receive(:info).with("GET #{ARANGO_HOST}/_api/test ")
       logger.should_receive(:info).with("200 {\"a\":1}")
@@ -238,11 +238,11 @@ describe Ashikawa::Core::Connection do
 
     it "should log a post request" do
       request_stub.post("/_api/test") do
-        [201, response_headers, JSON.generate({:b => 2})]
+        [201, response_headers, JSON.generate({b: 2})]
       end
       logger.should_receive(:info).with("POST #{ARANGO_HOST}/_api/test {:a=>2}")
       logger.should_receive(:info).with("201 {\"b\":2}")
-      subject.send_request("test", :post => { :a => 2})
+      subject.send_request("test", post: { a: 2})
     end
   end
 end

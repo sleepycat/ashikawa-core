@@ -29,7 +29,7 @@ describe Ashikawa::Core::Cursor do
     it "should iterate over all documents of a cursor when given a block" do
       first = true
 
-      @database.stub(:send_request).with("cursor/26011191", :put => {}) do
+      @database.stub(:send_request).with("cursor/26011191", put: {}) do
         if first
           first = false
           server_response("cursor/26011191-2")
@@ -48,7 +48,7 @@ describe Ashikawa::Core::Cursor do
     it "should return an enumerator to go over all documents of a cursor when given no block" do
       first = true
 
-      @database.stub(:send_request).with("cursor/26011191", :put => {}) do
+      @database.stub(:send_request).with("cursor/26011191", put: {}) do
         if first
           first = false
           server_response("cursor/26011191-2")
@@ -73,7 +73,7 @@ describe Ashikawa::Core::Cursor do
     it "should be deletable" do
       @database.stub(:send_request)
       @database.should_receive(:send_request).with("cursor/26011191",
-        :delete => {})
+        delete: {})
 
       subject.delete
     end
@@ -81,7 +81,7 @@ describe Ashikawa::Core::Cursor do
     it "should be enumerable" do
       first = true
 
-      @database.stub(:send_request).with("cursor/26011191", :put => {}) do
+      @database.stub(:send_request).with("cursor/26011191", put: {}) do
         if first
           first = false
           server_response("cursor/26011191-2")
@@ -98,7 +98,7 @@ describe Ashikawa::Core::Cursor do
     end
 
     it "should return edge objects when recieving data from an edge collection" do
-      @database.stub(:send_request).with("cursor/26011191", :put => {}) do
+      @database.stub(:send_request).with("cursor/26011191", put: {}) do
         server_response("cursor/edges")
       end
       @database.should_receive(:send_request).once

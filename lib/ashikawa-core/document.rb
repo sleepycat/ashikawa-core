@@ -79,7 +79,7 @@ module Ashikawa
       #   document.delete
       def delete
         check_if_persisted!
-        send_request_for_document(:delete => {})
+        send_request_for_document(delete: {})
       end
 
       # Update the value of an attribute (Does not write to database)
@@ -117,7 +117,7 @@ module Ashikawa
       #   document.save
       def save
         check_if_persisted!
-        send_request_for_document(:put => @content)
+        send_request_for_document(put: @content)
       end
 
       # Get a fresh version of this document from the database

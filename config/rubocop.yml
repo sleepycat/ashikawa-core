@@ -31,7 +31,7 @@ AccessControl:
   Enabled: true
 
 HashSyntax:
-  Enabled: false
+  Enabled: true
 
 StringLiterals:
   Enabled: false

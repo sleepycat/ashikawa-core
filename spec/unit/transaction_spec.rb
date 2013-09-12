@@ -9,7 +9,7 @@ describe Ashikawa::Core::Transaction do
     subject { Ashikawa::Core::Transaction }
 
     it "should be initialized with only write collections" do
-      transaction = subject.new(db, action, :write => [
+      transaction = subject.new(db, action, write: [
         "collection_1"
       ])
 
@@ -17,7 +17,7 @@ describe Ashikawa::Core::Transaction do
     end
 
     it "should be initialized with only read collections" do
-      transaction = subject.new(db, action, :read => [
+      transaction = subject.new(db, action, read: [
         "collection_1"
       ])
 
@@ -27,15 +27,15 @@ describe Ashikawa::Core::Transaction do
 
   describe "using a transaction" do
     let(:read_and_write_collections) do
-      { :read => ["collection_1"], :write => ["collection_2"] }
+      { read: ["collection_1"], write: ["collection_2"] }
     end
 
     let(:only_read_collection) do
-      { :read => ["collection_1"] }
+      { read: ["collection_1"] }
     end
 
     let(:only_write_collection) do
-      { :write => ["collection_1"] }
+      { write: ["collection_1"] }
     end
 
     subject { Ashikawa::Core::Transaction.new(db, action, read_and_write_collections) }
@@ -71,21 +71,21 @@ describe Ashikawa::Core::Transaction do
       end
 
       it "should post to `transaction` endpoint" do
-        db.should_receive(:send_request).with("transaction", :post => an_instance_of(Hash))
+        db.should_receive(:send_request).with("transaction", post: an_instance_of(Hash))
         subject.execute
       end
 
       it "should only send the read collection if no write collection was provided" do
         transaction = Ashikawa::Core::Transaction.new(db, action, only_read_collection)
         db.should_receive(:send_request).with(anything, {
-          :post => hash_including(:collections => only_read_collection)
+          post: hash_including(collections: only_read_collection)
         })
         transaction.execute
       end
 
       it "should send the information about the read and write collections" do
         db.should_receive(:send_request).with(anything, {
-          :post => hash_including(:collections => read_and_write_collections)
+          post: hash_including(collections: read_and_write_collections)
         })
         subject.execute
       end
@@ -93,28 +93,28 @@ describe Ashikawa::Core::Transaction do
       it "should only send the write collection if no read collection was provided" do
         transaction = Ashikawa::Core::Transaction.new(db, action, only_write_collection)
         db.should_receive(:send_request).with(anything, {
-          :post => hash_including(:collections => only_write_collection)
+          post: hash_including(collections: only_write_collection)
         })
         transaction.execute
       end
 
       it "should send the information about the action" do
         db.should_receive(:send_request).with(anything, {
-          :post => hash_including(:action => action)
+          post: hash_including(action: action)
         })
         subject.execute
       end
 
       it "should send with wait for sync set to false by default" do
         db.should_receive(:send_request).with(anything, {
-          :post => hash_including(:waitForSync => false)
+          post: hash_including(waitForSync: false)
         })
         subject.execute
       end
 
       it "should send with wait for sync set to the value provided by the user" do
         db.should_receive(:send_request).with(anything, {
-          :post => hash_including(:waitForSync => wait_for_sync)
+          post: hash_including(waitForSync: wait_for_sync)
         })
         subject.wait_for_sync = wait_for_sync
         subject.execute
@@ -122,14 +122,14 @@ describe Ashikawa::Core::Transaction do
 
       it "should not send lock timeout by default" do
         db.should_receive(:send_request).with(anything, {
-          :post => hash_not_including(:lockTimeout => anything)
+          post: hash_not_including(lockTimeout: anything)
         })
         subject.execute
       end
 
       it "should send the configured lock timeout" do
         db.should_receive(:send_request).with(anything, {
-          :post => hash_including(:lockTimeout => lock_timeout)
+          post: hash_including(lockTimeout: lock_timeout)
         })
         subject.lock_timeout = lock_timeout
         subject.execute
@@ -137,14 +137,14 @@ describe Ashikawa::Core::Transaction do
 
       it "should send the arguments object if it was provided" do
         db.should_receive(:send_request).with(anything, {
-          :post => hash_including(:params => action_params)
+          post: hash_including(params: action_params)
         })
         subject.execute(action_params)
       end
 
       it "should not send params by default" do
         db.should_receive(:send_request).with(anything, {
-          :post => hash_not_including(:params => anything)
+          post: hash_not_including(params: anything)
         })
         subject.execute
       end
