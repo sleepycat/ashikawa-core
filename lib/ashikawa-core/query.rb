@@ -194,7 +194,7 @@ module Ashikawa
         allowed_keys = ALLOWED_KEYS_FOR_PATH.fetch(path)
         options.keep_if { |key, _| allowed_keys.include?(key) }
         Hash[options.map { |key, value|
-          [key.to_s.gsub(/_(.)/) { $1.upcase }, value]
+          [key.to_s.gsub(/_(.)/) { |match| match[1].upcase }, value]
         }]
       end
 

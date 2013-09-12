@@ -79,10 +79,10 @@ ConstantName:
   Enabled: false
 
 AvoidPerlisms:
-  Enabled: false
+  Enabled: true
 
 AvoidPerlBackrefs:
-  Enabled: false
+  Enabled: true
 
 TrivialAccessors:
   Enabled: true
