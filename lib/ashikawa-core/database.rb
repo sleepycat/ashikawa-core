@@ -111,7 +111,7 @@ module Ashikawa
         Ashikawa::Core::Collection.new(self, response)
       end
 
-      alias :[] :collection
+      alias_method :[], :collection
 
       # Return a Query initialized with this database
       #

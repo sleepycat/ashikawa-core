@@ -2,7 +2,7 @@ AllCops:
   Includes:
     - '../**/*.rake'
   Excludes:
-    - '../vendor/**'
+    - '*_spec.rb'
 
 # Avoid parameter lists longer than five parameters.
 ParameterLists:
@@ -28,7 +28,7 @@ CollectionMethods:
 # level I think it sort of blends in with the def keywords and makes it harder
 # to scan the code and see where the sections are.
 AccessControl:
-  Enabled: false
+  Enabled: true
 
 HashSyntax:
   Enabled: false
@@ -37,20 +37,22 @@ StringLiterals:
   Enabled: false
 
 Void:
-  Enabled: false
+  Enabled: true
 
+# TODO: Limit is 79. This is too low. Is this adjustable?
 LineLength:
   Enabled: false
 
 SpaceAroundBraces:
-  Enabled: false
+  Enabled: true
 
 SpaceInsideHashLiteralBraces:
-  Enabled: false
+  Enabled: true
 
 AlignParameters:
-  Enabled: false
+  Enabled: true
 
+# I don't agree with this
 Blocks:
   Enabled: false
 
@@ -58,20 +60,21 @@ SymbolName:
   Enabled: false
 
 NumericLiterals:
-  Enabled: false
+  Enabled: true
 
 SpaceInsideBrackets:
-  Enabled: false
+  Enabled: true
 
 WordArray:
-  Enabled: false
+  Enabled: true
 
 Lambda:
-  Enabled: false
+  Enabled: true
 
 RegexpLiteral:
-  Enabled: false
+  Enabled: true
 
+# Don't agree
 ConstantName:
   Enabled: false
 
@@ -85,7 +88,7 @@ TrivialAccessors:
   Enabled: false
 
 Alias:
-  Enabled: false
+  Enabled: true
 
 Loop:
   Enabled: false
