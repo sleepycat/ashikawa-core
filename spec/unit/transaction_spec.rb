@@ -60,31 +60,31 @@ describe Ashikawa::Core::Transaction do
       let(:action_params) { double }
 
       before {
-        response.stub(:[])
-        db.stub(:send_request).and_return { response }
+        allow(response).to receive(:[])
+        allow(db).to receive(:send_request).and_return { response }
       }
 
       it "should return the result from the database" do
-        response.should_receive(:[]).with("result").and_return { result }
-        db.should_receive(:send_request).and_return { response }
+        expect(response).to receive(:[]).with("result").and_return { result }
+        expect(db).to receive(:send_request).and_return { response }
         expect(subject.execute).to eq(result)
       end
 
       it "should post to `transaction` endpoint" do
-        db.should_receive(:send_request).with("transaction", post: an_instance_of(Hash))
+        expect(db).to receive(:send_request).with("transaction", post: an_instance_of(Hash))
         subject.execute
       end
 
       it "should only send the read collection if no write collection was provided" do
         transaction = Ashikawa::Core::Transaction.new(db, action, only_read_collection)
-        db.should_receive(:send_request).with(anything, {
+        expect(db).to receive(:send_request).with(anything, {
           post: hash_including(collections: only_read_collection)
         })
         transaction.execute
       end
 
       it "should send the information about the read and write collections" do
-        db.should_receive(:send_request).with(anything, {
+        expect(db).to receive(:send_request).with(anything, {
           post: hash_including(collections: read_and_write_collections)
         })
         subject.execute
@@ -92,28 +92,28 @@ describe Ashikawa::Core::Transaction do
 
       it "should only send the write collection if no read collection was provided" do
         transaction = Ashikawa::Core::Transaction.new(db, action, only_write_collection)
-        db.should_receive(:send_request).with(anything, {
+        expect(db).to receive(:send_request).with(anything, {
           post: hash_including(collections: only_write_collection)
         })
         transaction.execute
       end
 
       it "should send the information about the action" do
-        db.should_receive(:send_request).with(anything, {
+        expect(db).to receive(:send_request).with(anything, {
           post: hash_including(action: action)
         })
         subject.execute
       end
 
       it "should send with wait for sync set to false by default" do
-        db.should_receive(:send_request).with(anything, {
+        expect(db).to receive(:send_request).with(anything, {
           post: hash_including(waitForSync: false)
         })
         subject.execute
       end
 
       it "should send with wait for sync set to the value provided by the user" do
-        db.should_receive(:send_request).with(anything, {
+        expect(db).to receive(:send_request).with(anything, {
           post: hash_including(waitForSync: wait_for_sync)
         })
         subject.wait_for_sync = wait_for_sync
@@ -121,14 +121,14 @@ describe Ashikawa::Core::Transaction do
       end
 
       it "should not send lock timeout by default" do
-        db.should_receive(:send_request).with(anything, {
+        expect(db).to receive(:send_request).with(anything, {
           post: hash_not_including(lockTimeout: anything)
         })
         subject.execute
       end
 
       it "should send the configured lock timeout" do
-        db.should_receive(:send_request).with(anything, {
+        expect(db).to receive(:send_request).with(anything, {
           post: hash_including(lockTimeout: lock_timeout)
         })
         subject.lock_timeout = lock_timeout
@@ -136,14 +136,14 @@ describe Ashikawa::Core::Transaction do
       end
 
       it "should send the arguments object if it was provided" do
-        db.should_receive(:send_request).with(anything, {
+        expect(db).to receive(:send_request).with(anything, {
           post: hash_including(params: action_params)
         })
         subject.execute(action_params)
       end
 
       it "should not send params by default" do
-        db.should_receive(:send_request).with(anything, {
+        expect(db).to receive(:send_request).with(anything, {
           post: hash_not_including(params: anything)
         })
         subject.execute

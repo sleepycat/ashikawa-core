@@ -13,8 +13,8 @@ describe Ashikawa::Core::Database do
   end
 
   it "should initialize with a connection" do
-    @connection.stub(:host) { "localhost" }
-    @connection.stub(:port) { 8529 }
+    allow(@connection).to receive(:host) { "localhost" }
+    allow(@connection).to receive(:port) { 8529 }
 
     database = subject.new do |config|
       config.connection = @connection
@@ -24,11 +24,11 @@ describe Ashikawa::Core::Database do
   end
 
   it "should initialize with a connection string" do
-    Ashikawa::Core::Connection.stub(:new).with("http://localhost:8529", {
+    allow(Ashikawa::Core::Connection).to receive(:new).with("http://localhost:8529", {
       logger: nil,
       adapter: nil
     }).and_return(double)
-    Ashikawa::Core::Connection.should_receive(:new).with("http://localhost:8529", {
+    expect(Ashikawa::Core::Connection).to receive(:new).with("http://localhost:8529", {
       logger: nil,
       adapter: nil
     })
@@ -40,11 +40,11 @@ describe Ashikawa::Core::Database do
 
   it "should initialize with a connection string and logger" do
     logger = double
-    Ashikawa::Core::Connection.stub(:new).with("http://localhost:8529", {
+    allow(Ashikawa::Core::Connection).to receive(:new).with("http://localhost:8529", {
       logger: logger,
       adapter: nil
     }).and_return(double)
-    Ashikawa::Core::Connection.should_receive(:new).with("http://localhost:8529", {
+    expect(Ashikawa::Core::Connection).to receive(:new).with("http://localhost:8529", {
       logger: logger,
       adapter: nil
     })
@@ -57,11 +57,11 @@ describe Ashikawa::Core::Database do
 
   it "should initialize with a connection string and adapter" do
     adapter = double
-    Ashikawa::Core::Connection.stub(:new).with("http://localhost:8529", {
+    allow(Ashikawa::Core::Connection).to receive(:new).with("http://localhost:8529", {
       logger: nil,
       adapter: adapter
     }).and_return(double)
-    Ashikawa::Core::Connection.should_receive(:new).with("http://localhost:8529", {
+    expect(Ashikawa::Core::Connection).to receive(:new).with("http://localhost:8529", {
       logger: nil,
       adapter: adapter
     })
@@ -90,8 +90,8 @@ describe Ashikawa::Core::Database do
     end
 
     double Ashikawa::Core::Query
-    Ashikawa::Core::Query.stub(:new)
-    Ashikawa::Core::Query.should_receive(:new).exactly(1).times.with(database)
+    allow(Ashikawa::Core::Query).to receive(:new)
+    expect(Ashikawa::Core::Query).to receive(:new).exactly(1).times.with(database)
 
     database.query
   end
@@ -104,53 +104,53 @@ describe Ashikawa::Core::Database do
     }
 
     it "should delegate authentication to the connection" do
-      @connection.should_receive(:authenticate_with).with({ username: "user", password: "password" })
+      expect(@connection).to receive(:authenticate_with).with({ username: "user", password: "password" })
 
       subject.authenticate_with username: "user", password: "password"
     end
 
     it "should fetch all available non-system collections" do
-      @connection.stub(:send_request) {|path| server_response("collections/all") }
-      @connection.should_receive(:send_request).with("collection")
+      allow(@connection).to receive(:send_request) {|path| server_response("collections/all") }
+      expect(@connection).to receive(:send_request).with("collection")
 
       (0..1).each do |k|
-        Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/all")["collections"][k])
+        expect(Ashikawa::Core::Collection).to receive(:new).with(subject, server_response("collections/all")["collections"][k])
       end
 
       expect(subject.collections.length).to eq(2)
     end
 
     it "should fetch all available non-system collections" do
-      @connection.stub(:send_request) {|path| server_response("collections/all") }
-      @connection.should_receive(:send_request).with("collection")
+      allow(@connection).to receive(:send_request) {|path| server_response("collections/all") }
+      expect(@connection).to receive(:send_request).with("collection")
 
-      Ashikawa::Core::Collection.should_receive(:new).exactly(5).times
+      expect(Ashikawa::Core::Collection).to receive(:new).exactly(5).times
 
       expect(subject.system_collections.length).to eq(5)
     end
 
     it "should create a non volatile collection by default" do
-      @connection.stub(:send_request) { |path| server_response("collections/60768679") }
-      @connection.should_receive(:send_request).with("collection",
+      allow(@connection).to receive(:send_request) { |path| server_response("collections/60768679") }
+      expect(@connection).to receive(:send_request).with("collection",
         post: { name: "volatile_collection"})
 
-      Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/60768679"))
+      expect(Ashikawa::Core::Collection).to receive(:new).with(subject, server_response("collections/60768679"))
 
       subject.create_collection("volatile_collection")
     end
 
     it "should create a volatile collection when asked" do
-      @connection.stub(:send_request) { |path| server_response("collections/60768679") }
-      @connection.should_receive(:send_request).with("collection",
+      allow(@connection).to receive(:send_request) { |path| server_response("collections/60768679") }
+      expect(@connection).to receive(:send_request).with("collection",
         post: { name: "volatile_collection", isVolatile: true})
 
-      Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/60768679"))
+      expect(Ashikawa::Core::Collection).to receive(:new).with(subject, server_response("collections/60768679"))
 
       subject.create_collection("volatile_collection", is_volatile: true)
     end
 
     it "should create an autoincrement collection when asked" do
-      @connection.should_receive(:send_request).with("collection",
+      expect(@connection).to receive(:send_request).with("collection",
         post: { name: "autoincrement_collection", keyOptions: {
           type: "autoincrement",
           offset: 0,
@@ -159,7 +159,7 @@ describe Ashikawa::Core::Database do
         }
       })
 
-      Ashikawa::Core::Collection.should_receive(:new)
+      expect(Ashikawa::Core::Collection).to receive(:new)
 
       subject.create_collection("autoincrement_collection", key_options: {
         type: :autoincrement,
@@ -170,35 +170,35 @@ describe Ashikawa::Core::Database do
     end
 
     it "should create an edge collection when asked" do
-      @connection.stub(:send_request) { |path| server_response("collections/60768679") }
-      @connection.should_receive(:send_request).with("collection",
+      allow(@connection).to receive(:send_request) { |path| server_response("collections/60768679") }
+      expect(@connection).to receive(:send_request).with("collection",
         post: { name: "volatile_collection", type: 3})
 
-      Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/60768679"))
+      expect(Ashikawa::Core::Collection).to receive(:new).with(subject, server_response("collections/60768679"))
 
       subject.create_collection("volatile_collection", content_type: :edge)
     end
 
     it "should fetch a single collection if it exists" do
-      @connection.stub(:send_request) { |path| server_response("collections/60768679") }
-      @connection.should_receive(:send_request).with("collection/60768679")
+      allow(@connection).to receive(:send_request) { |path| server_response("collections/60768679") }
+      expect(@connection).to receive(:send_request).with("collection/60768679")
 
-      Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/60768679"))
+      expect(Ashikawa::Core::Collection).to receive(:new).with(subject, server_response("collections/60768679"))
 
       subject.collection(60768679)
     end
 
     it "should fetch a single collection with the array syntax" do
-      @connection.stub(:send_request) { |path| server_response("collections/60768679") }
-      @connection.should_receive(:send_request).with("collection/60768679")
+      allow(@connection).to receive(:send_request) { |path| server_response("collections/60768679") }
+      expect(@connection).to receive(:send_request).with("collection/60768679")
 
-      Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/60768679"))
+      expect(Ashikawa::Core::Collection).to receive(:new).with(subject, server_response("collections/60768679"))
 
       subject[60768679]
     end
 
     it "should create a single collection if it doesn't exist" do
-      @connection.stub :send_request do |path, method|
+      allow(@connection).to receive :send_request do |path, method|
         method ||= {}
         if method.key? :post
           server_response("collections/60768679")
@@ -206,16 +206,16 @@ describe Ashikawa::Core::Database do
           raise Ashikawa::Core::CollectionNotFoundException
         end
       end
-      @connection.should_receive(:send_request).with("collection/new_collection")
-      @connection.should_receive(:send_request).with("collection", post: { name: "new_collection"})
+      expect(@connection).to receive(:send_request).with("collection/new_collection")
+      expect(@connection).to receive(:send_request).with("collection", post: { name: "new_collection"})
 
-      Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/60768679"))
+      expect(Ashikawa::Core::Collection).to receive(:new).with(subject, server_response("collections/60768679"))
 
       subject['new_collection']
     end
 
     it "should send a request via the connection object" do
-      @connection.should_receive(:send_request).with("my/path", post: { data: "mydata" })
+      expect(@connection).to receive(:send_request).with("my/path", post: { data: "mydata" })
 
       subject.send_request "my/path", post: { data: "mydata" }
     end
@@ -225,7 +225,7 @@ describe Ashikawa::Core::Database do
     let(:transaction) { double }
 
     it "should create a transaction" do
-      Ashikawa::Core::Transaction.should_receive(:new).with(subject, js_function, collections).and_return { transaction }
+      expect(Ashikawa::Core::Transaction).to receive(:new).with(subject, js_function, collections).and_return { transaction }
       expect(subject.create_transaction(js_function, collections)).to eq(transaction)
     end
   end

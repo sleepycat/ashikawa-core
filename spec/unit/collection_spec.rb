@@ -22,40 +22,40 @@ describe Ashikawa::Core::Collection do
     collection = subject.new @database, server_response("collections/60768679")
 
     double Ashikawa::Core::Query
-    Ashikawa::Core::Query.stub(:new)
-    Ashikawa::Core::Query.should_receive(:new).exactly(1).times.with(collection)
+    allow(Ashikawa::Core::Query).to receive(:new)
+    expect(Ashikawa::Core::Query).to receive(:new).exactly(1).times.with(collection)
 
     collection.query
   end
 
   describe "attributes of a collection" do
     it "should check if the collection waits for sync" do
-      @database.stub(:send_request).with("collection/60768679/properties", {}).and_return { server_response("collections/60768679-properties") }
-      @database.should_receive(:send_request).with("collection/60768679/properties", {})
+      allow(@database).to receive(:send_request).with("collection/60768679/properties", {}).and_return { server_response("collections/60768679-properties") }
+      expect(@database).to receive(:send_request).with("collection/60768679/properties", {})
 
       my_collection = subject.new @database, { "id" => "60768679" }
       expect(my_collection.wait_for_sync?).to be_true
     end
 
     it "should know how many documents the collection has" do
-      @database.stub(:send_request).with("collection/60768679/count", {}).and_return { server_response("collections/60768679-count") }
-      @database.should_receive(:send_request).with("collection/60768679/count", {})
+      allow(@database).to receive(:send_request).with("collection/60768679/count", {}).and_return { server_response("collections/60768679-count") }
+      expect(@database).to receive(:send_request).with("collection/60768679/count", {})
 
       my_collection = subject.new @database, { "id" => "60768679" }
       expect(my_collection.length).to eq(54)
     end
 
     it "should know if the collection is volatile" do
-      @database.stub(:send_request).with("collection/60768679/properties", {}).and_return { server_response("collections/60768679-properties-volatile") }
-      @database.should_receive(:send_request).with("collection/60768679/properties", {})
+      allow(@database).to receive(:send_request).with("collection/60768679/properties", {}).and_return { server_response("collections/60768679-properties-volatile") }
+      expect(@database).to receive(:send_request).with("collection/60768679/properties", {})
 
       my_collection = subject.new(@database, { "id" => "60768679" })
       expect(my_collection.volatile?).to eq(true)
     end
 
     it "should know if the collection is not volatile" do
-      @database.stub(:send_request).with("collection/60768679/properties", {}).and_return { server_response("collections/60768679-properties") }
-      @database.should_receive(:send_request).with("collection/60768679/properties", {})
+      allow(@database).to receive(:send_request).with("collection/60768679/properties", {}).and_return { server_response("collections/60768679-properties") }
+      expect(@database).to receive(:send_request).with("collection/60768679/properties", {})
 
       my_collection = subject.new(@database, { "id" => "60768679" })
       expect(my_collection.volatile?).to eq(false)
@@ -72,12 +72,12 @@ describe Ashikawa::Core::Collection do
     end
 
     it "should check for the figures" do
-      @database.stub(:send_request).with("collection/60768679/figures", {}).and_return { server_response("collections/60768679-figures") }
-      @database.should_receive(:send_request).with("collection/60768679/figures", {}).at_least(1).times
+      allow(@database).to receive(:send_request).with("collection/60768679/figures", {}).and_return { server_response("collections/60768679-figures") }
+      expect(@database).to receive(:send_request).with("collection/60768679/figures", {}).at_least(1).times
 
       double Ashikawa::Core::Figure
-      Ashikawa::Core::Figure.stub(:new)
-      Ashikawa::Core::Figure.should_receive(:new).exactly(1).times.with(server_response("collections/60768679-figures")["figures"])
+      allow(Ashikawa::Core::Figure).to receive(:new)
+      expect(Ashikawa::Core::Figure).to receive(:new).exactly(1).times.with(server_response("collections/60768679-figures")["figures"])
 
       my_collection = subject.new @database, { "id" => "60768679" }
       my_collection.figure
@@ -88,80 +88,80 @@ describe Ashikawa::Core::Collection do
     subject { Ashikawa::Core::Collection.new @database, { "id" => "60768679", "name" => "example_1" } }
 
     it "should get deleted" do
-      @database.stub(:send_request).with("collection/60768679/", delete: {})
-      @database.should_receive(:send_request).with("collection/60768679/", delete: {})
+      allow(@database).to receive(:send_request).with("collection/60768679/", delete: {})
+      expect(@database).to receive(:send_request).with("collection/60768679/", delete: {})
 
       subject.delete
     end
 
     it "should get loaded" do
-      @database.stub(:send_request).with("collection/60768679/load", put: {})
-      @database.should_receive(:send_request).with("collection/60768679/load", put: {})
+      allow(@database).to receive(:send_request).with("collection/60768679/load", put: {})
+      expect(@database).to receive(:send_request).with("collection/60768679/load", put: {})
 
       subject.load
     end
 
     it "should get unloaded" do
-      @database.stub(:send_request).with("collection/60768679/unload", put: {})
-      @database.should_receive(:send_request).with("collection/60768679/unload", put: {})
+      allow(@database).to receive(:send_request).with("collection/60768679/unload", put: {})
+      expect(@database).to receive(:send_request).with("collection/60768679/unload", put: {})
 
       subject.unload
     end
 
     it "should get truncated" do
-      @database.stub(:send_request).with("collection/60768679/truncate", put: {})
-      @database.should_receive(:send_request).with("collection/60768679/truncate", put: {})
+      allow(@database).to receive(:send_request).with("collection/60768679/truncate", put: {})
+      expect(@database).to receive(:send_request).with("collection/60768679/truncate", put: {})
 
       subject.truncate!
     end
 
     it "should change if it waits for sync" do
-      @database.stub(:send_request).with("collection/60768679/properties", put: {"waitForSync" => true})
-      @database.should_receive(:send_request).with("collection/60768679/properties", put: {"waitForSync" => true})
+      allow(@database).to receive(:send_request).with("collection/60768679/properties", put: {"waitForSync" => true})
+      expect(@database).to receive(:send_request).with("collection/60768679/properties", put: {"waitForSync" => true})
 
       subject.wait_for_sync = true
     end
 
     it "should check for the key options" do
       raw_key_options = double
-      @database.should_receive(:send_request).with("collection/60768679/properties", {}).and_return { { "keyOptions" => raw_key_options } }
+      expect(@database).to receive(:send_request).with("collection/60768679/properties", {}).and_return { { "keyOptions" => raw_key_options } }
 
       key_options = double
-      Ashikawa::Core::KeyOptions.stub(:new).with(raw_key_options).and_return { key_options }
+      allow(Ashikawa::Core::KeyOptions).to receive(:new).with(raw_key_options).and_return { key_options }
 
       expect(subject.key_options).to eq(key_options)
     end
 
     it "should change its name" do
-      @database.stub(:send_request).with("collection/60768679/rename", put: {"name" => "my_new_name"})
-      @database.should_receive(:send_request).with("collection/60768679/rename", put: {"name" => "my_new_name"})
+      allow(@database).to receive(:send_request).with("collection/60768679/rename", put: {"name" => "my_new_name"})
+      expect(@database).to receive(:send_request).with("collection/60768679/rename", put: {"name" => "my_new_name"})
 
       subject.name = "my_new_name"
     end
 
     describe "add and get single documents" do
       it "should receive a document by ID via fetch" do
-        @database.stub(:send_request).with("document/60768679/333", {}).and_return { server_response('documents/example_1-137249191') }
-        @database.should_receive(:send_request).with("document/60768679/333", {})
+        allow(@database).to receive(:send_request).with("document/60768679/333", {}).and_return { server_response('documents/example_1-137249191') }
+        expect(@database).to receive(:send_request).with("document/60768679/333", {})
 
         # Documents need to get initialized:
-        Ashikawa::Core::Document.should_receive(:new)
+        expect(Ashikawa::Core::Document).to receive(:new)
 
         subject.fetch(333)
       end
 
       it "should receive a document by ID via []" do
-        @database.stub(:send_request).with("document/60768679/333", {}).and_return { server_response('documents/example_1-137249191') }
-        @database.should_receive(:send_request).with("document/60768679/333", {})
+        allow(@database).to receive(:send_request).with("document/60768679/333", {}).and_return { server_response('documents/example_1-137249191') }
+        expect(@database).to receive(:send_request).with("document/60768679/333", {})
 
         # Documents need to get initialized:
-        Ashikawa::Core::Document.should_receive(:new)
+        expect(Ashikawa::Core::Document).to receive(:new)
 
         subject[333]
       end
 
       it "should throw an exception when the document was not found during a fetch" do
-        @database.stub(:send_request).and_return {
+        allow(@database).to receive(:send_request).and_return {
           raise Ashikawa::Core::DocumentNotFoundException
         }
 
@@ -171,7 +171,7 @@ describe Ashikawa::Core::Collection do
       end
 
       it "should return nil when the document was not found when using []" do
-        @database.stub(:send_request).and_return {
+        allow(@database).to receive(:send_request).and_return {
           raise Ashikawa::Core::DocumentNotFoundException
         }
 
@@ -179,17 +179,17 @@ describe Ashikawa::Core::Collection do
       end
 
       it "should replace a document by ID" do
-        @database.stub(:send_request).with("document/60768679/333", put: {"name" => "The Dude"})
-        @database.should_receive(:send_request).with("document/60768679/333", put: {"name" => "The Dude"})
+        allow(@database).to receive(:send_request).with("document/60768679/333", put: {"name" => "The Dude"})
+        expect(@database).to receive(:send_request).with("document/60768679/333", put: {"name" => "The Dude"})
 
         subject.replace(333, {"name" => "The Dude"})
       end
 
       it "should create a new document" do
-        @database.stub(:send_request).with("document?collection=60768679", post: { "name" => "The Dude" }).and_return do
+        allow(@database).to receive(:send_request).with("document?collection=60768679", post: { "name" => "The Dude" }).and_return do
           server_response('documents/new-example_1-137249191')
         end
-        @database.stub(:send_request).with("document/60768679/333", post: {
+        allow(@database).to receive(:send_request).with("document/60768679/333", post: {
           "name" => "The Dude"
         }).and_return {
           {
@@ -198,12 +198,12 @@ describe Ashikawa::Core::Collection do
             "_key" => "137249191"
           }
         }
-        @database.stub(:send_request).with("document/60768679/333", {}).and_return { server_response('documents/example_1-137249191') }
+        allow(@database).to receive(:send_request).with("document/60768679/333", {}).and_return { server_response('documents/example_1-137249191') }
 
         # Documents need to get initialized:
-        Ashikawa::Core::Document.should_receive(:new).and_return {
+        expect(Ashikawa::Core::Document).to receive(:new).and_return {
           document = double
-          document.should_receive(:refresh!)
+          expect(document).to receive(:refresh!)
           document
         }
 
@@ -211,15 +211,15 @@ describe Ashikawa::Core::Collection do
       end
 
       it "should create a new document" do
-        @database.stub(:send_request).with("document?collection=60768679", post: { "name" => "The Dude" }).and_return do
+        allow(@database).to receive(:send_request).with("document?collection=60768679", post: { "name" => "The Dude" }).and_return do
           server_response('documents/example_1-137249191')
         end
-        @database.stub(:send_request).with("document/60768679/333").and_return { server_response('documents/example_1-137249191') }
+        allow(@database).to receive(:send_request).with("document/60768679/333").and_return { server_response('documents/example_1-137249191') }
 
         # Documents need to get initialized:
-        Ashikawa::Core::Document.should_receive(:new).and_return {
+        expect(Ashikawa::Core::Document).to receive(:new).and_return {
           document = double
-          document.should_receive(:refresh!)
+          expect(document).to receive(:refresh!)
           document
         }
 
@@ -234,36 +234,36 @@ describe Ashikawa::Core::Collection do
 
       describe "indices" do
         it "should add a new index" do
-          @database.stub(:send_request).with("index?collection=60768679", post: {
+          allow(@database).to receive(:send_request).with("index?collection=60768679", post: {
             "type" => "hash", "fields" => [ "a", "b" ]
           }).and_return { server_response('indices/new-hash-index') }
-          @database.should_receive(:send_request).with("index?collection=60768679", post: {
+          expect(@database).to receive(:send_request).with("index?collection=60768679", post: {
             "type" => "hash", "fields" => [ "a", "b" ]
           })
 
-          Ashikawa::Core::Index.should_receive(:new).with(subject,
+          expect(Ashikawa::Core::Index).to receive(:new).with(subject,
             server_response('indices/new-hash-index'))
 
           subject.add_index :hash, on: [ :a, :b ]
         end
 
         it "should get an index by ID" do
-          @database.stub(:send_request).with(
+          allow(@database).to receive(:send_request).with(
             "index/example_1/168054969"
           ).and_return { server_response('indices/hash-index') }
 
-          Ashikawa::Core::Index.should_receive(:new).with(subject,
+          expect(Ashikawa::Core::Index).to receive(:new).with(subject,
             server_response('indices/hash-index'))
 
           subject.index 168054969
         end
 
         it "should get all indices" do
-          @database.stub(:send_request).with(
+          allow(@database).to receive(:send_request).with(
             "index?collection=60768679"
           ).and_return { server_response('indices/all') }
 
-          Ashikawa::Core::Index.should_receive(:new).exactly(1).times
+          expect(Ashikawa::Core::Index).to receive(:new).exactly(1).times
 
           indices = subject.indices
           expect(indices.length).to eq(1)
@@ -276,36 +276,37 @@ describe Ashikawa::Core::Collection do
     subject { Ashikawa::Core::Collection.new @database, { "id" => "60768679", "name" => "example_1", "type" => 3 } }
 
     it "should receive an edge by ID" do
-      @database.stub(:send_request).with("edge/60768679/333", {}).and_return { server_response('documents/example_1-137249191') }
-      @database.should_receive(:send_request).with("edge/60768679/333", {})
+      allow(@database).to receive(:send_request).with("edge/60768679/333", {}).and_return { server_response('documents/example_1-137249191') }
+      expect(@database).to receive(:send_request).with("edge/60768679/333", {})
 
       # Documents need to get initialized:
-      Ashikawa::Core::Edge.should_receive(:new)
+      expect(Ashikawa::Core::Edge).to receive(:new)
 
       subject.fetch(333)
     end
 
     it "should replace an edge by ID" do
-      @database.stub(:send_request).with("edge/60768679/333", put: {"name" => "The Dude"})
-      @database.should_receive(:send_request).with("edge/60768679/333", put: {"name" => "The Dude"})
+      allow(@database).to receive(:send_request).with("edge/60768679/333", put: {"name" => "The Dude"})
+      expect(@database).to receive(:send_request).with("edge/60768679/333", put: {"name" => "The Dude"})
 
       subject.replace(333, {"name" => "The Dude"})
     end
 
     it "should create a new edge" do
-      @database.stub(:send_request).with("edge?collection=60768679&from=1&to=2", post: { "name" => "The Dude" }).and_return do
+      pending "lol"
+      allow(@database).to receive(:send_request).with("edge?collection=60768679&from=1&to=2", post: { "name" => "The Dude" }).and_return do
         server_response('documents/new-example_1-137249191')
       end
-      @database.stub(:send_request).with("edge?collection=60768679&from=1&to=2", post: { "name" => "The Dude" }).and_return { server_response('documents/example_1-137249191') }
+      allow(@database).to receive(:send_request).with("edge?collection=60768679&from=1&to=2", post: { "name" => "The Dude" }).and_return { server_response('documents/example_1-137249191') }
       from_double = double
-      from_double.stub(id: "1")
+      allow(from_double).to receive(id: "1")
       to_double = double
-      to_double.stub(id: "2")
+      allow(to_double).to receive(id: "2")
 
       # Documents need to get initialized:
-      Ashikawa::Core::Edge.should_receive(:new).and_return {
+      expect(Ashikawa::Core::Edge).to receive(:new).and_return {
         document = double
-        document.should_receive(:refresh!)
+        expect(document).to receive(:refresh!)
         document
       }
 

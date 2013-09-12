@@ -27,7 +27,7 @@ describe Ashikawa::Core::Edge do
     subject { Ashikawa::Core::Edge.new(database, raw_data)}
 
     it "should be deletable" do
-      database.should_receive(:send_request).with("edge/#{raw_data['_id']}",
+      expect(database).to receive(:send_request).with("edge/#{raw_data['_id']}",
         { delete: {} }
       )
 
@@ -35,7 +35,7 @@ describe Ashikawa::Core::Edge do
     end
 
     it "should store changes to the database" do
-      database.should_receive(:send_request).with("edge/#{raw_data['_id']}",
+      expect(database).to receive(:send_request).with("edge/#{raw_data['_id']}",
         { put: { "first_name" => "The", "last_name" => "Other" } }
       )
 

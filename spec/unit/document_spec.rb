@@ -45,7 +45,7 @@ describe Ashikawa::Core::Document do
     end
 
     it "should be deletable" do
-      database.should_receive(:send_request).with("document/#{raw_data['_id']}",
+      expect(database).to receive(:send_request).with("document/#{raw_data['_id']}",
         { delete: {} }
       )
 
@@ -53,7 +53,7 @@ describe Ashikawa::Core::Document do
     end
 
     it "should store changes to the database" do
-      database.should_receive(:send_request).with("document/#{raw_data['_id']}",
+      expect(database).to receive(:send_request).with("document/#{raw_data['_id']}",
         { put: { "first_name" => "The", "last_name" => "Other" } }
       )
 
@@ -68,7 +68,7 @@ describe Ashikawa::Core::Document do
     end
 
     it "should be refreshable" do
-      database.should_receive(:send_request).with("document/#{raw_data['_id']}", {}).and_return {
+      expect(database).to receive(:send_request).with("document/#{raw_data['_id']}", {}).and_return {
         { "name" => "Jeff" }
       }
 
@@ -90,12 +90,12 @@ describe Ashikawa::Core::Document do
     end
 
     it "should not be deletable" do
-      database.should_not_receive :send_request
+      expect(database).not_to receive :send_request
       expect { subject.delete }.to raise_error Ashikawa::Core::DocumentNotFoundException
     end
 
     it "should not store changes to the database" do
-      database.should_not_receive :send_request
+      expect(database).not_to receive :send_request
       expect { subject.save }.to raise_error Ashikawa::Core::DocumentNotFoundException
     end
   end

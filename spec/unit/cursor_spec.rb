@@ -29,7 +29,7 @@ describe Ashikawa::Core::Cursor do
     it "should iterate over all documents of a cursor when given a block" do
       first = true
 
-      @database.stub(:send_request).with("cursor/26011191", put: {}) do
+      allow(@database).to receive(:send_request).with("cursor/26011191", put: {}) do
         if first
           first = false
           server_response("cursor/26011191-2")
@@ -37,10 +37,10 @@ describe Ashikawa::Core::Cursor do
           server_response("cursor/26011191-3")
         end
       end
-      @database.should_receive(:send_request).twice
+      expect(@database).to receive(:send_request).twice
 
-      Ashikawa::Core::Document.stub(:new)
-      Ashikawa::Core::Document.should_receive(:new).exactly(5).times
+      allow(Ashikawa::Core::Document).to receive(:new)
+      expect(Ashikawa::Core::Document).to receive(:new).exactly(5).times
 
       subject.each { |document| }
     end
@@ -48,7 +48,7 @@ describe Ashikawa::Core::Cursor do
     it "should return an enumerator to go over all documents of a cursor when given no block" do
       first = true
 
-      @database.stub(:send_request).with("cursor/26011191", put: {}) do
+      allow(@database).to receive(:send_request).with("cursor/26011191", put: {}) do
         if first
           first = false
           server_response("cursor/26011191-2")
@@ -56,10 +56,10 @@ describe Ashikawa::Core::Cursor do
           server_response("cursor/26011191-3")
         end
       end
-      @database.should_receive(:send_request).twice
+      expect(@database).to receive(:send_request).twice
 
-      Ashikawa::Core::Document.stub(:new)
-      Ashikawa::Core::Document.should_receive(:new).exactly(5).times
+      allow(Ashikawa::Core::Document).to receive(:new)
+      expect(Ashikawa::Core::Document).to receive(:new).exactly(5).times
 
       enumerator = subject.each
       enumerator.next
@@ -71,8 +71,8 @@ describe Ashikawa::Core::Cursor do
     end
 
     it "should be deletable" do
-      @database.stub(:send_request)
-      @database.should_receive(:send_request).with("cursor/26011191",
+      allow(@database).to receive(:send_request)
+      expect(@database).to receive(:send_request).with("cursor/26011191",
         delete: {})
 
       subject.delete
@@ -81,7 +81,7 @@ describe Ashikawa::Core::Cursor do
     it "should be enumerable" do
       first = true
 
-      @database.stub(:send_request).with("cursor/26011191", put: {}) do
+      allow(@database).to receive(:send_request).with("cursor/26011191", put: {}) do
         if first
           first = false
           server_response("cursor/26011191-2")
@@ -89,22 +89,22 @@ describe Ashikawa::Core::Cursor do
           server_response("cursor/26011191-3")
         end
       end
-      @database.should_receive(:send_request).twice
+      expect(@database).to receive(:send_request).twice
 
-      Ashikawa::Core::Document.stub(:new).and_return { 1 }
-      Ashikawa::Core::Document.should_receive(:new).exactly(5).times
+      allow(Ashikawa::Core::Document).to receive(:new).and_return { 1 }
+      expect(Ashikawa::Core::Document).to receive(:new).exactly(5).times
 
       expect(subject.map{|i| i}[0]).to eq(1)
     end
 
     it "should return edge objects when recieving data from an edge collection" do
-      @database.stub(:send_request).with("cursor/26011191", put: {}) do
+      allow(@database).to receive(:send_request).with("cursor/26011191", put: {}) do
         server_response("cursor/edges")
       end
-      @database.should_receive(:send_request).once
+      expect(@database).to receive(:send_request).once
 
-      Ashikawa::Core::Edge.stub(:new).and_return { 1 }
-      Ashikawa::Core::Edge.should_receive(:new).exactly(2).times
+      allow(Ashikawa::Core::Edge).to receive(:new).and_return { 1 }
+      expect(Ashikawa::Core::Edge).to receive(:new).exactly(2).times
 
       subject.each { |document| }
     end

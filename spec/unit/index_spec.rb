@@ -30,7 +30,7 @@ describe Ashikawa::Core::Index do
     subject { Ashikawa::Core::Index.new collection, raw_data }
 
     it "should be deletable" do
-      collection.should_receive(:send_request).with("index/167137465/168054969",
+      expect(collection).to receive(:send_request).with("index/167137465/168054969",
         delete: {})
 
       subject.delete

@@ -9,34 +9,34 @@ describe Ashikawa::Core::Query do
     subject { Ashikawa::Core::Query.new collection }
 
     before do
-      collection.stub(:name).and_return "example_1"
-      collection.stub(:database).and_return double
+      allow(collection).to receive(:name).and_return "example_1"
+      allow(collection).to receive(:database).and_return double
     end
 
     describe "get all" do
       it "should list all documents" do
-        collection.stub(:send_request).and_return { server_response('simple-queries/all') }
-        collection.should_receive(:send_request).with("simple/all", put: {"collection" => "example_1"})
+        allow(collection).to receive(:send_request).and_return { server_response('simple-queries/all') }
+        expect(collection).to receive(:send_request).with("simple/all", put: {"collection" => "example_1"})
 
-        Ashikawa::Core::Cursor.should_receive(:new)
+        expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.all
       end
 
       it "should be able to limit the number of documents" do
-        collection.stub(:send_request).and_return { server_response('simple-queries/all_skip') }
-        collection.should_receive(:send_request).with("simple/all", put: {"collection" => "example_1", "limit" => 1})
+        allow(collection).to receive(:send_request).and_return { server_response('simple-queries/all_skip') }
+        expect(collection).to receive(:send_request).with("simple/all", put: {"collection" => "example_1", "limit" => 1})
 
-        Ashikawa::Core::Cursor.should_receive(:new)
+        expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.all limit: 1
       end
 
       it "should be able to skip documents" do
-        collection.stub(:send_request).and_return { server_response('simple-queries/all_limit') }
-        collection.should_receive(:send_request).with("simple/all", put: {"collection" => "example_1", "skip" => 1})
+        allow(collection).to receive(:send_request).and_return { server_response('simple-queries/all_limit') }
+        expect(collection).to receive(:send_request).with("simple/all", put: {"collection" => "example_1", "skip" => 1})
 
-        Ashikawa::Core::Cursor.should_receive(:new)
+        expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.all skip: 1
       end
@@ -46,13 +46,13 @@ describe Ashikawa::Core::Query do
       let(:example) { {hello: "world"} }
 
       it "should find exactly one fitting document" do
-        collection.stub(:database).and_return { double }
+        allow(collection).to receive(:database).and_return { double }
 
-        collection.stub(:send_request).and_return { server_response('simple-queries/example') }
-        collection.should_receive(:send_request).with("simple/first-example", put:
+        allow(collection).to receive(:send_request).and_return { server_response('simple-queries/example') }
+        expect(collection).to receive(:send_request).with("simple/first-example", put:
           {"collection" => "example_1", "example" => { hello: "world"}})
 
-        Ashikawa::Core::Document.should_receive(:new)
+        expect(Ashikawa::Core::Document).to receive(:new)
 
         subject.first_example example
       end
@@ -62,30 +62,30 @@ describe Ashikawa::Core::Query do
       let(:example) { {hello: "world"} }
 
       it "should find all fitting documents" do
-        collection.stub(:send_request).and_return { server_response('simple-queries/example') }
-        collection.should_receive(:send_request).with("simple/by-example", put:
+        allow(collection).to receive(:send_request).and_return { server_response('simple-queries/example') }
+        expect(collection).to receive(:send_request).with("simple/by-example", put:
           {"collection" => "example_1", "example" => { hello: "world"}})
 
-        Ashikawa::Core::Cursor.should_receive(:new)
+        expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.by_example example
       end
 
       it "should be able to limit the number of documents" do
-        collection.stub(:send_request).and_return { server_response('simple-queries/example') }
-        collection.should_receive(:send_request).with("simple/by-example", put: {"collection" => "example_1", "limit" => 2, "example" => { hello: "world"}})
+        allow(collection).to receive(:send_request).and_return { server_response('simple-queries/example') }
+        expect(collection).to receive(:send_request).with("simple/by-example", put: {"collection" => "example_1", "limit" => 2, "example" => { hello: "world"}})
 
-        Ashikawa::Core::Cursor.should_receive(:new)
+        expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.by_example example, limit: 2
       end
 
       it "should be able to skip documents" do
-        collection.stub(:send_request).and_return { server_response('simple-queries/example') }
-        collection.should_receive(:send_request).with("simple/by-example", put:
+        allow(collection).to receive(:send_request).and_return { server_response('simple-queries/example') }
+        expect(collection).to receive(:send_request).with("simple/by-example", put:
           {"collection" => "example_1", "skip" => 1, "example" => { hello: "world"}})
 
-        Ashikawa::Core::Cursor.should_receive(:new)
+        expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.by_example example, skip: 1
       end
@@ -93,10 +93,10 @@ describe Ashikawa::Core::Query do
 
     describe "near a geolocation" do
       it "should find documents based on latitude/longitude" do
-        collection.stub(:send_request).and_return { server_response('simple-queries/near') }
-        collection.should_receive(:send_request).with("simple/near", put: { "collection" => "example_1", "latitude" => 0, "longitude" => 0 })
+        allow(collection).to receive(:send_request).and_return { server_response('simple-queries/near') }
+        expect(collection).to receive(:send_request).with("simple/near", put: { "collection" => "example_1", "latitude" => 0, "longitude" => 0 })
 
-        Ashikawa::Core::Cursor.should_receive(:new)
+        expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.near latitude: 0, longitude: 0
       end
@@ -104,10 +104,10 @@ describe Ashikawa::Core::Query do
 
     describe "within a radious of a geolocation" do
       it "should look for documents based on latidude/longitude" do
-        collection.stub(:send_request).and_return { server_response('simple-queries/within') }
-        collection.should_receive(:send_request).with("simple/within" , put: { "collection" => "example_1", "latitude" => 0, "longitude" => 0, "radius" => 2 })
+        allow(collection).to receive(:send_request).and_return { server_response('simple-queries/within') }
+        expect(collection).to receive(:send_request).with("simple/within" , put: { "collection" => "example_1", "latitude" => 0, "longitude" => 0, "radius" => 2 })
 
-        Ashikawa::Core::Cursor.should_receive(:new)
+        expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.within latitude: 0, longitude: 0, radius: 2
       end
@@ -116,10 +116,10 @@ describe Ashikawa::Core::Query do
     describe "in a certain range" do
       it "should look for documents with an attribute in that range" do
         arguments = { "collection" => "example_1", "attribute" => "age", "left" => 50, "right" => 60, "closed" => false}
-        collection.stub(:send_request).and_return { server_response('simple-queries/range') }
-        collection.should_receive(:send_request).with("simple/range" , put: arguments)
+        allow(collection).to receive(:send_request).and_return { server_response('simple-queries/range') }
+        expect(collection).to receive(:send_request).with("simple/range" , put: arguments)
 
-        Ashikawa::Core::Cursor.should_receive(:new)
+        expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.in_range attribute: "age", left: 50, right: 60, closed: false
       end
@@ -127,14 +127,14 @@ describe Ashikawa::Core::Query do
 
     describe "with an AQL query" do
       it "should be able to execute it" do
-        collection.stub(:database).and_return double
-        collection.stub(:send_request).and_return { server_response("cursor/query") }
-        collection.should_receive(:send_request).with("cursor", post: {
+        allow(collection).to receive(:database).and_return double
+        allow(collection).to receive(:send_request).and_return { server_response("cursor/query") }
+        expect(collection).to receive(:send_request).with("cursor", post: {
           "query" => "FOR u IN users LIMIT 2 RETURN u",
           "count" => true,
           "batchSize" => 2
         })
-        Ashikawa::Core::Cursor.should_receive(:new).with(collection.database, server_response("cursor/query"))
+        expect(Ashikawa::Core::Cursor).to receive(:new).with(collection.database, server_response("cursor/query"))
 
         subject.execute "FOR u IN users LIMIT 2 RETURN u", count: true, batch_size: 2
       end
@@ -142,8 +142,8 @@ describe Ashikawa::Core::Query do
       it "should return true when asked if a valid query is valid" do
         query = "FOR u IN users LIMIT 2 RETURN u"
 
-        collection.stub(:send_request).and_return { server_response("query/valid") }
-        collection.should_receive(:send_request).with("query", post: {
+        allow(collection).to receive(:send_request).and_return { server_response("query/valid") }
+        expect(collection).to receive(:send_request).with("query", post: {
           "query" => query
         })
 
@@ -153,10 +153,10 @@ describe Ashikawa::Core::Query do
       it "should return false when asked if an invalid query is valid" do
         query = "FOR u IN users LIMIT 2"
 
-        collection.stub(:send_request) do
+        allow(collection).to receive(:send_request) do
           raise Ashikawa::Core::BadSyntax
         end
-        collection.should_receive(:send_request).with("query", post: {
+        expect(collection).to receive(:send_request).with("query", post: {
           "query" => query
         })
 
@@ -176,13 +176,13 @@ describe Ashikawa::Core::Query do
 
     describe "with an AQL query" do
       it "should be able to execute it" do
-        database.stub(:send_request).and_return { server_response("cursor/query") }
-        database.should_receive(:send_request).with("cursor", post: {
+        allow(database).to receive(:send_request).and_return { server_response("cursor/query") }
+        expect(database).to receive(:send_request).with("cursor", post: {
           "query" => "FOR u IN users LIMIT 2 RETURN u",
           "count" => true,
           "batchSize" => 2
         })
-        Ashikawa::Core::Cursor.should_receive(:new).with(database, server_response("cursor/query"))
+        expect(Ashikawa::Core::Cursor).to receive(:new).with(database, server_response("cursor/query"))
 
         subject.execute "FOR u IN users LIMIT 2 RETURN u", count: true, batch_size: 2
       end
@@ -190,8 +190,8 @@ describe Ashikawa::Core::Query do
       it "should return true when asked if a valid query is valid" do
         query = "FOR u IN users LIMIT 2 RETURN u"
 
-        database.stub(:send_request).and_return { server_response("query/valid") }
-        database.should_receive(:send_request).with("query", post: {
+        allow(database).to receive(:send_request).and_return { server_response("query/valid") }
+        expect(database).to receive(:send_request).with("query", post: {
           "query" => query
         })
 
@@ -201,10 +201,10 @@ describe Ashikawa::Core::Query do
       it "should return false when asked if an invalid query is valid" do
         query = "FOR u IN users LIMIT 2"
 
-        database.stub(:send_request) do
+        allow(database).to receive(:send_request) do
           raise Ashikawa::Core::BadSyntax
         end
-        database.should_receive(:send_request).with("query", post: {
+        expect(database).to receive(:send_request).with("query", post: {
           "query" => query
         })
 
