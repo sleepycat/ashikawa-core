@@ -85,7 +85,8 @@ AvoidPerlBackrefs:
   Enabled: false
 
 TrivialAccessors:
-  Enabled: false
+  Enabled: true
+  ExactNameMatch: true
 
 Alias:
   Enabled: true
