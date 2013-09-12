@@ -22,26 +22,26 @@ describe Ashikawa::Core::Document do
 
   it "should initialize data with ID" do
     document = subject.new database, raw_data
-    document.id.should == "1234567/2345678"
-    document.key.should == "2345678"
-    document.revision.should == "3456789"
+    expect(document.id).to eq("1234567/2345678")
+    expect(document.key).to eq("2345678")
+    expect(document.revision).to eq("3456789")
   end
 
   it "should initialize data without ID" do
     document = subject.new database, raw_data_without_id
-    document.id.should == :not_persisted
-    document.revision.should == :not_persisted
+    expect(document.id).to eq(:not_persisted)
+    expect(document.revision).to eq(:not_persisted)
   end
 
   describe "initialized document with ID" do
     subject { Ashikawa::Core::Document.new database, raw_data }
 
     it "should return the correct value for an existing attribute" do
-      subject["first_name"].should be(raw_data["first_name"])
+      expect(subject["first_name"]).to be(raw_data["first_name"])
     end
 
     it "should return nil for an non-existing attribute" do
-      subject["no_name"].should be_nil
+      expect(subject["no_name"]).to be_nil
     end
 
     it "should be deletable" do
@@ -63,8 +63,8 @@ describe Ashikawa::Core::Document do
 
     it "should be convertable to a hash" do
       hash = subject.hash
-      hash.should be_instance_of Hash
-      hash["first_name"].should == subject["first_name"]
+      expect(hash).to be_instance_of Hash
+      expect(hash["first_name"]).to eq(subject["first_name"])
     end
 
     it "should be refreshable" do
@@ -73,8 +73,8 @@ describe Ashikawa::Core::Document do
       }
 
       refreshed_subject = subject.refresh!
-      refreshed_subject.should == subject
-      subject["name"].should == "Jeff"
+      expect(refreshed_subject).to eq(subject)
+      expect(subject["name"]).to eq("Jeff")
     end
   end
 
@@ -82,11 +82,11 @@ describe Ashikawa::Core::Document do
     subject { Ashikawa::Core::Document.new database, raw_data_without_id }
 
     it "should return the correct value for an existing attribute" do
-      subject["first_name"].should be(raw_data_without_id["first_name"])
+      expect(subject["first_name"]).to be(raw_data_without_id["first_name"])
     end
 
     it "should return nil for an non-existing attribute" do
-      subject["no_name"].should be_nil
+      expect(subject["no_name"]).to be_nil
     end
 
     it "should not be deletable" do

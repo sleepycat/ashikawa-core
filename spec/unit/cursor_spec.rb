@@ -11,14 +11,14 @@ describe Ashikawa::Core::Cursor do
 
   it "should create a cursor for a non-complete batch" do
     my_cursor = subject.new @database, server_response("cursor/26011191")
-    my_cursor.id.should        == "26011191"
-    my_cursor.length.should    == 5
+    expect(my_cursor.id).to        eq("26011191")
+    expect(my_cursor.length).to    eq(5)
   end
 
   it "should create a cursor for the last batch" do
     my_cursor = subject.new @database, server_response("cursor/26011191-3")
-    my_cursor.id.should be_nil
-    my_cursor.length.should == 5
+    expect(my_cursor.id).to be_nil
+    expect(my_cursor.length).to eq(5)
   end
 
   describe "existing cursor" do
@@ -94,7 +94,7 @@ describe Ashikawa::Core::Cursor do
       Ashikawa::Core::Document.stub(:new).and_return { 1 }
       Ashikawa::Core::Document.should_receive(:new).exactly(5).times
 
-      subject.map{|i| i}[0].should == 1
+      expect(subject.map{|i| i}[0]).to eq(1)
     end
 
     it "should return edge objects when recieving data from an edge collection" do

@@ -17,9 +17,9 @@ describe Ashikawa::Core::KeyOptions do
       "allowUserKeys" => allow_user_keys
     })
 
-    key_options.type.should == type
-    key_options.offset.should == offset
-    key_options.increment.should == increment
-    key_options.allow_user_keys.should == allow_user_keys
+    expect(key_options.type).to eq(type)
+    expect(key_options.offset).to eq(offset)
+    expect(key_options.increment).to eq(increment)
+    expect(key_options.allow_user_keys).to eq(allow_user_keys)
   end
 end

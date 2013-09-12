@@ -25,6 +25,6 @@ describe "Transactions" do
     transaction.wait_for_sync = true
     transaction.lock_timeout = 14
 
-    transaction.execute({ a: 5 }).should == 5
+    expect(transaction.execute({ a: 5 })).to eq(5)
   end
 end

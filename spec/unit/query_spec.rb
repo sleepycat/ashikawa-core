@@ -147,7 +147,7 @@ describe Ashikawa::Core::Query do
           "query" => query
         })
 
-        subject.valid?(query).should be_true
+        expect(subject.valid?(query)).to be_true
       end
 
       it "should return false when asked if an invalid query is valid" do
@@ -160,7 +160,7 @@ describe Ashikawa::Core::Query do
           "query" => query
         })
 
-        subject.valid?(query).should be_false
+        expect(subject.valid?(query)).to be_false
       end
     end
   end
@@ -195,7 +195,7 @@ describe Ashikawa::Core::Query do
           "query" => query
         })
 
-        subject.valid?(query).should be_true
+        expect(subject.valid?(query)).to be_true
       end
 
       it "should return false when asked if an invalid query is valid" do
@@ -208,7 +208,7 @@ describe Ashikawa::Core::Query do
           "query" => query
         })
 
-        subject.valid?(query).should be_false
+        expect(subject.valid?(query)).to be_false
       end
     end
   end

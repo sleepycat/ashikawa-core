@@ -31,31 +31,31 @@ describe Ashikawa::Core::Figure do
   subject { Ashikawa::Core::Figure.new(raw_figures) }
 
   it "should check for the alive figures" do
-    subject.alive_size.should == 0
-    subject.alive_count.should == 0
+    expect(subject.alive_size).to eq(0)
+    expect(subject.alive_count).to eq(0)
   end
 
   it "should check for the dead figures" do
-    subject.dead_size.should == 2384
-    subject.dead_count.should == 149
-    subject.dead_deletion.should == 0
+    expect(subject.dead_size).to eq(2384)
+    expect(subject.dead_count).to eq(149)
+    expect(subject.dead_deletion).to eq(0)
   end
 
   it "should check for the datafiles figures" do
-    subject.datafiles_count.should == 1
-    subject.datafiles_file_size.should == 124
+    expect(subject.datafiles_count).to eq(1)
+    expect(subject.datafiles_file_size).to eq(124)
   end
 
   it "should check for the journal figures" do
-    subject.journals_count.should == 1
-    subject.journals_file_size.should == 124
+    expect(subject.journals_count).to eq(1)
+    expect(subject.journals_file_size).to eq(124)
   end
 
   it "should check for the shapes figure" do
-    subject.shapes_count.should == 2
+    expect(subject.shapes_count).to eq(2)
   end
 
   it "should check for the attributes_count figure" do
-    subject.attributes_count.should == 12
+    expect(subject.attributes_count).to eq(12)
   end
 end

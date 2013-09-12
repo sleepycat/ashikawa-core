@@ -23,19 +23,19 @@ describe "Basics" do
       subject["collection_1"]
       subject["collection_2"]
       subject["collection_3"]
-      subject.collections.length.should == 3
+      expect(subject.collections.length).to eq(3)
       subject["collection_3"].delete
-      subject.collections.length.should == 2
+      expect(subject.collections.length).to eq(2)
     end
 
     it "should create a non-volatile collection by default" do
       subject.create_collection("nonvolatile_collection")
-      subject["nonvolatile_collection"].volatile?.should be_false
+      expect(subject["nonvolatile_collection"].volatile?).to be_false
     end
 
     it "should create a volatile collection" do
       subject.create_collection("volatile_collection", is_volatile: true)
-      subject["volatile_collection"].volatile?.should be_true
+      expect(subject["volatile_collection"].volatile?).to be_true
     end
 
     it "should create an autoincrementing collection" do
@@ -46,72 +46,72 @@ describe "Basics" do
       })
       key_options = subject["autoincrement_collection"].key_options
 
-      key_options.type.should == "autoincrement"
-      key_options.offset.should == 0
-      key_options.increment.should == 10
-      key_options.allow_user_keys.should == false
+      expect(key_options.type).to eq("autoincrement")
+      expect(key_options.offset).to eq(0)
+      expect(key_options.increment).to eq(10)
+      expect(key_options.allow_user_keys).to eq(false)
     end
 
     it "should be possible to create an edge collection" do
       subject.create_collection("edge_collection", content_type: :edge)
-      subject["edge_collection"].content_type.should == :edge
+      expect(subject["edge_collection"].content_type).to eq(:edge)
     end
 
     it "should be possible to change the name of a collection" do
       my_collection = subject["test_collection"]
-      my_collection.name.should == "test_collection"
+      expect(my_collection.name).to eq("test_collection")
       my_collection.name = "my_new_name"
-      my_collection.name.should == "my_new_name"
+      expect(my_collection.name).to eq("my_new_name")
     end
 
     it "should be possible to find a collection by ID" do
       my_collection = subject["test_collection"]
-      subject[my_collection.id].name.should == "test_collection"
+      expect(subject[my_collection.id].name).to eq("test_collection")
     end
 
     it "should be possible to list all system collections" do
-      subject.system_collections.length.should > 0
+      expect(subject.system_collections.length).to be > 0
     end
 
     it "should be possible to load and unload collections" do
       my_collection = subject["test_collection"]
-      my_collection.status.loaded?.should be_true
+      expect(my_collection.status.loaded?).to be_true
       my_collection.unload
       my_id = my_collection.id
       my_collection = subject[my_id]
-      subject[my_id].status.loaded?.should be_false
+      expect(subject[my_id].status.loaded?).to be_false
     end
 
     it "should be possible to get figures" do
       my_collection = subject["test_collection"]
-      my_collection.figure.alive_size.class.should == Fixnum
-      my_collection.figure.alive_count.class.should == Fixnum
-      my_collection.figure.dead_size.class.should == Fixnum
-      my_collection.figure.dead_count.class.should == Fixnum
-      my_collection.figure.dead_deletion.class.should == Fixnum
-      my_collection.figure.datafiles_count.class.should == Fixnum
-      my_collection.figure.datafiles_file_size.class.should == Fixnum
-      my_collection.figure.journals_count.class.should == Fixnum
-      my_collection.figure.journals_file_size.class.should == Fixnum
-      my_collection.figure.shapes_count.class.should == Fixnum
+      expect(my_collection.figure.alive_size.class).to eq(Fixnum)
+      expect(my_collection.figure.alive_count.class).to eq(Fixnum)
+      expect(my_collection.figure.dead_size.class).to eq(Fixnum)
+      expect(my_collection.figure.dead_count.class).to eq(Fixnum)
+      expect(my_collection.figure.dead_deletion.class).to eq(Fixnum)
+      expect(my_collection.figure.datafiles_count.class).to eq(Fixnum)
+      expect(my_collection.figure.datafiles_file_size.class).to eq(Fixnum)
+      expect(my_collection.figure.journals_count.class).to eq(Fixnum)
+      expect(my_collection.figure.journals_file_size.class).to eq(Fixnum)
+      expect(my_collection.figure.shapes_count.class).to eq(Fixnum)
     end
 
     it "should change and receive information about waiting for sync" do
       my_collection = subject["my_collection"]
       my_collection.wait_for_sync = false
-      my_collection.wait_for_sync?.should be_false
+      expect(my_collection.wait_for_sync?).to be_false
       my_collection.wait_for_sync = true
-      my_collection.wait_for_sync?.should be_true
+      expect(my_collection.wait_for_sync?).to be_true
     end
 
     it "should be possible to get information about the number of documents" do
       empty_collection = subject["empty_collection"]
-      empty_collection.length.should == 0
+      expect(empty_collection.length).to eq(0)
       empty_collection.create_document({ name: "testname", age: 27})
       empty_collection.create_document({ name: "anderer name", age: 28})
-      empty_collection.length.should == 2
+      expect(empty_collection.length).to eq(2)
       empty_collection.truncate!
-      empty_collection.length.should == 0
+      expect(empty_collection.length).to eq(0)
     end
 
     it "should be possible to update the attributes of a document" do
@@ -122,7 +122,7 @@ describe "Basics" do
       document["name"] = "Other Dude"
       document.save
 
-      collection.fetch(document_key)["name"].should == "Other Dude"
+      expect(collection.fetch(document_key)["name"]).to eq("Other Dude")
     end
 
     it "should be possible to access and create documents from a collection" do
@@ -130,10 +130,10 @@ describe "Basics" do
 
       document = collection.create_document(name: "The Dude", bowling: true)
       document_key = document.key
-      collection.fetch(document_key)["name"].should == "The Dude"
+      expect(collection.fetch(document_key)["name"]).to eq("The Dude")
 
       collection.replace(document_key, { name: "Other Dude", bowling: true })
-      collection.fetch(document_key)["name"].should == "Other Dude"
+      expect(collection.fetch(document_key)["name"]).to eq("Other Dude")
     end
 
     it "should be possible to create an edge between two documents" do
@@ -145,8 +145,8 @@ describe "Basics" do
       e = edges.create_edge(a, b, {name: "fance_edge"})
 
       e = edges.fetch(e.key)
-      e.from_id.should == a.id
-      e.to_id.should == b.id
+      expect(e.from_id).to eq(a.id)
+      expect(e.to_id).to eq(b.id)
     end
   end
 
@@ -162,10 +162,10 @@ describe "Basics" do
 
     it "should be possible to manipulate documents and save them" do
       subject["name"] = "Jeffrey Lebowski"
-      subject["name"].should == "Jeffrey Lebowski"
-      collection.fetch(document_key)["name"].should == "The Dude"
+      expect(subject["name"]).to eq("Jeffrey Lebowski")
+      expect(collection.fetch(document_key)["name"]).to eq("The Dude")
       subject.save
-      collection.fetch(document_key)["name"].should == "Jeffrey Lebowski"
+      expect(collection.fetch(document_key)["name"]).to eq("Jeffrey Lebowski")
     end
 
     it "should be possible to delete a document" do
@@ -186,9 +186,9 @@ describe "Basics" do
       changed_document["name"] = "New Name"
       changed_document.save
 
-      subject["name"].should == "The Dude"
+      expect(subject["name"]).to eq("The Dude")
       subject.refresh!
-      subject["name"].should == "New Name"
+      expect(subject["name"]).to eq("New Name")
     end
   end
 end

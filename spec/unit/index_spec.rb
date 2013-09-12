@@ -20,10 +20,10 @@ describe Ashikawa::Core::Index do
 
   it "should initialize an Index" do
     index = subject.new collection, raw_data
-    index.id.should == "167137465/168054969"
-    index.type.should == :hash
-    index.on.should == [:something]
-    index.unique.should == true
+    expect(index.id).to eq("167137465/168054969")
+    expect(index.type).to eq(:hash)
+    expect(index.on).to eq([:something])
+    expect(index.unique).to eq(true)
   end
 
   describe "initialized index" do

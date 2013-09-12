@@ -18,9 +18,9 @@ describe Ashikawa::Core::Edge do
 
   it "should initialize data" do
     document = subject.new(database, raw_data)
-    document.id.should == "1234567/2345678"
-    document.key.should == "2345678"
-    document.revision.should == "3456789"
+    expect(document.id).to eq("1234567/2345678")
+    expect(document.key).to eq("2345678")
+    expect(document.revision).to eq("3456789")
   end
 
   describe "initialized edge" do
@@ -44,11 +44,11 @@ describe Ashikawa::Core::Edge do
     end
 
     it "should know the ID of the 'from' document" do
-      subject.from_id.should == "7848004/9289796"
+      expect(subject.from_id).to eq("7848004/9289796")
     end
 
     it "should know the ID of the 'to' document" do
-      subject.to_id.should == "7848004/9355332"
+      expect(subject.to_id).to eq("7848004/9355332")
     end
   end
 end

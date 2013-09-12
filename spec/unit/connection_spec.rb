@@ -7,9 +7,9 @@ describe Ashikawa::Core::Connection do
   subject { Ashikawa::Core::Connection.new(ARANGO_HOST, adapter: [:test, request_stub]) }
 
   it "should have a scheme, hostname and port" do
-    subject.scheme.should == "http"
-    subject.host.should == "localhost"
-    subject.port.should == 8529
+    expect(subject.scheme).to eq("http")
+    expect(subject.host).to eq("localhost")
+    expect(subject.port).to eq(8529)
   end
 
   it "should send a get request" do
@@ -24,7 +24,7 @@ describe Ashikawa::Core::Connection do
 
   it "should send a post request" do
     request_stub.post("/_api/my/path") do |request|
-      request[:body].should == "{\"name\":\"new_collection\"}"
+      expect(request[:body]).to eq("{\"name\":\"new_collection\"}")
       [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
@@ -35,7 +35,7 @@ describe Ashikawa::Core::Connection do
 
   it "should send a put request" do
     request_stub.put("/_api/my/path") do |request|
-      request[:body].should == '{"name":"new_collection"}'
+      expect(request[:body]).to eq('{"name":"new_collection"}')
       [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
@@ -56,7 +56,7 @@ describe Ashikawa::Core::Connection do
 
   it "should write JSON request" do
     request_stub.post("/_api/my/path") do |req|
-      req[:body].should == "{\"test\":1}"
+      expect(req[:body]).to eq("{\"test\":1}")
       [200, response_headers, JSON.generate({ "name" => "dude" })]
     end
 
@@ -69,18 +69,18 @@ describe Ashikawa::Core::Connection do
       [200, response_headers, "{\"name\":\"dude\"}"]
     end
 
-    subject.send_request("my/path").should == {"name" => "dude"}
+    expect(subject.send_request("my/path")).to eq({"name" => "dude"})
     request_stub.verify_stubbed_calls
   end
 
   describe "authentication" do
     it "should have authentication turned off by default" do
-      subject.authentication?.should be_false
+      expect(subject.authentication?).to be_false
     end
 
     it "should tell if authentication is enabled" do
       subject.authenticate_with username: "testuser", password: "testpassword"
-      subject.authentication?.should be_true
+      expect(subject.authentication?).to be_true
     end
 
     it "should only accept username & password pairs" do
@@ -94,7 +94,7 @@ describe Ashikawa::Core::Connection do
     end
 
     it "should allow chaining" do
-      subject.authenticate_with(username: "a", password: "b").should == subject
+      expect(subject.authenticate_with(username: "a", password: "b")).to eq(subject)
     end
 
     it "should send the authentication data with every GET request" do

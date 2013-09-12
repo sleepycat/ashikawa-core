@@ -19,8 +19,8 @@ describe Ashikawa::Core::Database do
     database = subject.new do |config|
       config.connection = @connection
     end
-    database.host.should == "localhost"
-    database.port.should == 8529
+    expect(database.host).to eq("localhost")
+    expect(database.port).to eq(8529)
   end
 
   it "should initialize with a connection string" do
@@ -117,7 +117,7 @@ describe Ashikawa::Core::Database do
         Ashikawa::Core::Collection.should_receive(:new).with(subject, server_response("collections/all")["collections"][k])
       end
 
-      subject.collections.length.should == 2
+      expect(subject.collections.length).to eq(2)
     end
 
     it "should fetch all available non-system collections" do
@@ -126,7 +126,7 @@ describe Ashikawa::Core::Database do
 
       Ashikawa::Core::Collection.should_receive(:new).exactly(5).times
 
-      subject.system_collections.length.should == 5
+      expect(subject.system_collections.length).to eq(5)
     end
 
     it "should create a non volatile collection by default" do
@@ -226,7 +226,7 @@ describe Ashikawa::Core::Database do
 
     it "should create a transaction" do
       Ashikawa::Core::Transaction.should_receive(:new).with(subject, js_function, collections).and_return { transaction }
-      subject.create_transaction(js_function, collections).should == transaction
+      expect(subject.create_transaction(js_function, collections)).to eq(transaction)
     end
   end
 end

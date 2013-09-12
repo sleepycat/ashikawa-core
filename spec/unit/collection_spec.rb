@@ -10,12 +10,12 @@ describe Ashikawa::Core::Collection do
 
   it "should have a name" do
     my_collection = subject.new @database, server_response("collections/60768679")
-    my_collection.name.should == "example_1"
+    expect(my_collection.name).to eq("example_1")
   end
 
   it "should accept an ID" do
     my_collection = subject.new @database, server_response("collections/60768679")
-    my_collection.id.should == "60768679"
+    expect(my_collection.id).to eq("60768679")
   end
 
   it "should create a query" do
@@ -34,7 +34,7 @@ describe Ashikawa::Core::Collection do
       @database.should_receive(:send_request).with("collection/60768679/properties", {})
 
       my_collection = subject.new @database, { "id" => "60768679" }
-      my_collection.wait_for_sync?.should be_true
+      expect(my_collection.wait_for_sync?).to be_true
     end
 
     it "should know how many documents the collection has" do
@@ -42,7 +42,7 @@ describe Ashikawa::Core::Collection do
       @database.should_receive(:send_request).with("collection/60768679/count", {})
 
       my_collection = subject.new @database, { "id" => "60768679" }
-      my_collection.length.should == 54
+      expect(my_collection.length).to eq(54)
     end
 
     it "should know if the collection is volatile" do
@@ -50,7 +50,7 @@ describe Ashikawa::Core::Collection do
       @database.should_receive(:send_request).with("collection/60768679/properties", {})
 
       my_collection = subject.new(@database, { "id" => "60768679" })
-      my_collection.volatile?.should == true
+      expect(my_collection.volatile?).to eq(true)
     end
 
     it "should know if the collection is not volatile" do
@@ -58,17 +58,17 @@ describe Ashikawa::Core::Collection do
       @database.should_receive(:send_request).with("collection/60768679/properties", {})
 
       my_collection = subject.new(@database, { "id" => "60768679" })
-      my_collection.volatile?.should == false
+      expect(my_collection.volatile?).to eq(false)
     end
 
     it "should know that a collection is from type 'document'" do
       my_collection = subject.new(@database, { "id" => "60768679", "type" => 2 })
-      my_collection.content_type.should == :document
+      expect(my_collection.content_type).to eq(:document)
     end
 
     it "should know that a collection is from type 'edge'" do
       my_collection = subject.new(@database, { "id" => "60768679", "type" => 3 })
-      my_collection.content_type.should == :edge
+      expect(my_collection.content_type).to eq(:edge)
     end
 
     it "should check for the figures" do
@@ -129,7 +129,7 @@ describe Ashikawa::Core::Collection do
       key_options = double
       Ashikawa::Core::KeyOptions.stub(:new).with(raw_key_options).and_return { key_options }
 
-      subject.key_options.should == key_options
+      expect(subject.key_options).to eq(key_options)
     end
 
     it "should change its name" do
@@ -266,7 +266,7 @@ describe Ashikawa::Core::Collection do
           Ashikawa::Core::Index.should_receive(:new).exactly(1).times
 
           indices = subject.indices
-          indices.length.should == 1
+          expect(indices.length).to eq(1)
         end
       end
     end

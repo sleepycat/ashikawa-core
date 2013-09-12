@@ -21,8 +21,8 @@ describe "Indices" do
     # This is temporary until Index has a key
     index_key = index.id.split('/')[1]
 
-    subject.index(index_key).id.should == index.id
-    subject.indices[0].class.should == Ashikawa::Core::Index
+    expect(subject.index(index_key).id).to eq(index.id)
+    expect(subject.indices[0].class).to eq(Ashikawa::Core::Index)
   end
 
   it "should be possible to remove indices" do

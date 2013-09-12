@@ -13,7 +13,7 @@ describe Ashikawa::Core::Transaction do
         "collection_1"
       ])
 
-      transaction.write_collections.should == ["collection_1"]
+      expect(transaction.write_collections).to eq(["collection_1"])
     end
 
     it "should be initialized with only read collections" do
@@ -21,7 +21,7 @@ describe Ashikawa::Core::Transaction do
         "collection_1"
       ])
 
-      transaction.read_collections.should == ["collection_1"]
+      expect(transaction.read_collections).to eq(["collection_1"])
     end
   end
 
@@ -41,9 +41,9 @@ describe Ashikawa::Core::Transaction do
     subject { Ashikawa::Core::Transaction.new(db, action, read_and_write_collections) }
 
     it "should be possible to activate waiting for sync" do
-      subject.wait_for_sync.should == false
+      expect(subject.wait_for_sync).to eq(false)
       subject.wait_for_sync = true
-      subject.wait_for_sync.should == true
+      expect(subject.wait_for_sync).to eq(true)
     end
 
     it "should be possible to set the lock timeout" do
@@ -67,7 +67,7 @@ describe Ashikawa::Core::Transaction do
       it "should return the result from the database" do
         response.should_receive(:[]).with("result").and_return { result }
         db.should_receive(:send_request).and_return { response }
-        subject.execute.should == result
+        expect(subject.execute).to eq(result)
       end
 
       it "should post to `transaction` endpoint" do
