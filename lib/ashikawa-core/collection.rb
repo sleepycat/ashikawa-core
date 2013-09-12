@@ -525,7 +525,7 @@ module Ashikawa
         @name         = raw_collection['name']
         @id           = raw_collection['id']
         @content_type = CONTENT_TYPES[raw_collection['type']] || :document
-        @status       = Status.new(raw_collection['status'].to_i) if raw_collection.has_key?('status')
+        @status       = Status.new(raw_collection['status'].to_i) if raw_collection.key?('status')
         self
       end
 

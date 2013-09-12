@@ -175,7 +175,7 @@ describe Ashikawa::Core::Collection do
           raise Ashikawa::Core::DocumentNotFoundException
         }
 
-        subject[123].should == nil
+        expect(subject[123]).to be_nil
       end
 
       it "should replace a document by ID" do

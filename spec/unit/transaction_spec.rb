@@ -47,9 +47,9 @@ describe Ashikawa::Core::Transaction do
     end
 
     it "should be possible to set the lock timeout" do
-      subject.lock_timeout.should == nil
+      expect(subject.lock_timeout).to be_nil
       subject.lock_timeout = 30
-      subject.lock_timeout.should == 30
+      expect(subject.lock_timeout).to be 30
     end
 
     describe "execute" do

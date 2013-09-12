@@ -117,7 +117,7 @@ module Ashikawa
       # @api private
       def http_verb(params)
         [:post, :put, :delete].detect { |method_name|
-          params.has_key?(method_name)
+          params.key?(method_name)
         } || :get
       end
     end

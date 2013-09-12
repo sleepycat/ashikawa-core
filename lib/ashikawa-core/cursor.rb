@@ -91,7 +91,7 @@ module Ashikawa
       # @return class
       # @api private
       def detect_document_class_for(raw_document)
-        if raw_document.has_key?("_from") && raw_document.has_key?("_to")
+        if raw_document.key?("_from") && raw_document.key?("_to")
           Edge
         else
           Document
@@ -117,7 +117,7 @@ module Ashikawa
       # @api private
       def parse_documents_cursor(raw_cursor)
         @current = raw_cursor['result']
-        @length  = raw_cursor['count'].to_i if raw_cursor.has_key?('count')
+        @length  = raw_cursor['count'].to_i if raw_cursor.key?('count')
       end
 
       # Get a new batch from the server

@@ -200,7 +200,7 @@ describe Ashikawa::Core::Database do
     it "should create a single collection if it doesn't exist" do
       @connection.stub :send_request do |path, method|
         method ||= {}
-        if method.has_key? :post
+        if method.key? :post
           server_response("collections/60768679")
         else
           raise Ashikawa::Core::CollectionNotFoundException

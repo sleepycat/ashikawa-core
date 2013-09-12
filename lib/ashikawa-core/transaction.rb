@@ -104,8 +104,8 @@ module Ashikawa
       # @api private
       def parse_options(options)
         collections = {}
-        collections[:write] = options[:write] if options.has_key? :write
-        collections[:read] = options[:read] if options.has_key? :read
+        collections[:write] = options[:write] if options.key? :write
+        collections[:read] = options[:read] if options.key? :read
         collections
       end
     end
