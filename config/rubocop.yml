@@ -92,7 +92,7 @@ Alias:
   Enabled: true
 
 Loop:
-  Enabled: false
+  Enabled: true
 
 # Do not agree at all
 AndOr:
