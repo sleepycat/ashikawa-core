@@ -39,9 +39,9 @@ StringLiterals:
 Void:
   Enabled: true
 
-# TODO: Limit is 79. This is too low. Is this adjustable?
 LineLength:
-  Enabled: false
+  Enabled: true
+  Max: 120
 
 SpaceAroundBraces:
   Enabled: true

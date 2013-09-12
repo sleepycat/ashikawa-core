@@ -124,7 +124,7 @@ module Ashikawa
       # @option options [Integer] :attribute The attribute path to check.
       # @option options [Integer] :left The lower bound
       # @option options [Integer] :right The upper bound
-      # @option options [Integer] :closed If true, use intervall including left and right, otherwise exclude right, but include left.
+      # @option options [Integer] :closed If true, the interval includes right
       # @option options [Integer] :skip The documents to skip in the query (optional).
       # @option options [Integer] :limit The maximal amount of documents to return (optional).
       # @return [Cursor]

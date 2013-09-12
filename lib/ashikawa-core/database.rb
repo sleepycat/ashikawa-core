@@ -48,7 +48,8 @@ module Ashikawa
       def initialize
         configuration = Ashikawa::Core::Configuration.new
         yield(configuration)
-        @connection = configuration.connection || setup_new_connection(configuration.url, configuration.logger, configuration.adapter)
+        @connection = configuration.connection ||
+          setup_new_connection(configuration.url, configuration.logger, configuration.adapter)
       end
 
       # Returns a list of all non-system collections defined in the database
