@@ -53,3 +53,5 @@ task :ci => %w[
   spec
   ci:metrics
 ]
+
+task :default => :ci

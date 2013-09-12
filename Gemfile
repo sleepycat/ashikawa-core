@@ -6,3 +6,6 @@ gemspec
 gem 'devtools', :git => 'https://github.com/rom-rb/devtools.git'
 
 eval File.read('Gemfile.devtools')
+
+# Added by devtools
+eval_gemfile 'Gemfile.devtools'
