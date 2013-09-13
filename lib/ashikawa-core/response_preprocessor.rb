@@ -58,6 +58,33 @@ module Ashikawa
         end
       end
 
+      # Raise a Bad Syntax Error
+      #
+      # @raise [BadSyntax]
+      # @return nil
+      # @api private
+      def bad_syntax
+        raise Ashikawa::Core::BadSyntax
+      end
+
+      # Raise a Client Error for a given body
+      #
+      # @raise [ClientError]
+      # @return nil
+      # @api private
+      def client_error_status_for(body)
+        raise Ashikawa::Core::ClientError, error(body)
+      end
+
+      # Raise a Server Error for a given body
+      #
+      # @raise [ServerError]
+      # @return nil
+      # @api private
+      def server_error_status_for(body)
+        raise Ashikawa::Core::ServerError, error(body)
+      end
+
       # Parse the JSON
       #
       # @param [Hash] env Environment info
@@ -86,10 +113,10 @@ module Ashikawa
       # @api private
       def handle_status(env)
         case env[:status]
-        when BadSyntaxStatus then raise Ashikawa::Core::BadSyntax
-        when ResourceNotFoundErrorError then raise resource_not_found_for(env)
-        when ClientErrorStatuses then raise Ashikawa::Core::ClientError, error(env[:body])
-        when ServerErrorStatuses then raise Ashikawa::Core::ServerError, error(env[:body])
+        when BadSyntaxStatus then bad_syntax
+        when ResourceNotFoundErrorError then resource_not_found_for(env)
+        when ClientErrorStatuses then client_error_status_for(env[:body])
+        when ServerErrorStatuses then server_error_status_for(env[:body])
         end
       end
 
