@@ -193,9 +193,19 @@ module Ashikawa
       def prepare_request(path, options)
         allowed_keys = ALLOWED_KEYS_FOR_PATH.fetch(path)
         options.keep_if { |key, _| allowed_keys.include?(key) }
-        Hash[options.map { |key, value|
-          [key.to_s.gsub(/_(.)/) { |match| match[1].upcase }, value]
-        }]
+        options.reduce({}) { |result, (key, value)|
+          result[snake_to_camel_case(key.to_s)] = value
+          result
+        }
+      end
+
+      # Translates Snake Case to Camel Case
+      #
+      # @param [String] str
+      # @return [String] The translated String
+      # @api private
+      def snake_to_camel_case(str)
+        str.gsub(/_(.)/) { |match| match[1].upcase }
       end
 
       # Send a simple query to the server
