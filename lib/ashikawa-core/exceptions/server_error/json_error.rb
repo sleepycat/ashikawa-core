@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require "ashikawa-core/exceptions/server_error"
+require 'ashikawa-core/exceptions/server_error'
 
 module Ashikawa
   module Core
@@ -19,7 +19,7 @@ module Ashikawa
       # @return String
       # @api private
       def to_s
-        "Either the JSON from the server was malformed or the content type incorrect"
+        'Either the JSON from the server was malformed or the content type incorrect'
       end
     end
   end

@@ -3,6 +3,7 @@ AllCops:
     - '../**/*.rake'
   Excludes:
     - '*_spec.rb'
+    - '*spec_helper.rb'
 
 # Avoid parameter lists longer than five parameters.
 ParameterLists:
@@ -34,7 +35,7 @@ HashSyntax:
   Enabled: true
 
 StringLiterals:
-  Enabled: false
+  Enabled: true
 
 Void:
   Enabled: true

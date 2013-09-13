@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require "ashikawa-core/exceptions/client_error/resource_not_found"
+require 'ashikawa-core/exceptions/client_error/resource_not_found'
 
 module Ashikawa
   module Core
@@ -11,7 +11,7 @@ module Ashikawa
       # @return String
       # @api private
       def to_s
-        "You requested a document from the server that does not exist"
+        'You requested a document from the server that does not exist'
       end
     end
   end

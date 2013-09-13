@@ -1,11 +1,11 @@
 # -*- encoding : utf-8 -*-
-require "forwardable"
-require "faraday"
-require "null_logger"
-require "uri"
-require "equalizer"
-require "ashikawa-core/request_preprocessor"
-require "ashikawa-core/response_preprocessor"
+require 'forwardable'
+require 'faraday'
+require 'null_logger'
+require 'uri'
+require 'equalizer'
+require 'ashikawa-core/request_preprocessor'
+require 'ashikawa-core/response_preprocessor'
 
 module Ashikawa
   module Core
@@ -21,8 +21,8 @@ module Ashikawa
       # @return [String]
       # @api public
       # @example Get the host part of the connection
-      #   connection = Connection.new("http://localhost:8529")
-      #   connection.host # => "localhost"
+      #   connection = Connection.new('http://localhost:8529')
+      #   connection.host # => 'localhost'
       def_delegator :@connection, :host
 
       # The scheme of the connection
@@ -31,8 +31,8 @@ module Ashikawa
       # @return [String]
       # @api public
       # @example Get the scheme of the connection
-      #   connection = Connection.new("http://localhost:8529")
-      #   connection.scheme # => "http"
+      #   connection = Connection.new('http://localhost:8529')
+      #   connection.scheme # => 'http'
       def_delegator :@connection, :scheme
 
       # The port of the connection
@@ -41,7 +41,7 @@ module Ashikawa
       # @return [Fixnum]
       # @api public
       # @example Get the port of the connection
-      #   connection = Connection.new("http://localhost:8529")
+      #   connection = Connection.new('http://localhost:8529')
       #   connection.port # => 8529
       def_delegator :@connection, :port
 
@@ -52,7 +52,7 @@ module Ashikawa
       # @option opts [Object] logger The logger you want to use. Defaults to Null Logger.
       # @api public
       # @example Create a new Connection
-      #  connection = Connection.new("http://localhost:8529")
+      #  connection = Connection.new('http://localhost:8529')
       def initialize(api_string, opts = {})
         logger  = opts[:logger]  || NullLogger.instance
         adapter = opts[:adapter] || Faraday.default_adapter
@@ -85,7 +85,7 @@ module Ashikawa
       # @return [Boolean]
       # @api public
       # @example Is authentication activated for this connection?
-      #   connection = Connection.new("http://localhost:8529")
+      #   connection = Connection.new('http://localhost:8529')
       #   connection.authentication? #=> false
       #   connection.authenticate_with(:username => 'james', :password => 'bond')
       #   connection.authentication? #=> true
@@ -101,7 +101,7 @@ module Ashikawa
       # @raise [ArgumentError] if username or password are missing
       # @api public
       # @example Authenticate with the database for all future requests
-      #   connection = Connection.new("http://localhost:8529")
+      #   connection = Connection.new('http://localhost:8529')
       #   connection.authenticate_with(:username => 'james', :password => 'bond')
       def authenticate_with(options = {})
         raise ArgumentError, 'missing username or password' unless options.key? :username and options.key? :password

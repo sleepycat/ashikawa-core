@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require "ashikawa-core/exceptions/client_error.rb"
+require 'ashikawa-core/exceptions/client_error.rb'
 
 module Ashikawa
   module Core
@@ -18,7 +18,7 @@ module Ashikawa
       # @return String
       # @api private
       def to_s
-        "Status 400: The syntax of the request was bad"
+        'Status 400: The syntax of the request was bad'
       end
     end
   end

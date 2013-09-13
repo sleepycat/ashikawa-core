@@ -12,14 +12,14 @@ module Ashikawa
       extend Forwardable
 
       ALLOWED_KEYS_FOR_PATH = {
-        "simple/all"           => [:limit, :skip, :collection],
-        "simple/by-example"    => [:limit, :skip, :example, :collection],
-        "simple/near"          => [:latitude, :longitude, :distance, :skip, :limit, :geo, :collection],
-        "simple/within"        => [:latitude, :longitude, :radius, :distance, :skip, :limit, :geo, :collection],
-        "simple/range"         => [:attribute, :left, :right, :closed, :limit, :skip, :collection],
-        "cursor"               => [:query, :count, :batch_size, :collection],
-        "query"                => [:query],
-        "simple/first-example" => [:example, :collection]
+        'simple/all'           => [:limit, :skip, :collection],
+        'simple/by-example'    => [:limit, :skip, :example, :collection],
+        'simple/near'          => [:latitude, :longitude, :distance, :skip, :limit, :geo, :collection],
+        'simple/within'        => [:latitude, :longitude, :radius, :distance, :skip, :limit, :geo, :collection],
+        'simple/range'         => [:attribute, :left, :right, :closed, :limit, :skip, :collection],
+        'cursor'               => [:query, :count, :batch_size, :collection],
+        'query'                => [:query],
+        'simple/first-example' => [:example, :collection]
       }
 
       # Delegate sending requests to the connection
@@ -49,7 +49,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.all # => #<Cursor id=33>
       def all(options = {})
-        simple_query_request("simple/all", options)
+        simple_query_request('simple/all', options)
       end
 
       # Looks for documents in a collection which match the given criteria
@@ -63,9 +63,9 @@ module Ashikawa
       # @api public
       # @example Find all documents in a collection that are red
       #   query = Ashikawa::Core::Query.new(collection)
-      #   query.by_example({ "color" => "red" }, :options => { :limit => 1 }) #=> #<Cursor id=2444>
+      #   query.by_example({ 'color' => 'red' }, :options => { :limit => 1 }) #=> #<Cursor id=2444>
       def by_example(example = {}, options = {})
-        simple_query_request("simple/by-example", { example: example }.merge(options))
+        simple_query_request('simple/by-example', { example: example }.merge(options))
       end
 
       # Looks for one document in a collection which matches the given criteria
@@ -76,11 +76,11 @@ module Ashikawa
       # @api public
       # @example Find one document in a collection that is red
       #   query = Ashikawa::Core::Query.new(collection)
-      #   query.first_example({ "color" => "red"}) # => #<Document id=2444 color="red">
+      #   query.first_example({ 'color' => 'red'}) # => #<Document id=2444 color="red">
       def first_example(example = {})
-        request = prepare_request("simple/first-example", { example: example, collection: collection.name })
-        response = send_request("simple/first-example", { put: request })
-        Document.new(database, response["document"])
+        request = prepare_request('simple/first-example', { example: example, collection: collection.name })
+        response = send_request('simple/first-example', { put: request })
+        Document.new(database, response['document'])
       end
 
       # Looks for documents in a collection based on location
@@ -98,7 +98,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.near(:latitude => 37.331693, :longitude => -122.030468)
       def near(options = {})
-        simple_query_request("simple/near", options)
+        simple_query_request('simple/near', options)
       end
 
       # Looks for documents in a collection within a radius
@@ -117,7 +117,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.within(:latitude => 37.331693, :longitude => -122.030468, :radius => 100)
       def within(options = {})
-        simple_query_request("simple/within", options)
+        simple_query_request('simple/within', options)
       end
 
       # Looks for documents in a collection with an attribute between two values
@@ -135,7 +135,7 @@ module Ashikawa
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.within(:latitude => 37.331693, :longitude => -122.030468, :radius => 100)
       def in_range(options = {})
-        simple_query_request("simple/range", options)
+        simple_query_request('simple/range', options)
       end
 
       # Send an AQL query to the database
@@ -147,9 +147,9 @@ module Ashikawa
       # @api public
       # @example Send an AQL query to the database
       #   query = Ashikawa::Core::Query.new(collection)
-      #   query.execute("FOR u IN users LIMIT 2") # => #<Cursor id=33>
+      #   query.execute('FOR u IN users LIMIT 2') # => #<Cursor id=33>
       def execute(query, options = {})
-        wrapped_request("cursor", :post, options.merge({ query: query }))
+        wrapped_request('cursor', :post, options.merge({ query: query }))
       end
 
       # Test if an AQL query is valid
@@ -159,9 +159,9 @@ module Ashikawa
       # @api public
       # @example Validate an AQL query
       #   query = Ashikawa::Core::Query.new(collection)
-      #   query.valid?("FOR u IN users LIMIT 2") # => true
+      #   query.valid?('FOR u IN users LIMIT 2') # => true
       def valid?(query)
-        !!wrapped_request("query", :post, { query: query })
+        !!wrapped_request('query', :post, { query: query })
       rescue Ashikawa::Core::BadSyntax
         false
       end

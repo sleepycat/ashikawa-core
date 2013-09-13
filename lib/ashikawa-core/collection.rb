@@ -1,14 +1,14 @@
 # -*- encoding : utf-8 -*-
-require "ashikawa-core/document"
-require "ashikawa-core/edge"
-require "ashikawa-core/index"
-require "ashikawa-core/cursor"
-require "ashikawa-core/query"
-require "ashikawa-core/status"
-require "ashikawa-core/figure"
-require "ashikawa-core/key_options"
-require "forwardable"
-require "equalizer"
+require 'ashikawa-core/document'
+require 'ashikawa-core/edge'
+require 'ashikawa-core/index'
+require 'ashikawa-core/cursor'
+require 'ashikawa-core/query'
+require 'ashikawa-core/status'
+require 'ashikawa-core/figure'
+require 'ashikawa-core/key_options'
+require 'forwardable'
+require 'equalizer'
 
 module Ashikawa
   module Core
@@ -33,19 +33,19 @@ module Ashikawa
       # @return [String]
       # @api public
       # @example Change the name of a collection
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
-      #   collection.name # => "example_1"
-      #   collection.name = "example_2"
-      #   collection.name # => "example_2"
+      #   collection.name # => 'example_1'
+      #   collection.name = 'example_2'
+      #   collection.name # => 'example_2'
       attr_reader :name
 
       # The ID of the collection. Is set by the database and unique
@@ -53,14 +53,14 @@ module Ashikawa
       # @return [Fixnum]
       # @api public
       # @example Get the id of the collection
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.id #=> 4588
@@ -71,14 +71,14 @@ module Ashikawa
       # @return [Status]
       # @api public
       # @example
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.status.loaded? #=> true
@@ -90,14 +90,14 @@ module Ashikawa
       # @return [Database]
       # @api public
       # @example
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.database #=> #<Database: ...>
@@ -108,14 +108,14 @@ module Ashikawa
       # @return [:document, :edge]
       # @api public
       # @example
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.content_type #=> :document
@@ -130,14 +130,14 @@ module Ashikawa
       # @param [Hash] raw_collection The raw collection returned from the server
       # @api public
       # @example Create a Collection object from scratch
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       def initialize(database, raw_collection)
@@ -152,19 +152,19 @@ module Ashikawa
       # @return [String] New Name
       # @api public
       # @example Change the name of a collection
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
-      #   collection.name # => "example_1"
-      #   collection.name = "example_2"
-      #   collection.name # => "example_2"
+      #   collection.name # => 'example_1'
+      #   collection.name = 'example_2'
+      #   collection.name # => 'example_2'
       def name=(new_name)
         send_information_to_server(:rename, :name, new_name)
         @name = new_name
@@ -175,14 +175,14 @@ module Ashikawa
       # @return [Boolean]
       # @api public
       # @example Does the collection wait for file synchronization?
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.wait_for_sync? #=> false
@@ -195,14 +195,14 @@ module Ashikawa
       # @return [String] Response from the server
       # @api public
       # @example Tell the collection to wait for file synchronization
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.wait_for_sync = true
@@ -216,7 +216,7 @@ module Ashikawa
       # @api public
       # @example Check if this collection has autoincrementing keys
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
-      #   collection.key_options.type # => "autoincrement"
+      #   collection.key_options.type # => 'autoincrement'
       def key_options
         KeyOptions.new(get_information_from_server(:properties, :keyOptions))
       end
@@ -226,14 +226,14 @@ module Ashikawa
       # @return [Fixnum] Number of documents
       # @api public
       # @example How many documents are in the collection?
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.length # => 0
@@ -246,14 +246,14 @@ module Ashikawa
       # @return [Figure]
       # @api public
       # @example Get the datafile count for a collection
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.figure.datafiles_count #=> 0
@@ -267,19 +267,19 @@ module Ashikawa
       # @return [String] Response from the server
       # @api public
       # @example Delete a collection
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.delete
       def delete
-        send_request_for_this_collection("", delete: {})
+        send_request_for_this_collection('', delete: {})
       end
 
       # Load the collection into memory
@@ -287,14 +287,14 @@ module Ashikawa
       # @return [String] Response from the server
       # @api public
       # @example Load a collection into memory
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.load
@@ -307,14 +307,14 @@ module Ashikawa
       # @return [String] Response from the server
       # @api public
       # @example Unload a collection into memory
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.unload
@@ -327,14 +327,14 @@ module Ashikawa
       # @return [String] Response from the server
       # @api public
       # @example Remove all documents from a collection
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
       #   raw_collection = {
-      #     "name" => "example_1",
-      #     "waitForSync" => true,
-      #     "id" => 4588,
-      #     "status" => 3,
-      #     "error" => false,
-      #     "code" => 200
+      #     'name' => 'example_1',
+      #     'waitForSync' => true,
+      #     'id' => 4588,
+      #     'status' => 3,
+      #     'error' => false,
+      #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
       #   collection.truncate!
@@ -401,7 +401,7 @@ module Ashikawa
       # @return [Edge] The created edge
       # @api public
       # @example Create a new document from raw data
-      #   collection.create_edge(node_a, node_b, {"name" => "incredible edge"})
+      #   collection.create_edge(node_a, node_b, {'name' => 'incredible edge'})
       def create_edge(from, to, attributes)
         raise "Can't create an edge in a document collection" if @content_type == :document
         response = send_request("edge?collection=#{@id}&from=#{from.id}&to=#{to.id}", post: attributes)
@@ -419,8 +419,8 @@ module Ashikawa
       #   people.add_index(:hash, :on => [:name, :profession])
       def add_index(type, opts)
         response = send_request("index?collection=#{@id}", post: {
-          "type" => type.to_s,
-          "fields" => opts[:on].map { |field| field.to_s }
+          'type' => type.to_s,
+          'fields' => opts[:on].map { |field| field.to_s }
         })
 
         Index.new(self, response)
@@ -449,7 +449,7 @@ module Ashikawa
       def indices
         response = send_request("index?collection=#{@id}")
 
-        response["indexes"].map do |raw_index|
+        response['indexes'].map do |raw_index|
           Index.new(self, raw_index)
         end
       end

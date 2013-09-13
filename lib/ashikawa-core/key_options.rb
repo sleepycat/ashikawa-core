@@ -45,10 +45,10 @@ module Ashikawa
       # @example Create a new KeyOptions object
       #   KeyOptions.new({ :type => :autoincrement })
       def initialize(raw_key_options)
-        @type = raw_key_options["type"]
-        @offset = raw_key_options["offset"]
-        @increment = raw_key_options["increment"]
-        @allow_user_keys = raw_key_options["allowUserKeys"]
+        @type = raw_key_options['type']
+        @offset = raw_key_options['offset']
+        @increment = raw_key_options['increment']
+        @allow_user_keys = raw_key_options['allowUserKeys']
       end
     end
   end

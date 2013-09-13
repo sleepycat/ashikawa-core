@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require "ashikawa-core/exceptions/client_error.rb"
+require 'ashikawa-core/exceptions/client_error.rb'
 
 module Ashikawa
   module Core
@@ -19,7 +19,7 @@ module Ashikawa
       # @return String
       # @api private
       def to_s
-        "Status 404: The Resource you requested was not found on the server"
+        'Status 404: The Resource you requested was not found on the server'
       end
     end
   end

@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
-require "faraday"
-require "json"
+require 'faraday'
+require 'json'
 
 module Ashikawa
   module Core

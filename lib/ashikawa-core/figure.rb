@@ -10,12 +10,12 @@ module Ashikawa
       # @example Create a new figure from a raw figure
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       def initialize(raw_figure)
-        @datafiles  = raw_figure["datafiles"]
-        @alive      = raw_figure["alive"]
-        @dead       = raw_figure["dead"]
-        @shapes     = raw_figure["shapes"]
-        @journals   = raw_figure["journals"]
-        @attributes = raw_figure["attributes"]
+        @datafiles  = raw_figure['datafiles']
+        @alive      = raw_figure['alive']
+        @dead       = raw_figure['dead']
+        @shapes     = raw_figure['shapes']
+        @journals   = raw_figure['journals']
+        @attributes = raw_figure['attributes']
       end
 
       # The number of active datafiles
@@ -26,7 +26,7 @@ module Ashikawa
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       #   figure.datafiles_count #=> 1337
       def datafiles_count
-        @datafiles["count"]
+        @datafiles['count']
       end
 
       # The file size of datafiles
@@ -37,7 +37,7 @@ module Ashikawa
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       #   figure.datafile_size #=> 1337
       def datafiles_file_size
-        @datafiles["fileSize"]
+        @datafiles['fileSize']
       end
 
       # The total size in bytes used by all living documents
@@ -48,7 +48,7 @@ module Ashikawa
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       #   figure.alive_size #=> 1337
       def alive_size
-        @alive["size"]
+        @alive['size']
       end
 
       # The number of living documents
@@ -59,7 +59,7 @@ module Ashikawa
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       #   figure.alive_count #=> 1337
       def alive_count
-        @alive["count"]
+        @alive['count']
       end
 
       # The total size in bytes used by all dead documents
@@ -70,7 +70,7 @@ module Ashikawa
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       #   figure.dead_size #=> 1337
       def dead_size
-        @dead["size"]
+        @dead['size']
       end
 
       # The number of dead documents
@@ -81,7 +81,7 @@ module Ashikawa
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       #   figure.dead_count #=> 1337
       def dead_count
-        @dead["count"]
+        @dead['count']
       end
 
       # The total number of shapes used in the collection
@@ -92,7 +92,7 @@ module Ashikawa
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       #   figure.shapes_count #=> 1337
       def shapes_count
-        @shapes["count"]
+        @shapes['count']
       end
 
       # The number of deletion markers
@@ -103,7 +103,7 @@ module Ashikawa
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       #   figure.dead_deletion #=> 1337
       def dead_deletion
-        @dead["deletion"]
+        @dead['deletion']
       end
 
       # The number of journals
@@ -114,7 +114,7 @@ module Ashikawa
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       #   figure.journal_count #=> 1337
       def journals_count
-        @journals["count"]
+        @journals['count']
       end
 
       # The file size of journals
@@ -125,7 +125,7 @@ module Ashikawa
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       #   figure.journal_size #=> 1337
       def journals_file_size
-        @journals["fileSize"]
+        @journals['fileSize']
       end
 
       # Number of different attributes that are or have been used in the collection
@@ -136,7 +136,7 @@ module Ashikawa
       #   figure = Ashikawa::Core::Figure.new(raw_figure)
       #   figure.attributes_count #=> 12
       def attributes_count
-        @attributes["count"]
+        @attributes['count']
       end
     end
   end

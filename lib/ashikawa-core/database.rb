@@ -1,12 +1,12 @@
 # -*- encoding : utf-8 -*-
-require "ashikawa-core/exceptions/client_error/resource_not_found/collection_not_found"
-require "ashikawa-core/collection"
-require "ashikawa-core/connection"
-require "ashikawa-core/cursor"
-require "ashikawa-core/configuration"
-require "ashikawa-core/transaction"
-require "forwardable"
-require "equalizer"
+require 'ashikawa-core/exceptions/client_error/resource_not_found/collection_not_found'
+require 'ashikawa-core/collection'
+require 'ashikawa-core/connection'
+require 'ashikawa-core/cursor'
+require 'ashikawa-core/configuration'
+require 'ashikawa-core/transaction'
+require 'forwardable'
+require 'equalizer'
 
 module Ashikawa
   module Core
@@ -33,16 +33,16 @@ module Ashikawa
       # @api public
       # @example Access a Database by providing the URL
       #   database = Ashikawa::Core::Database.new do |config|
-      #     config.url = "http://localhost:8529"
+      #     config.url = 'http://localhost:8529'
       #   end
       # @example Access a Database by providing a Connection
-      #   connection = Connection.new("http://localhost:8529")
+      #   connection = Connection.new('http://localhost:8529')
       #   database = Ashikawa::Core::Database.new do |config|
       #     config.connection = connection
       #   end
       # @example Access a Database with a logger and custom HTTP adapter
       #   database = Ashikawa::Core::Database.new do |config|
-      #     config.url = "http://localhost:8529"
+      #     config.url = 'http://localhost:8529'
       #     config.adapter = my_adapter
       #     config.logger = my_logger
       #   end
@@ -58,12 +58,12 @@ module Ashikawa
       # @return [Array<Collection>]
       # @api public
       # @example Get an Array containing the Collections in the database
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
-      #   database["a"]
-      #   database["b"]
-      #   database.collections # => [ #<Collection name="a">, #<Collection name="b">]
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
+      #   database['a']
+      #   database['b']
+      #   database.collections # => [ #<Collection name='a'>, #<Collection name="b">]
       def collections
-        all_collections_where { |collection| !collection["name"].start_with?("_") }
+        all_collections_where { |collection| !collection['name'].start_with?('_') }
       end
 
       # Returns a list of all system collections defined in the database
@@ -71,10 +71,10 @@ module Ashikawa
       # @return [Array<Collection>]
       # @api public
       # @example Get an Array containing the Collections in the database
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
-      #   database.system_collections # => [ #<Collection name="_a">, #<Collection name="_b">]
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
+      #   database.system_collections # => [ #<Collection name='_a'>, #<Collection name="_b">]
       def system_collections
-        all_collections_where { |collection| collection["name"].start_with?("_") }
+        all_collections_where { |collection| collection['name'].start_with?('_') }
       end
 
       # Create a Collection based on name
@@ -85,10 +85,10 @@ module Ashikawa
       # @return [Collection]
       # @api public
       # @example Create a new, volatile collection
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
-      #   database.create_collection("a", :isVolatile => true) # => #<Collection name="a">
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
+      #   database.create_collection('a', :isVolatile => true) # => #<Collection name="a">
       def create_collection(collection_identifier, opts = {})
-        response = send_request("collection", post: translate_params(collection_identifier, opts))
+        response = send_request('collection', post: translate_params(collection_identifier, opts))
         Ashikawa::Core::Collection.new(self, response)
       end
 
@@ -98,16 +98,16 @@ module Ashikawa
       # @return [Collection]
       # @api public
       # @example Get a Collection from the database by name
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
-      #   database["a"] # => #<Collection name="a">
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
+      #   database['a'] # => #<Collection name="a">
       # @example Get a Collection from the database by ID
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
-      #   database["7254820"] # => #<Collection id=7254820>
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
+      #   database['7254820'] # => #<Collection id=7254820>
       def collection(collection_identifier)
         begin
           response = send_request("collection/#{collection_identifier}")
         rescue CollectionNotFoundException
-          response = send_request("collection", post: { name: collection_identifier })
+          response = send_request('collection', post: { name: collection_identifier })
         end
 
         Ashikawa::Core::Collection.new(self, response)
@@ -120,8 +120,8 @@ module Ashikawa
       # @return [Query]
       # @api public
       # @example Send an AQL query to the database
-      #   database = Ashikawa::Core::Database.new("http://localhost:8529")
-      #   database.query.execute "FOR u IN users LIMIT 2" # => #<Cursor id=33>
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
+      #   database.query.execute 'FOR u IN users LIMIT 2' # => #<Cursor id=33>
       def query
         Query.new(self)
       end
@@ -134,7 +134,7 @@ module Ashikawa
       # @return [Object] The result of the transaction
       # @api public
       # @example Create a new Transaction
-      #   transaction = database.create_transaction("function () { return 5; }", :read => ["collection_1"])
+      #   transaction = database.create_transaction('function () { return 5; }", :read => ["collection_1'])
       #   transaction.execute #=> 5
       def create_transaction(action, collections)
         Ashikawa::Core::Transaction.new(self, action, collections)
@@ -150,7 +150,7 @@ module Ashikawa
       # @return [Connection]
       # @api private
       def setup_new_connection(url, logger, adapter)
-        raise(ArgumentError, "Please provide either an url or a connection to setup the database") if url.nil?
+        raise(ArgumentError, 'Please provide either an url or a connection to setup the database') if url.nil?
         Ashikawa::Core::Connection.new(url, {
           logger: logger,
           adapter: adapter
@@ -204,7 +204,7 @@ module Ashikawa
       # @return [Array<Collection>]
       # @api private
       def all_collections_where(&block)
-        raw_collections = send_request("collection")["collections"]
+        raw_collections = send_request('collection')['collections']
         raw_collections.keep_if(&block)
         parse_raw_collections(raw_collections)
       end

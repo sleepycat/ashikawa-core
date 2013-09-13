@@ -75,10 +75,10 @@ module Ashikawa
       # @return self
       # @api private
       def parse_raw_index(raw_index)
-        @id = raw_index["id"]
-        @on = convert_to_symbols(raw_index["fields"]) if raw_index.key?("fields")
-        @type = raw_index["type"].to_sym if raw_index.key?("type")
-        @unique = raw_index["unique"]
+        @id = raw_index['id']
+        @on = convert_to_symbols(raw_index['fields']) if raw_index.key?('fields')
+        @type = raw_index['type'].to_sym if raw_index.key?('type')
+        @unique = raw_index['unique']
         self
       end
 

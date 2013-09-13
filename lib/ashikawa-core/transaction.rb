@@ -8,7 +8,7 @@ module Ashikawa
       # @return [Array<String>]
       # @api public
       # @example Get the collections that the transaction writes to
-      #   transaction.write_collections # => ["collection_1"]
+      #   transaction.write_collections # => ['collection_1']
       def write_collections
         @request_parameters[:collections][:write]
       end
@@ -18,7 +18,7 @@ module Ashikawa
       # @return [Array<String>]
       # @api public
       # @example Get the collections that the transaction reads from
-      #   transaction.read_collections # => ["collection_1"]
+      #   transaction.read_collections # => ['collection_1']
       def read_collections
         @request_parameters[:collections][:read]
       end
@@ -71,8 +71,8 @@ module Ashikawa
       # @option options [Array<String>] :read The collections you want to read from
       # @api public
       # @example Create a Transaction
-      #   transaction = Ashikawa::Core::Transaction.new(database, "function () { return 5; }",
-      #     :read => ["collection_1"]
+      #   transaction = Ashikawa::Core::Transaction.new(database, 'function () { return 5; }',
+      #     :read => ['collection_1']
       def initialize(database, action, options)
         @database = database
         @request_parameters = {
@@ -91,8 +91,8 @@ module Ashikawa
       #   transaction.execute({ :a => 5 })
       def execute(action_parameters = :no_params_provided)
         @request_parameters[:params] = action_parameters unless action_parameters == :no_params_provided
-        response = @database.send_request("transaction", post: @request_parameters)
-        response["result"]
+        response = @database.send_request('transaction', post: @request_parameters)
+        response['result']
       end
 
       private

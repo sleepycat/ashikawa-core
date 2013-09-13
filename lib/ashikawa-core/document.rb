@@ -14,7 +14,7 @@ module Ashikawa
       # @api public
       # @example Get the ID for a Document
       #   document = Ashikawa::Core::Document.new(database, raw_document)
-      #   document.id # => "my_fancy_collection/2345678"
+      #   document.id # => 'my_fancy_collection/2345678'
       attr_reader :id
 
       # The key of the document (No collection prefix)
@@ -23,7 +23,7 @@ module Ashikawa
       # @api public
       # @example Get the key for a Document
       #   document = Ashikawa::Core::Document.new(database, raw_document)
-      #   document.key # => "2345678"
+      #   document.key # => '2345678'
       attr_reader :key
 
       # The current revision of the document
@@ -103,7 +103,7 @@ module Ashikawa
       # @api public
       # @example Get the hash representation of a document
       #   document = Ashikawa::Core::Document.new(database, raw_document)
-      #   document.hash #=> { :name => "Lebowski", :occupation => "Not occupied" }
+      #   document.hash #=> { :name => 'Lebowski", :occupation => "Not occupied' }
       def hash
         @content
       end
@@ -143,7 +143,7 @@ module Ashikawa
         @id       = raw_document['_id'] || :not_persisted
         @key      = raw_document['_key']
         @revision = raw_document['_rev'] || :not_persisted
-        @content  = raw_document.delete_if { |key, value| key.start_with?("_") }
+        @content  = raw_document.delete_if { |key, value| key.start_with?('_') }
         self
       end
 

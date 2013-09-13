@@ -17,7 +17,7 @@ module Ashikawa
       # @api public
       # @example Get the id of the cursor
       #   cursor = Ashikawa::Core::Cursor.new(database, raw_cursor)
-      #   cursor.id #=> "1337"
+      #   cursor.id #=> '1337'
       attr_reader :id
 
       # The number of documents
@@ -93,7 +93,7 @@ module Ashikawa
       # @return class
       # @api private
       def detect_document_class_for(raw_document)
-        if raw_document.key?("_from") && raw_document.key?("_to")
+        if raw_document.key?('_from') && raw_document.key?('_to')
           Edge
         else
           Document

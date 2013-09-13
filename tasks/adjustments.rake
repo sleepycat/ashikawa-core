@@ -3,16 +3,16 @@
 # Difference to Devtools:
 # * Acceptance, no integration tests
 
-Rake::Task["spec"].clear
-Rake::Task["spec:integration"].clear
+Rake::Task['spec'].clear
+Rake::Task['spec:integration'].clear
 
 desc 'Run all specs'
 task spec: %w[ spec:unit spec:acceptance ]
 
 namespace :spec do
-  desc "Run the acceptance tests. Requires ArangoDB to be running."
+  desc 'Run the acceptance tests. Requires ArangoDB to be running.'
   RSpec::Core::RakeTask.new(:acceptance) do |spec|
-    spec.pattern = "spec/acceptance/*_spec.rb"
+    spec.pattern = 'spec/acceptance/*_spec.rb'
   end
 end
 
@@ -21,8 +21,8 @@ end
 # * Do not run mutant yet
 # * metrics task only runs metrics (and not specs)
 
-Rake::Task["ci"].clear
-Rake::Task["ci:metrics"].clear
+Rake::Task['ci'].clear
+Rake::Task['ci:metrics'].clear
 
 namespace :ci do
   desc 'Run all metrics except mutant and reek'

@@ -1,14 +1,14 @@
 # -*- encoding : utf-8 -*-
-require "faraday"
-require "json"
-require "ashikawa-core/exceptions/client_error"
-require "ashikawa-core/exceptions/client_error/resource_not_found"
-require "ashikawa-core/exceptions/client_error/resource_not_found/index_not_found"
-require "ashikawa-core/exceptions/client_error/resource_not_found/document_not_found"
-require "ashikawa-core/exceptions/client_error/resource_not_found/collection_not_found"
-require "ashikawa-core/exceptions/client_error/bad_syntax"
-require "ashikawa-core/exceptions/server_error"
-require "ashikawa-core/exceptions/server_error/json_error"
+require 'faraday'
+require 'json'
+require 'ashikawa-core/exceptions/client_error'
+require 'ashikawa-core/exceptions/client_error/resource_not_found'
+require 'ashikawa-core/exceptions/client_error/resource_not_found/index_not_found'
+require 'ashikawa-core/exceptions/client_error/resource_not_found/document_not_found'
+require 'ashikawa-core/exceptions/client_error/resource_not_found/collection_not_found'
+require 'ashikawa-core/exceptions/client_error/bad_syntax'
+require 'ashikawa-core/exceptions/server_error'
+require 'ashikawa-core/exceptions/server_error/json_error'
 
 module Ashikawa
   module Core
@@ -92,7 +92,7 @@ module Ashikawa
       # @return [Hash] The parsed body
       # @api private
       def parse_json(env)
-        fail JSON::ParserError unless json_content_type?(env[:response_headers]["content-type"])
+        fail JSON::ParserError unless json_content_type?(env[:response_headers]['content-type'])
         JSON.parse(env[:body])
       rescue JSON::ParserError
         raise Ashikawa::Core::JsonError
@@ -104,7 +104,7 @@ module Ashikawa
       # @return [Boolean]
       # @api private
       def json_content_type?(content_type)
-        content_type == "application/json; charset=utf-8"
+        content_type == 'application/json; charset=utf-8'
       end
 
       # Handle the status code
@@ -138,7 +138,7 @@ module Ashikawa
       # @api private
       def error(body)
         parsed_body = JSON.parse(body)
-        "#{parsed_body["errorNum"]}: #{parsed_body["errorMessage"]}"
+        "#{parsed_body['errorNum']}: #{parsed_body["errorMessage"]}"
       end
     end
 
