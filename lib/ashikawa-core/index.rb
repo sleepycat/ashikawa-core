@@ -75,10 +75,19 @@ module Ashikawa
       # @api private
       def parse_raw_index(raw_index)
         @id = raw_index["id"]
-        @on = raw_index["fields"].map { |field| field.to_sym } if raw_index.key?("fields")
+        @on = convert_to_symbols(raw_index["fields"]) if raw_index.key?("fields")
         @type = raw_index["type"].to_sym if raw_index.key?("type")
         @unique = raw_index["unique"]
         self
+      end
+
+      # Convert all elements of an array to symbols
+      #
+      # @param [Array] arr
+      # @return Array
+      # @api private
+      def convert_to_symbols(arr)
+        arr.map { |field| field.to_sym }
       end
     end
   end
