@@ -189,7 +189,7 @@ module Ashikawa
       # @api private
       def translate_params(collection_identifier, opts)
         params = { name: collection_identifier }
-        params[:isVolatile] = true if opts[:is_volatile] == true
+        params[:isVolatile] = true if opts[:is_volatile]
         params[:type] = COLLECTION_TYPES[opts[:content_type]] if opts.key?(:content_type)
         params[:keyOptions] = translate_key_options(opts[:key_options]) if opts.key?(:key_options)
         params
