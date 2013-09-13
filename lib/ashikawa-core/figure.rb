@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Ashikawa
   module Core
     # Wrapper around figures of a collection

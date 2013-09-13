@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Ashikawa
   module Core
     # A JavaScript Transaction on the database

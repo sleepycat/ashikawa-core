@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require "forwardable"
 require "faraday"
 require "null_logger"

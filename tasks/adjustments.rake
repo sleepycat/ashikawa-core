@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 ## Specs
 # Difference to Devtools:
 # * Acceptance, no integration tests

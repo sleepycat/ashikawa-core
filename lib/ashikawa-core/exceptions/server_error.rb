@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Ashikawa
   module Core
     # The server had an error during the request

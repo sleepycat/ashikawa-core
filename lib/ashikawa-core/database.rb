@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require "ashikawa-core/exceptions/client_error/resource_not_found/collection_not_found"
 require "ashikawa-core/collection"
 require "ashikawa-core/connection"

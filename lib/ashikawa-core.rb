@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require "ashikawa-core/collection"
 require "ashikawa-core/connection"
 require "ashikawa-core/database"

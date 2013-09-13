@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require "ashikawa-core/exceptions/no_collection_provided"
 require "ashikawa-core/exceptions/client_error"
 require "ashikawa-core/exceptions/client_error/bad_syntax"

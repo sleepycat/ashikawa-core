@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Ashikawa
   module Core
     # This Exception is thrown when a Query object should execute a simple query

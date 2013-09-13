@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'ashikawa-core/exceptions/client_error/resource_not_found/document_not_found'
 require 'equalizer'
 

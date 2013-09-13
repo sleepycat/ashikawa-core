@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require "ashikawa-core/exceptions/server_error"
 
 module Ashikawa

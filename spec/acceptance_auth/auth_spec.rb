@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'acceptance_auth/spec_helper'
 
 describe "authenticated database" do

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require "ashikawa-core/status"
 
 describe Ashikawa::Core::Status do

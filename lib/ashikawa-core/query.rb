@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'ashikawa-core/cursor'
 require 'ashikawa-core/document'
 require 'ashikawa-core/exceptions/no_collection_provided'

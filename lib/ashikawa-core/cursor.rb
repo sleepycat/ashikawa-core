@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'ashikawa-core/document'
 require 'ashikawa-core/edge'
 require 'equalizer'
