@@ -79,12 +79,6 @@ RegexpLiteral:
 ConstantName:
   Enabled: false
 
-AvoidPerlisms:
-  Enabled: true
-
-AvoidPerlBackrefs:
-  Enabled: true
-
 TrivialAccessors:
   Enabled: true
   ExactNameMatch: true

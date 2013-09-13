@@ -19,22 +19,8 @@ end
 ## Metrics
 # Differences to Devtools:
 # * Do not run mutant yet
-# * metrics task only runs metrics (and not specs)
 
 Rake::Task['ci'].clear
-Rake::Task['ci:metrics'].clear
-
-namespace :ci do
-  desc 'Run all metrics except mutant and reek'
-  task metrics: %w[
-    metrics:coverage
-    metrics:yardstick:verify
-    metrics:rubocop
-    metrics:flog
-    metrics:flay
-    metrics:reek
-  ]
-end
 
 desc 'Run all metrics and specs'
 task ci: %w[
