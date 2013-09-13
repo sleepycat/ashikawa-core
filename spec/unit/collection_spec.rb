@@ -294,15 +294,14 @@ describe Ashikawa::Core::Collection do
     end
 
     it "should create a new edge" do
-      pending "lol"
       allow(@database).to receive(:send_request).with("edge?collection=60768679&from=1&to=2", post: { "name" => "The Dude" }).and_return do
         server_response('documents/new-example_1-137249191')
       end
       allow(@database).to receive(:send_request).with("edge?collection=60768679&from=1&to=2", post: { "name" => "The Dude" }).and_return { server_response('documents/example_1-137249191') }
       from_double = double
-      allow(from_double).to receive(id: "1")
+      allow(from_double).to receive(:id).and_return("1")
       to_double = double
-      allow(to_double).to receive(id: "2")
+      allow(to_double).to receive(:id).and_return("2")
 
       # Documents need to get initialized:
       expect(Ashikawa::Core::Edge).to receive(:new).and_return {
