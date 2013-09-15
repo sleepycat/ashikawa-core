@@ -34,18 +34,16 @@ describe Ashikawa::Core::Collection do
     end
 
     it "should check for the figures" do
-      figures = double
-
       allow(response).to receive(:[])
         .with("figures")
-        .and_return(figures)
+        .and_return(value)
       expect(database).to receive(:send_request)
         .with("collection/60768679/figures", {})
         .and_return(response)
 
       expect(Ashikawa::Core::Figure).to receive(:new)
         .exactly(1).times
-        .with(figures)
+        .with(value)
 
       subject.figure
     end
@@ -88,16 +86,16 @@ describe Ashikawa::Core::Collection do
 
     it "should change its name" do
       expect(database).to receive(:send_request)
-        .with("collection/60768679/rename", put: {"name" => "my_new_name"})
+        .with("collection/60768679/rename", put: {"name" => value})
 
-      subject.name = "my_new_name"
+      subject.name = value
     end
 
     it "should change if it waits for sync" do
       expect(database).to receive(:send_request)
-        .with("collection/60768679/properties", put: {"waitForSync" => true})
+        .with("collection/60768679/properties", put: {"waitForSync" => value})
 
-      subject.wait_for_sync = true
+      subject.wait_for_sync = value
     end
 
     describe "properties" do
@@ -111,6 +109,7 @@ describe Ashikawa::Core::Collection do
         allow(response).to receive(:[])
           .with("waitForSync")
           .and_return(value)
+
         expect(subject.wait_for_sync?).to be(value)
       end
 
@@ -171,9 +170,9 @@ describe Ashikawa::Core::Collection do
 
       it "should replace a document by ID" do
         expect(database).to receive(:send_request)
-          .with("document/60768679/333", put: {"name" => "The Dude"})
+          .with("document/60768679/333", put: {"name" => value})
 
-        subject.replace(333, {"name" => "The Dude"})
+        subject.replace(333, {"name" => value})
       end
     end
 
@@ -218,17 +217,16 @@ describe Ashikawa::Core::Collection do
   describe "an initialized document collection" do
     subject { Ashikawa::Core::Collection.new database, raw_document_collection }
 
+    let(:document) { double }
+    let(:response) { double }
+    let(:raw_document) { double }
+
     its(:content_type) { should be(:document) }
 
     it "should create a new document" do
-      document = double
-      response = double
-      raw_document = double
-
       allow(database).to receive(:send_request)
         .with("document?collection=60768679", post: raw_document)
         .and_return(response)
-
       expect(Ashikawa::Core::Document).to receive(:new)
         .with(database, response, raw_document)
         .and_return(document)
@@ -245,6 +243,10 @@ describe Ashikawa::Core::Collection do
 
   describe "an initialized edge collection" do
     subject { Ashikawa::Core::Collection.new database, raw_edge_collection }
+
+    let(:document) { double }
+    let(:response) { double }
+    let(:raw_document) { double }
 
     its(:content_type) { should be(:edge) }
 
@@ -265,14 +267,9 @@ describe Ashikawa::Core::Collection do
     end
 
     it "should create a new edge" do
-      response = double
-      raw_document = double
-      document = double
-
       allow(database).to receive(:send_request)
         .with("edge?collection=60768679&from=1&to=2", post: raw_document)
         .and_return(response)
-
       expect(Ashikawa::Core::Edge).to receive(:new)
         .with(database, response, raw_document)
         .and_return(document)
