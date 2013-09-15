@@ -30,13 +30,14 @@ module Ashikawa
       #
       # @param [Database] database
       # @param [Hash] raw_edge
+      # @param [Hash] additional_data
       # @api public
       # @example Create an Edge
       #   document = Ashikawa::Core::Edge.new(database, raw_edge)
-      def initialize(database, raw_edge)
+      def initialize(database, raw_edge, additional_data = {})
         @from_id = raw_edge['_from']
         @to_id = raw_edge['_to']
-        super(database, raw_edge)
+        super(database, raw_edge, additional_data)
       end
 
       protected

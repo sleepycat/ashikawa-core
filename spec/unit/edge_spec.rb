@@ -15,13 +15,22 @@ describe Ashikawa::Core::Edge do
       "last_name" => "Dude"
     }
   }
-  subject { Ashikawa::Core::Edge }
+  let(:additional_data) {
+    {
+      "more_info" => "this is important"
+    }
+  }
 
-  it "should initialize data" do
-    document = subject.new(database, raw_data)
-    expect(document.id).to eq("1234567/2345678")
-    expect(document.key).to eq("2345678")
-    expect(document.revision).to eq("3456789")
+  describe "initializing" do
+    subject { Ashikawa::Core::Edge }
+
+    it "should initialize data" do
+      document = subject.new(database, raw_data, additional_data)
+      expect(document.id).to eq("1234567/2345678")
+      expect(document.key).to eq("2345678")
+      expect(document.revision).to eq("3456789")
+      expect(document["more_info"]).to eq(additional_data["more_info"])
+    end
   end
 
   describe "initialized edge" do
