@@ -108,8 +108,8 @@ describe "Basics" do
     it "should be possible to get information about the number of documents" do
       empty_collection = subject["empty_collection"]
       expect(empty_collection.length).to eq(0)
-      empty_collection.create_document({ name: "testname", age: 27})
-      empty_collection.create_document({ name: "anderer name", age: 28})
+      empty_collection.create_document(name: "testname", age: 27)
+      empty_collection.create_document(name: "anderer name", age: 28)
       expect(empty_collection.length).to eq(2)
       empty_collection.truncate!
       expect(empty_collection.length).to eq(0)
@@ -141,8 +141,8 @@ describe "Basics" do
       nodes = subject.create_collection("nodecollection")
       edges = subject.create_collection("edgecollection", content_type: :edge)
 
-      a = nodes.create_document({name: "a"})
-      b = nodes.create_document({name: "b"})
+      a = nodes.create_document(name: "a")
+      b = nodes.create_document(name: "b")
       e = edges.create_edge(a, b, {name: "fance_edge"})
 
       e = edges.fetch(e.key)
