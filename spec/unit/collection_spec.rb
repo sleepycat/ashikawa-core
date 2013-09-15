@@ -187,47 +187,23 @@ describe Ashikawa::Core::Collection do
       end
 
       it "should create a new document" do
-        allow(@database).to receive(:send_request).with("document?collection=60768679", post: { "name" => "The Dude" }).and_return do
-          server_response('documents/new-example_1-137249191')
-        end
-        allow(@database).to receive(:send_request).with("document/60768679/333", post: {
-          "name" => "The Dude"
-        }).and_return {
-          {
-            "_id" => "example_1/137249191",
-            "_rev" => "137249191",
-            "_key" => "137249191"
-          }
-        }
-        allow(@database).to receive(:send_request).with("document/60768679/333", {}).and_return { server_response('documents/example_1-137249191') }
+        document = double
+        server_response = { a: 1 }
+        raw_document = { b: 2 }
 
-        # Documents need to get initialized:
-        expect(Ashikawa::Core::Document).to receive(:new).and_return {
-          document = double
-          expect(document).to receive(:refresh!)
-          document
-        }
+        allow(@database).to receive(:send_request)
+          .with("document?collection=60768679", post: raw_document)
+          .and_return(server_response)
 
-        subject.create_document({"name" => "The Dude"})
+        expect(document).to receive(:refresh!)
+        expect(Ashikawa::Core::Document).to receive(:new)
+          .with(@database, server_response)
+          .and_return(document)
+
+        subject.create_document(raw_document)
       end
 
-      it "should create a new document" do
-        allow(@database).to receive(:send_request).with("document?collection=60768679", post: { "name" => "The Dude" }).and_return do
-          server_response('documents/example_1-137249191')
-        end
-        allow(@database).to receive(:send_request).with("document/60768679/333").and_return { server_response('documents/example_1-137249191') }
-
-        # Documents need to get initialized:
-        expect(Ashikawa::Core::Document).to receive(:new).and_return {
-          document = double
-          expect(document).to receive(:refresh!)
-          document
-        }
-
-        subject.create_document("name" => "The Dude")
-      end
-
-      it "should not create a new document" do
+      it "should not create a new edge" do
         expect {
           subject.create_edge(nil, nil, {"quote" => "D'ya have to use s'many cuss words?"})
         }.to raise_exception(RuntimeError, "Can't create an edge in a document collection")
@@ -294,23 +270,21 @@ describe Ashikawa::Core::Collection do
     end
 
     it "should create a new edge" do
-      allow(@database).to receive(:send_request).with("edge?collection=60768679&from=1&to=2", post: { "name" => "The Dude" }).and_return do
-        server_response('documents/new-example_1-137249191')
-      end
-      allow(@database).to receive(:send_request).with("edge?collection=60768679&from=1&to=2", post: { "name" => "The Dude" }).and_return { server_response('documents/example_1-137249191') }
-      from_double = double
-      allow(from_double).to receive(:id).and_return("1")
-      to_double = double
-      allow(to_double).to receive(:id).and_return("2")
+      server_response = { a: 1 }
+      raw_document = { b: 2 }
 
-      # Documents need to get initialized:
-      expect(Ashikawa::Core::Edge).to receive(:new).and_return {
-        document = double
-        expect(document).to receive(:refresh!)
-        document
-      }
+      document = double
+      expect(document).to receive(:refresh!)
 
-      subject.create_edge(from_double, to_double, {"name" => "The Dude"})
+      allow(@database).to receive(:send_request)
+        .with("edge?collection=60768679&from=1&to=2", post: raw_document)
+        .and_return(server_response)
+
+      expect(Ashikawa::Core::Edge).to receive(:new)
+        .with(@database, server_response)
+        .and_return(document)
+
+      subject.create_edge(double(id: "1"), double(id: "2"), raw_document)
     end
 
     it "should not create a new document" do
