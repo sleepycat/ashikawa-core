@@ -45,7 +45,7 @@ module Ashikawa
       #   document = Ashikawa::Core::Document.new(database, raw_document)
       def initialize(database, raw_document, additional_data = {})
         @database = database
-        raw_document.merge!(additional_data)
+        raw_document.merge!(clean_up_additional_data(additional_data))
         parse_raw_document(raw_document)
       end
 
@@ -156,6 +156,18 @@ module Ashikawa
       # @api private
       def send_request_for_document(opts = {})
         @database.send_request("document/#{@id}", opts)
+      end
+
+      # Clean up the raw data hash to have string keys
+      #
+      # @param [Hash] raw_data
+      # @return [Hash] Cleaned up hash
+      # @api private
+      def clean_up_additional_data(raw_data)
+        raw_data.reduce({}) do |result, (key, value)|
+          result[key.to_s] = value
+          result
+        end
       end
     end
   end

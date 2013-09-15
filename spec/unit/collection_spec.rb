@@ -195,9 +195,8 @@ describe Ashikawa::Core::Collection do
           .with("document?collection=60768679", post: raw_document)
           .and_return(server_response)
 
-        expect(document).to receive(:refresh!)
         expect(Ashikawa::Core::Document).to receive(:new)
-          .with(@database, server_response)
+          .with(@database, server_response, raw_document)
           .and_return(document)
 
         subject.create_document(raw_document)

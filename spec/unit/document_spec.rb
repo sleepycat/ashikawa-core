@@ -21,7 +21,7 @@ describe Ashikawa::Core::Document do
   }
   let(:additional_data) {
     {
-      "more_info" => "this is important"
+      more_info: "this is important"
     }
   }
   subject { Ashikawa::Core::Document }
@@ -42,7 +42,7 @@ describe Ashikawa::Core::Document do
 
     it "should initialize with additional data" do
       document = subject.new database, raw_data, additional_data
-      expect(document["more_info"]).to eq(additional_data["more_info"])
+      expect(document["more_info"]).to eq(additional_data[:more_info])
     end
   end
 

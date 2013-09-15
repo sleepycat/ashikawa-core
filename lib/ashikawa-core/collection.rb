@@ -390,7 +390,7 @@ module Ashikawa
       def create_document(attributes)
         raise "Can't create a document in an edge collection" if @content_type == :edge
         response = send_request_for_content(post: attributes)
-        Document.new(@database, response).refresh!
+        Document.new(@database, response, attributes)
       end
 
       # Create a new edge between two documents with certain attributes
