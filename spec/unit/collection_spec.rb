@@ -18,6 +18,7 @@ describe Ashikawa::Core::Collection do
     let(:key_options) { double }
     let(:response) { double }
     let(:value) { double }
+    let(:figure) { double }
 
     its(:name) { should eq("example_1") }
     its(:id) { should eq("60768679") }
@@ -44,8 +45,9 @@ describe Ashikawa::Core::Collection do
       expect(Ashikawa::Core::Figure).to receive(:new)
         .exactly(1).times
         .with(value)
+        .and_return(figure)
 
-      subject.figure
+      expect(subject.figure).to be(figure)
     end
 
     it "should create a query" do
