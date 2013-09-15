@@ -198,6 +198,7 @@ describe Ashikawa::Core::Collection do
 
     its(:content_type) { should be(:document) }
 
+
     it "should receive a document by ID via fetch" do
       expect(database).to receive(:send_request)
         .with("document/60768679/333", {})
@@ -250,13 +251,22 @@ describe Ashikawa::Core::Collection do
 
     its(:content_type) { should be(:edge) }
 
-    it "should receive an edge by ID" do
+    it "should receive an edge by ID via fetch" do
       expect(database).to receive(:send_request)
         .with("edge/60768679/333", {})
         .and_return(double)
       expect(Ashikawa::Core::Edge).to receive(:new)
 
       subject.fetch(333)
+    end
+
+    it "should receive an edge by ID via []" do
+      expect(database).to receive(:send_request)
+        .with("edge/60768679/333", {})
+        .and_return(double)
+      expect(Ashikawa::Core::Edge).to receive(:new)
+
+      subject[333]
     end
 
     it "should replace an edge by ID" do
