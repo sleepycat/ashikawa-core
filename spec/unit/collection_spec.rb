@@ -4,43 +4,21 @@ require 'ashikawa-core/collection'
 
 describe Ashikawa::Core::Collection do
   let(:database) { double }
+  let(:raw_document_collection) { server_response("collections/60768679") }
+  let(:raw_edge_collection) {{
+    "id" => "60768679",
+    "name" => "example_1",
+    "type" => 3
+  }}
 
-  describe "initializing" do
-    subject { Ashikawa::Core::Collection }
+  describe "an initialized collection" do
+    subject { Ashikawa::Core::Collection.new(database, raw_document_collection) }
 
-    it "should have a name" do
-      my_collection = subject.new(database, server_response("collections/60768679"))
-      expect(my_collection.name).to eq("example_1")
-    end
+    let(:raw_key_options) { double }
+    let(:key_options) { double }
 
-    it "should accept an ID" do
-      my_collection = subject.new(database, server_response("collections/60768679"))
-      expect(my_collection.id).to eq("60768679")
-    end
-
-    it "should create a query" do
-      collection = subject.new(database, server_response("collections/60768679"))
-
-      expect(Ashikawa::Core::Query).to receive(:new)
-        .exactly(1).times.
-        with(collection)
-
-      collection.query
-    end
-
-    it "should know that a collection is from type 'document'" do
-      my_collection = subject.new(database, { "id" => "60768679", "type" => 2 })
-      expect(my_collection.content_type).to eq(:document)
-    end
-
-    it "should know that a collection is from type 'edge'" do
-      my_collection = subject.new(database, { "id" => "60768679", "type" => 3 })
-      expect(my_collection.content_type).to eq(:edge)
-    end
-  end
-
-  describe "attributes of a collection" do
-    subject { Ashikawa::Core::Collection.new database, { "id" => "60768679" } }
+    its(:name) { should eq("example_1") }
+    its(:id) { should eq("60768679") }
 
     it "should check if the collection waits for sync" do
       expect(database).to receive(:send_request)
@@ -83,13 +61,14 @@ describe Ashikawa::Core::Collection do
 
       subject.figure
     end
-  end
 
-  describe "an initialized document collection" do
-    subject { Ashikawa::Core::Collection.new database, { "id" => "60768679", "name" => "example_1" } }
+    it "should create a query" do
+      expect(Ashikawa::Core::Query).to receive(:new)
+        .exactly(1).times
+        .with(subject)
 
-    let(:raw_key_options) { double }
-    let(:key_options) { double }
+      subject.query
+    end
 
     it "should get deleted" do
       expect(database).to receive(:send_request)
@@ -186,28 +165,6 @@ describe Ashikawa::Core::Collection do
 
         subject.replace(333, {"name" => "The Dude"})
       end
-
-      it "should create a new document" do
-        document = double
-        server_response = double
-        raw_document = double
-
-        allow(database).to receive(:send_request)
-          .with("document?collection=60768679", post: raw_document)
-          .and_return(server_response)
-
-        expect(Ashikawa::Core::Document).to receive(:new)
-          .with(database, server_response, raw_document)
-          .and_return(document)
-
-        subject.create_document(raw_document)
-      end
-
-      it "should not create a new edge" do
-        expect {
-          subject.create_edge(double, double, {"quote" => "D'ya have to use s'many cuss words?"})
-        }.to raise_exception(RuntimeError, "Can't create an edge in a document collection")
-      end
     end
 
     describe "indexes" do
@@ -234,7 +191,7 @@ describe Ashikawa::Core::Collection do
         subject.index 168054969
       end
 
-      it "should get all indices" do
+      it "should get all indexes" do
         allow(database).to receive(:send_request)
           .with("index?collection=60768679")
           .and_return { server_response('indices/all') }
@@ -247,8 +204,38 @@ describe Ashikawa::Core::Collection do
     end
   end
 
+  describe "an initialized document collection" do
+    subject { Ashikawa::Core::Collection.new database, raw_document_collection }
+
+    its(:content_type) { should be(:document) }
+
+    it "should create a new document" do
+      document = double
+      server_response = double
+      raw_document = double
+
+      allow(database).to receive(:send_request)
+        .with("document?collection=60768679", post: raw_document)
+        .and_return(server_response)
+
+      expect(Ashikawa::Core::Document).to receive(:new)
+        .with(database, server_response, raw_document)
+        .and_return(document)
+
+      subject.create_document(raw_document)
+    end
+
+    it "should not create a new edge" do
+      expect {
+        subject.create_edge(double, double, {"quote" => "D'ya have to use s'many cuss words?"})
+      }.to raise_exception(RuntimeError, "Can't create an edge in a document collection")
+    end
+  end
+
   describe "an initialized edge collection" do
-    subject { Ashikawa::Core::Collection.new database, { "id" => "60768679", "name" => "example_1", "type" => 3 } }
+    subject { Ashikawa::Core::Collection.new database, raw_edge_collection }
+
+    its(:content_type) { should be(:edge) }
 
     it "should receive an edge by ID" do
       expect(database).to receive(:send_request)
