@@ -133,46 +133,20 @@ describe Ashikawa::Core::Collection do
       end
     end
 
-    describe "adding and getting single documents" do
-      it "should receive a document by ID via fetch" do
-        expect(database).to receive(:send_request)
-          .with("document/60768679/333", {})
-          .and_return(double)
-        expect(Ashikawa::Core::Document).to receive(:new)
-
-        subject.fetch(333)
-      end
-
-      it "should receive a document by ID via []" do
-        expect(database).to receive(:send_request)
-          .with("document/60768679/333", {})
-          .and_return(double)
-        expect(Ashikawa::Core::Document).to receive(:new)
-
-        subject[333]
-      end
-
-      it "should throw an exception when the document was not found during a fetch" do
+    describe "non-existing documents" do
+      before do
         allow(database).to receive(:send_request)
           .and_raise(Ashikawa::Core::DocumentNotFoundException)
+      end
 
+      it "should throw an exception when using fetch" do
         expect {
           subject.fetch(123)
         }.to raise_exception Ashikawa::Core::DocumentNotFoundException
       end
 
-      it "should return nil when the document was not found when using []" do
-        allow(database).to receive(:send_request)
-          .and_raise(Ashikawa::Core::DocumentNotFoundException)
-
+      it "should return nil when using []" do
         expect(subject[123]).to be_nil
-      end
-
-      it "should replace a document by ID" do
-        expect(database).to receive(:send_request)
-          .with("document/60768679/333", put: {"name" => value})
-
-        subject.replace(333, {"name" => value})
       end
     end
 
@@ -220,8 +194,34 @@ describe Ashikawa::Core::Collection do
     let(:document) { double }
     let(:response) { double }
     let(:raw_document) { double }
+    let(:value) { double }
 
     its(:content_type) { should be(:document) }
+
+    it "should receive a document by ID via fetch" do
+      expect(database).to receive(:send_request)
+        .with("document/60768679/333", {})
+        .and_return(double)
+      expect(Ashikawa::Core::Document).to receive(:new)
+
+      subject.fetch(333)
+    end
+
+    it "should receive a document by ID via []" do
+      expect(database).to receive(:send_request)
+        .with("document/60768679/333", {})
+        .and_return(double)
+      expect(Ashikawa::Core::Document).to receive(:new)
+
+      subject[333]
+    end
+
+    it "should replace a document by ID" do
+      expect(database).to receive(:send_request)
+        .with("document/60768679/333", put: {"name" => value})
+
+      subject.replace(333, {"name" => value})
+    end
 
     it "should create a new document" do
       allow(database).to receive(:send_request)
