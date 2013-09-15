@@ -17,7 +17,7 @@ describe Ashikawa::Core::Edge do
   }
   let(:additional_data) {
     {
-      "more_info" => "this is important"
+      more_info: "this is important"
     }
   }
 
@@ -29,7 +29,7 @@ describe Ashikawa::Core::Edge do
       expect(document.id).to eq("1234567/2345678")
       expect(document.key).to eq("2345678")
       expect(document.revision).to eq("3456789")
-      expect(document["more_info"]).to eq(additional_data["more_info"])
+      expect(document["more_info"]).to eq(additional_data[:more_info])
     end
   end
 

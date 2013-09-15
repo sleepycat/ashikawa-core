@@ -405,7 +405,7 @@ module Ashikawa
       def create_edge(from, to, attributes)
         raise "Can't create an edge in a document collection" if @content_type == :document
         response = send_request("edge?collection=#{@id}&from=#{from.id}&to=#{to.id}", post: attributes)
-        Edge.new(@database, response).refresh!
+        Edge.new(@database, response, attributes)
       end
 
       # Add an index to the collection

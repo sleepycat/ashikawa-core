@@ -273,14 +273,13 @@ describe Ashikawa::Core::Collection do
       raw_document = { b: 2 }
 
       document = double
-      expect(document).to receive(:refresh!)
 
       allow(@database).to receive(:send_request)
         .with("edge?collection=60768679&from=1&to=2", post: raw_document)
         .and_return(server_response)
 
       expect(Ashikawa::Core::Edge).to receive(:new)
-        .with(@database, server_response)
+        .with(@database, server_response, raw_document)
         .and_return(document)
 
       subject.create_edge(double(id: "1"), double(id: "2"), raw_document)
