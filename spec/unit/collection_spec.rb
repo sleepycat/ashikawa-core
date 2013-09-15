@@ -17,6 +17,7 @@ describe Ashikawa::Core::Collection do
     let(:raw_key_options) { double }
     let(:key_options) { double }
     let(:response) { double }
+    let(:value) { double }
 
     its(:name) { should eq("example_1") }
     its(:id) { should eq("60768679") }
@@ -24,45 +25,34 @@ describe Ashikawa::Core::Collection do
     it "should check if the collection waits for sync" do
       allow(response).to receive(:[])
         .with("waitForSync")
-        .and_return(true)
+        .and_return(value)
       expect(database).to receive(:send_request)
         .with("collection/60768679/properties", {})
         .and_return(response)
 
-      expect(subject.wait_for_sync?).to be_true
+      expect(subject.wait_for_sync?).to be(value)
     end
 
     it "should know how many documents the collection has" do
       allow(response).to receive(:[])
         .with("count")
-        .and_return(54)
+        .and_return(value)
       expect(database).to receive(:send_request)
         .with("collection/60768679/count", {})
         .and_return(response)
 
-      expect(subject.length).to eq(54)
+      expect(subject.length).to be(value)
     end
 
     it "should know if the collection is volatile" do
       allow(response).to receive(:[])
         .with("isVolatile")
-        .and_return(true)
+        .and_return(value)
       expect(database).to receive(:send_request)
         .with("collection/60768679/properties", {})
         .and_return(response)
 
-      expect(subject.volatile?).to be_true
-    end
-
-    it "should know if the collection is not volatile" do
-      allow(response).to receive(:[])
-        .with("isVolatile")
-        .and_return(false)
-      expect(database).to receive(:send_request)
-        .with("collection/60768679/properties", {})
-        .and_return(response)
-
-      expect(subject.volatile?).to be_false
+      expect(subject.volatile?).to be(value)
     end
 
     it "should check for the figures" do
@@ -128,7 +118,7 @@ describe Ashikawa::Core::Collection do
     it "should check for the key options" do
       allow(Ashikawa::Core::KeyOptions).to receive(:new)
         .with(raw_key_options)
-        .and_return { key_options }
+        .and_return(key_options)
       expect(database).to receive(:send_request)
         .with("collection/60768679/properties", {})
         .and_return { { "keyOptions" => raw_key_options } }
