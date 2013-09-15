@@ -101,14 +101,16 @@ describe Ashikawa::Core::Collection do
     end
 
     describe "properties" do
+      before do
+        expect(database).to receive(:send_request)
+          .with("collection/60768679/properties", {})
+          .and_return(response)
+      end
+
       it "should check if the collection waits for sync" do
         allow(response).to receive(:[])
           .with("waitForSync")
           .and_return(value)
-        expect(database).to receive(:send_request)
-          .with("collection/60768679/properties", {})
-          .and_return(response)
-
         expect(subject.wait_for_sync?).to be(value)
       end
 
@@ -116,20 +118,17 @@ describe Ashikawa::Core::Collection do
         allow(response).to receive(:[])
           .with("isVolatile")
           .and_return(value)
-        expect(database).to receive(:send_request)
-          .with("collection/60768679/properties", {})
-          .and_return(response)
 
         expect(subject.volatile?).to be(value)
       end
 
       it "should check for the key options" do
-        allow(Ashikawa::Core::KeyOptions).to receive(:new)
-          .with(raw_key_options)
+        allow(response).to receive(:[])
+          .with("keyOptions")
+          .and_return(value)
+        expect(Ashikawa::Core::KeyOptions).to receive(:new)
+          .with(value)
           .and_return(key_options)
-        expect(database).to receive(:send_request)
-          .with("collection/60768679/properties", {})
-          .and_return { { "keyOptions" => raw_key_options } }
 
         expect(subject.key_options).to eq(key_options)
       end
