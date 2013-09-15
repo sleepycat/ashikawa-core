@@ -22,17 +22,6 @@ describe Ashikawa::Core::Collection do
     its(:name) { should eq("example_1") }
     its(:id) { should eq("60768679") }
 
-    it "should check if the collection waits for sync" do
-      allow(response).to receive(:[])
-        .with("waitForSync")
-        .and_return(value)
-      expect(database).to receive(:send_request)
-        .with("collection/60768679/properties", {})
-        .and_return(response)
-
-      expect(subject.wait_for_sync?).to be(value)
-    end
-
     it "should know how many documents the collection has" do
       allow(response).to receive(:[])
         .with("count")
@@ -42,17 +31,6 @@ describe Ashikawa::Core::Collection do
         .and_return(response)
 
       expect(subject.length).to be(value)
-    end
-
-    it "should know if the collection is volatile" do
-      allow(response).to receive(:[])
-        .with("isVolatile")
-        .and_return(value)
-      expect(database).to receive(:send_request)
-        .with("collection/60768679/properties", {})
-        .and_return(response)
-
-      expect(subject.volatile?).to be(value)
     end
 
     it "should check for the figures" do
@@ -108,6 +86,13 @@ describe Ashikawa::Core::Collection do
       subject.truncate!
     end
 
+    it "should change its name" do
+      expect(database).to receive(:send_request)
+        .with("collection/60768679/rename", put: {"name" => "my_new_name"})
+
+      subject.name = "my_new_name"
+    end
+
     it "should change if it waits for sync" do
       expect(database).to receive(:send_request)
         .with("collection/60768679/properties", put: {"waitForSync" => true})
@@ -115,22 +100,39 @@ describe Ashikawa::Core::Collection do
       subject.wait_for_sync = true
     end
 
-    it "should check for the key options" do
-      allow(Ashikawa::Core::KeyOptions).to receive(:new)
-        .with(raw_key_options)
-        .and_return(key_options)
-      expect(database).to receive(:send_request)
-        .with("collection/60768679/properties", {})
-        .and_return { { "keyOptions" => raw_key_options } }
+    describe "properties" do
+      it "should check if the collection waits for sync" do
+        allow(response).to receive(:[])
+          .with("waitForSync")
+          .and_return(value)
+        expect(database).to receive(:send_request)
+          .with("collection/60768679/properties", {})
+          .and_return(response)
 
-      expect(subject.key_options).to eq(key_options)
-    end
+        expect(subject.wait_for_sync?).to be(value)
+      end
 
-    it "should change its name" do
-      expect(database).to receive(:send_request)
-        .with("collection/60768679/rename", put: {"name" => "my_new_name"})
+      it "should know if the collection is volatile" do
+        allow(response).to receive(:[])
+          .with("isVolatile")
+          .and_return(value)
+        expect(database).to receive(:send_request)
+          .with("collection/60768679/properties", {})
+          .and_return(response)
 
-      subject.name = "my_new_name"
+        expect(subject.volatile?).to be(value)
+      end
+
+      it "should check for the key options" do
+        allow(Ashikawa::Core::KeyOptions).to receive(:new)
+          .with(raw_key_options)
+          .and_return(key_options)
+        expect(database).to receive(:send_request)
+          .with("collection/60768679/properties", {})
+          .and_return { { "keyOptions" => raw_key_options } }
+
+        expect(subject.key_options).to eq(key_options)
+      end
     end
 
     describe "adding and getting single documents" do
