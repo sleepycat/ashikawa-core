@@ -39,11 +39,13 @@ module Ashikawa
       #
       # @param [Database] database
       # @param [Hash] raw_document
+      # @param [Hash] additional_data
       # @api public
       # @example Create a document
       #   document = Ashikawa::Core::Document.new(database, raw_document)
-      def initialize(database, raw_document)
+      def initialize(database, raw_document, additional_data = {})
         @database = database
+        raw_document.merge!(additional_data)
         parse_raw_document(raw_document)
       end
 

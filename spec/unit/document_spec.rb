@@ -19,19 +19,31 @@ describe Ashikawa::Core::Document do
       "last_name" => "Dude"
     }
   }
+  let(:additional_data) {
+    {
+      "more_info" => "this is important"
+    }
+  }
   subject { Ashikawa::Core::Document }
 
-  it "should initialize data with ID" do
-    document = subject.new database, raw_data
-    expect(document.id).to eq("1234567/2345678")
-    expect(document.key).to eq("2345678")
-    expect(document.revision).to eq("3456789")
-  end
+  describe "initializing" do
+    it "should initialize with data including ID" do
+      document = subject.new database, raw_data
+      expect(document.id).to eq("1234567/2345678")
+      expect(document.key).to eq("2345678")
+      expect(document.revision).to eq("3456789")
+    end
 
-  it "should initialize data without ID" do
-    document = subject.new database, raw_data_without_id
-    expect(document.id).to eq(:not_persisted)
-    expect(document.revision).to eq(:not_persisted)
+    it "should initialize with data not including ID" do
+      document = subject.new database, raw_data_without_id
+      expect(document.id).to eq(:not_persisted)
+      expect(document.revision).to eq(:not_persisted)
+    end
+
+    it "should initialize with additional data" do
+      document = subject.new database, raw_data, additional_data
+      expect(document["more_info"]).to eq(additional_data["more_info"])
+    end
   end
 
   describe "initialized document with ID" do
