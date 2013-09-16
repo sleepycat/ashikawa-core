@@ -124,8 +124,7 @@ describe Ashikawa::Core::Query do
     end
 
     describe "with an AQL query" do
-      let(:query) { "FOR u IN users LIMIT 2 RETURN u" }
-      let(:invalid_query) { "FOR u IN users LIMIT 2" }
+      let(:query) { double }
 
       it "should be able to execute it" do
         allow(collection).to receive(:database)
@@ -155,9 +154,9 @@ describe Ashikawa::Core::Query do
         allow(collection).to receive(:send_request)
           .and_raise(Ashikawa::Core::BadSyntax)
         expect(collection).to receive(:send_request)
-          .with("query", post: { "query" => invalid_query })
+          .with("query", post: { "query" => query })
 
-        expect(subject.valid?(invalid_query)).to be_false
+        expect(subject.valid?(query)).to be_false
       end
     end
   end
@@ -172,8 +171,7 @@ describe Ashikawa::Core::Query do
     end
 
     describe "with an AQL query" do
-      let(:query) { "FOR u IN users LIMIT 2 RETURN u" }
-      let(:invalid_query) { "FOR u IN users LIMIT 2" }
+      let(:query) { double }
 
       it "should be able to execute it" do
         expect(database).to receive(:send_request)
@@ -199,10 +197,10 @@ describe Ashikawa::Core::Query do
 
       it "should return false when asked if an invalid query is valid" do
         expect(database).to receive(:send_request)
-          .with("query", post: { "query" => invalid_query })
+          .with("query", post: { "query" => query })
           .and_raise(Ashikawa::Core::BadSyntax)
 
-        expect(subject.valid?(invalid_query)).to be_false
+        expect(subject.valid?(query)).to be_false
       end
     end
   end
