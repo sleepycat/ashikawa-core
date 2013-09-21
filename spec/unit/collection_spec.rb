@@ -168,7 +168,8 @@ describe Ashikawa::Core::Collection do
       end
 
       it "should get an index by ID" do
-        allow(database).to receive(:send_request).with("index/example_1/168054969")
+        allow(database).to receive(:send_request)
+          .with("index/example_1/168054969")
           .and_return(index_response)
         expect(Ashikawa::Core::Index).to receive(:new)
           .with(subject, index_response)
@@ -176,16 +177,24 @@ describe Ashikawa::Core::Collection do
         subject.index(168054969)
       end
 
-      # TODO: Redo this
       it "should get all indexes" do
+        multi_index_response = double
+        allow(multi_index_response).to receive(:map)
+          .and_yield(index_response)
+
+        cursor = double
+        allow(cursor).to receive(:[])
+          .with("indexes")
+          .and_return(multi_index_response)
+
         allow(database).to receive(:send_request)
           .with("index?collection=60768679")
-          .and_return(double) { server_response('indices/all') }
+          .and_return(cursor)
 
         expect(Ashikawa::Core::Index).to receive(:new)
-          .exactly(1).times
+          .with(subject, index_response)
 
-        expect(subject.indices.length).to eq(1)
+        subject.indices
       end
     end
   end
