@@ -1,6 +1,6 @@
+# -*- encoding : utf-8 -*-
 require 'ashikawa-core/connection'
 
-# -*- encoding : utf-8 -*-
 module Ashikawa
   module Core
     # Configuration of Ashikawa::Core
@@ -29,7 +29,7 @@ module Ashikawa
       # @api private
       # @return Connection
       def connection
-        @connection || setup_new_connection(@url, @logger, @adapter)
+        @connection || setup_new_connection
       end
 
       private
@@ -41,7 +41,7 @@ module Ashikawa
       # @param [Adapter] adapter
       # @return [Connection]
       # @api private
-      def setup_new_connection(url, logger, adapter)
+      def setup_new_connection
         raise(ArgumentError, 'Please provide either an url or a connection to setup the database') if url.nil?
         Ashikawa::Core::Connection.new(url, {
           logger: logger,
