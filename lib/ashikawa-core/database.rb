@@ -49,8 +49,7 @@ module Ashikawa
       def initialize
         configuration = Ashikawa::Core::Configuration.new
         yield(configuration)
-        @connection = configuration.connection ||
-          setup_new_connection(configuration.url, configuration.logger, configuration.adapter)
+        @connection = configuration.connection
       end
 
       # Returns a list of all non-system collections defined in the database
@@ -141,21 +140,6 @@ module Ashikawa
       end
 
       private
-
-      # Setup the connection object
-      #
-      # @param [String] url
-      # @param [Logger] logger
-      # @param [Adapter] adapter
-      # @return [Connection]
-      # @api private
-      def setup_new_connection(url, logger, adapter)
-        raise(ArgumentError, 'Please provide either an url or a connection to setup the database') if url.nil?
-        Ashikawa::Core::Connection.new(url, {
-          logger: logger,
-          adapter: adapter
-        })
-      end
 
       # Parse a raw collection
       #

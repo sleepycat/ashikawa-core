@@ -1,3 +1,5 @@
+require 'ashikawa-core/connection'
+
 # -*- encoding : utf-8 -*-
 module Ashikawa
   module Core
@@ -11,7 +13,7 @@ module Ashikawa
       # The Connection object
       # @api private
       # @return Connection
-      attr_accessor :connection
+      attr_writer :connection
 
       # The logger instance
       # @api private
@@ -22,6 +24,30 @@ module Ashikawa
       # @api private
       # @return Object
       attr_accessor :adapter
+
+      # The Connection object
+      # @api private
+      # @return Connection
+      def connection
+        @connection || setup_new_connection(@url, @logger, @adapter)
+      end
+
+      private
+
+      # Setup the connection object
+      #
+      # @param [String] url
+      # @param [Logger] logger
+      # @param [Adapter] adapter
+      # @return [Connection]
+      # @api private
+      def setup_new_connection(url, logger, adapter)
+        raise(ArgumentError, 'Please provide either an url or a connection to setup the database') if url.nil?
+        Ashikawa::Core::Connection.new(url, {
+          logger: logger,
+          adapter: adapter
+        })
+      end
     end
   end
 end
