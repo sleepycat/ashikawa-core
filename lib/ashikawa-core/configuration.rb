@@ -2,7 +2,7 @@
 module Ashikawa
   module Core
     # Configuration of Ashikawa::Core
-    class Configuration < Struct.new(:url, :connection, :logger, :adapter)
+    class Configuration
       # The URL of the database instance
       # @api private
       # @return String
