@@ -149,6 +149,16 @@ describe "Basics" do
       expect(e.from_id).to eq(a.id)
       expect(e.to_id).to eq(b.id)
     end
+
+    it "should be possible to get a single attribute by AQL query" do
+      pending "Bug #70"
+
+      collection = subject["documenttests"]
+      collection.truncate!
+      collection.create_document(name: "The Dude", bowling: true)
+
+      expect(subject.query.execute("FOR doc IN documenttests RETURN doc.name").to_a.first). to eq "The Dude"
+    end
   end
 
   describe "for a created document" do
