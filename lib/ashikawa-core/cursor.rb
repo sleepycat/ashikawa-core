@@ -40,9 +40,9 @@ module Ashikawa
         parse_raw_cursor(raw_cursor)
       end
 
-      # Iterate over the documents found by the cursor
+      # Iterate over the result
       #
-      # @yield [document]
+      # @yield [Object] A Document, An Edge or a Raw Object
       # @return [nil, Enumerator] If no block is given, an Enumerator is returned
       # @api public
       # @example Print all documents
@@ -78,13 +78,17 @@ module Ashikawa
 
       private
 
-      # Parse a raw document and return a Document or Edge for it
+      # Parse a raw document and return a Document, an Edge or a raw object
       #
       # @param [Hash] raw_document
-      # @return Document | Edge
+      # @return Document | Edge | Object
       # @api private
       def parse_raw_document(raw_document)
-        detect_document_class_for(raw_document).new(@database, raw_document)
+        if raw_document.class == Hash
+          detect_document_class_for(raw_document).new(@database, raw_document)
+        else
+          raw_document
+        end
       end
 
       # Detect if a raw document is a document or edge and return the class

@@ -8,6 +8,15 @@ describe Ashikawa::Core::Cursor do
 
   describe "cursor for a non-complete batch" do
     let(:response) { server_response("cursor/26011191") }
+    let(:cursor_containing_string) {{
+      "hasMore" => false,
+      "error" => false,
+      "result" => [
+        "test"
+      ],
+      "code" => 200,
+      "count" => 1
+    }}
     subject { Ashikawa::Core::Cursor.new(database, response) }
 
     its(:id) { should eq("26011191") }
@@ -35,6 +44,14 @@ describe Ashikawa::Core::Cursor do
         .exactly(5).times
 
       subject.each { }
+    end
+
+    it "should return the raw string when the response consists of strings" do
+      allow(database).to receive(:send_request)
+        .with("cursor/26011191", put: {})
+        .and_return(cursor_containing_string)
+
+      expect(subject.to_a).to include "test"
     end
 
     it "should return an enumerator to go over all documents of a cursor when given no block" do

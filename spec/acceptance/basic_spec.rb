@@ -151,8 +151,6 @@ describe "Basics" do
     end
 
     it "should be possible to get a single attribute by AQL query" do
-      pending "Bug #70"
-
       collection = subject["documenttests"]
       collection.truncate!
       collection.create_document(name: "The Dude", bowling: true)
