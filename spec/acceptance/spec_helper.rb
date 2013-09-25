@@ -15,3 +15,7 @@ end
 require "ashikawa-core"
 
 ARANGO_HOST = "http://localhost:8529"
+
+DATABASE = Ashikawa::Core::Database.new do |config|
+  config.url = ARANGO_HOST
+end
