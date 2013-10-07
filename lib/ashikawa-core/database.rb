@@ -40,6 +40,11 @@ module Ashikawa
       #   database = Ashikawa::Core::Database.new do |config|
       #     config.connection = connection
       #   end
+      # @example Access a certain database from ArangoDB
+      #   database = Ashikawa::Core::Database.new do |config|
+      #     config.url = 'http://localhost:8529/_db/my_db'
+      #     config.connection = connection
+      #   end
       # @example Access a Database with a logger and custom HTTP adapter
       #   database = Ashikawa::Core::Database.new do |config|
       #     config.url = 'http://localhost:8529'
