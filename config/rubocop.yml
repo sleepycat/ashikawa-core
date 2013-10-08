@@ -4,8 +4,6 @@ AllCops:
     - 'Gemfile'
     - 'Guardfile'
     - 'Rakefile'
-  Excludes:
-    - '**/spec/acceptance/*_spec.rb'
 
 # Avoid parameter lists longer than five parameters.
 ParameterLists:
