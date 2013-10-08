@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'ashikawa-core/exceptions/no_collection_provided'
 require 'ashikawa-core/exceptions/client_error'
+require 'ashikawa-core/exceptions/client_error/authentication_failed'
 require 'ashikawa-core/exceptions/client_error/bad_syntax'
 require 'ashikawa-core/exceptions/client_error/resource_not_found'
 require 'ashikawa-core/exceptions/client_error/resource_not_found/document_not_found'
@@ -21,6 +22,10 @@ end
 
 describe Ashikawa::Core::BadSyntax do
   its(:to_s) { should include 'syntax' }
+end
+
+describe Ashikawa::Core::AuthenticationFailed do
+  its(:to_s) { should include 'Authentication failed' }
 end
 
 describe Ashikawa::Core::ResourceNotFound do

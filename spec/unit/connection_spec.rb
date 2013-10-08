@@ -139,6 +139,18 @@ describe Ashikawa::Core::Connection do
       request_stub.verify_stubbed_calls
     end
 
+    it 'should throw its own exception when doing a bad request' do
+      request_stub.get('/_api/secret') do
+        [401, response_headers, '']
+      end
+
+      expect do
+        subject.send_request('secret')
+      end.to raise_error(Ashikawa::Core::AuthenticationFailed)
+
+      request_stub.verify_stubbed_calls
+    end
+
     it 'should throw a general server error for the generic server error' do
       request_stub.get('/_api/bad/request') do
         [

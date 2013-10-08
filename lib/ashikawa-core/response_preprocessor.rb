@@ -7,6 +7,7 @@ require 'ashikawa-core/exceptions/client_error/resource_not_found/index_not_foun
 require 'ashikawa-core/exceptions/client_error/resource_not_found/document_not_found'
 require 'ashikawa-core/exceptions/client_error/resource_not_found/collection_not_found'
 require 'ashikawa-core/exceptions/client_error/bad_syntax'
+require 'ashikawa-core/exceptions/client_error/authentication_failed'
 require 'ashikawa-core/exceptions/server_error'
 require 'ashikawa-core/exceptions/server_error/json_error'
 
@@ -14,10 +15,11 @@ module Ashikawa
   module Core
     # Preprocessor for Faraday Requests
     class ResponsePreprocessor < Faraday::Middleware
-      ClientErrorStatuses = 400...499
-      ServerErrorStatuses = 500...599
       BadSyntaxStatus = 400
-      ResourceNotFoundErrorError = 404
+      AuthenticationFailed = 401
+      ResourceNotFoundError = 404
+      ClientErrorStatuses = 405...499
+      ServerErrorStatuses = 500...599
 
       # Create a new Response Preprocessor
       #
@@ -68,6 +70,15 @@ module Ashikawa
         raise Ashikawa::Core::BadSyntax
       end
 
+      # Raise an Authentication Failed Error
+      #
+      # @raise [AuthenticationFailed]
+      # @return nil
+      # @api private
+      def authentication_failed
+        raise Ashikawa::Core::AuthenticationFailed
+      end
+
       # Raise a Client Error for a given body
       #
       # @raise [ClientError]
@@ -115,7 +126,8 @@ module Ashikawa
       def handle_status(env)
         case env[:status]
         when BadSyntaxStatus then bad_syntax
-        when ResourceNotFoundErrorError then resource_not_found_for(env)
+        when AuthenticationFailed then authentication_failed
+        when ResourceNotFoundError then resource_not_found_for(env)
         when ClientErrorStatuses then client_error_status_for(env[:body])
         when ServerErrorStatuses then server_error_status_for(env[:body])
         end
