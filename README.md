@@ -1,4 +1,13 @@
-# Ashikawa Core [![Gem Version](https://badge.fury.io/rb/ashikawa-core.png)](http://badge.fury.io/rb/ashikawa-core) [![Build Status](https://secure.travis-ci.org/triAGENS/ashikawa-core.png?branch=master)](http://travis-ci.org/triAGENS/ashikawa-core) [![Dependency Status](https://gemnasium.com/triAGENS/ashikawa-core.png)](https://gemnasium.com/triAGENS/ashikawa-core) [![Code Climate](https://codeclimate.com/github/triAGENS/ashikawa-core.png)](https://codeclimate.com/github/triAGENS/ashikawa-core) [![Coverage Status](https://coveralls.io/repos/triAGENS/ashikawa-core/badge.png?branch=coverall)](https://coveralls.io/r/triAGENS/ashikawa-core)
+# Ashikawa Core
+
+| Project         | Ashikawa::Core
+|:----------------|:--------------------------------------------------
+| Homepage        | http://triagens.github.io/ashikawa-core/
+| Documentation   | http://www.rubydoc.info/github/triAGENS/ashikawa-core
+| CI              | [![Build Status](https://secure.travis-ci.org/triAGENS/ashikawa-core.png?branch=master)](http://travis-ci.org/triAGENS/ashikawa-core)
+| Code Metrics    | [![Code Climate](https://codeclimate.com/github/triAGENS/ashikawa-core.png)](https://codeclimate.com/github/triAGENS/ashikawa-core) [![Coverage Status](https://coveralls.io/repos/triAGENS/ashikawa-core/badge.png?branch=coverall)](https://coveralls.io/r/triAGENS/ashikawa-core)
+| Gem Version     | [![Gem Version](https://badge.fury.io/rb/ashikawa-core.png)](http://badge.fury.io/rb/ashikawa-core)
+| Dependencies    | [![Dependency Status](https://gemnasium.com/triAGENS/ashikawa-core.png)](https://gemnasium.com/triAGENS/ashikawa-core)
 
 Ashikawa Core is a Wrapper around the ArangoDB Rest API. It provides low level access and is intended to be used in ArangoDB ODMs and other projects related to the database. It is always working with the stable version of ArangoDB, this is currently version **1.4**. If you want to access an ArangoDB instance running version **1.3** to version [0.8](https://github.com/triAGENS/ashikawa-core/tree/0.8) of this gem (or just update :wink:).
 
@@ -10,7 +19,7 @@ All tests run on Travis CI for the following versions of Ruby:
 
 We also run on JRuby and MRI Head, but they are allowed failures (Please see [Travis](http://travis-ci.org/triAGENS/ashikawa-core) for their build status).
 
-Please note that the [`master`](https://github.com/triAGENS/ashikawa-core) branch is always the stable version released on Ruby Gems and documented on RDoc. If you want the most recent version, please refer to the [`development`](https://github.com/triAGENS/ashikawa-core/tree/development) branch.
+Please note that the [`master`](https://github.com/triAGENS/ashikawa-core) branch is always the stable version released on Ruby Gems and documented on [RDoc](http://www.rubydoc.info/github/triAGENS/ashikawa-core). If you want the most recent version, please refer to the [`development`](https://github.com/triAGENS/ashikawa-core/tree/development) branch.
 
 ## How to install it?
 
