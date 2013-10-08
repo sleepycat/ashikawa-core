@@ -18,6 +18,7 @@ port = ENV["ARANGODB_PORT"] || 8529
 username = ENV["ARANGODB_USERNAME"] || "root"
 password = ENV["ARANGODB_PASSWORD"] || ""
 
+# The database instance to use for all specs
 DATABASE = Ashikawa::Core::Database.new do |config|
   config.url = "http://localhost:#{port}"
 
