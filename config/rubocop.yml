@@ -4,6 +4,8 @@ AllCops:
     - 'Gemfile'
     - 'Guardfile'
     - 'Rakefile'
+  Excludes:
+    - 'spec/setup/**/*'
 
 # Avoid parameter lists longer than five parameters.
 ParameterLists:
