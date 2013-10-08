@@ -34,11 +34,13 @@ database = Ashikawa::Core::Database.new do |config|
 end
 ```
 
-If you want to access the `my_db` database of your ArangoDB instance (and not the `_system` database), do the following:
+If you want to access the `my_db` database of your ArangoDB instance (and not the `_system` database) and connect as a certain user, do the following:
 
 ```ruby
 database = Ashikawa::Core::Database.new do |config|
   config.url = "http://localhost:8529/_db/my_db"
+  config.user = "lebowski"
+  config.password = "i<3bowling"
 end
 ```
 

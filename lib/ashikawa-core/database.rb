@@ -35,10 +35,12 @@ module Ashikawa
       #   database = Ashikawa::Core::Database.new do |config|
       #     config.url = 'http://localhost:8529'
       #   end
-      # @example Access a Database by providing a Connection
+      # @example Access a Database by providing a Connection and authentication
       #   connection = Connection.new('http://localhost:8529')
       #   database = Ashikawa::Core::Database.new do |config|
       #     config.connection = connection
+      #     config.username = 'lebowski'
+      #     config.password = 'i<3bowling'
       #   end
       # @example Access a certain database from ArangoDB
       #   database = Ashikawa::Core::Database.new do |config|

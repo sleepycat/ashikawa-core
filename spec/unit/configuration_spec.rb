@@ -7,6 +7,8 @@ describe Ashikawa::Core::Configuration do
   let(:logger) { double }
   let(:adapter) { double }
   let(:connection) { double }
+  let(:username) { double }
+  let(:password) { double }
 
   its(:url) { should be_nil }
   its(:logger) { should be_nil }
@@ -39,6 +41,24 @@ describe Ashikawa::Core::Configuration do
         .with(url, { logger: logger, adapter: adapter })
         .and_return(connection)
       expect(subject.connection).to be connection
+    end
+  end
+
+  describe "set up authentication" do
+    before do
+      subject.url = url
+      allow(Ashikawa::Core::Connection).to receive(:new)
+        .and_return(connection)
+    end
+
+    it "should setup authentication" do
+      expect(connection).to receive(:authenticate_with)
+        .with({ username: username, password: password })
+        .and_return(connection)
+
+      subject.username = username
+      subject.password = password
+      subject.connection
     end
   end
 end

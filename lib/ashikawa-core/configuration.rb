@@ -25,11 +25,23 @@ module Ashikawa
       # @return Object
       attr_accessor :adapter
 
+      # The username for authentication
+      # @api private
+      # @return String
+      attr_accessor :username
+
+      # The password for authentication
+      # @api private
+      # @return String
+      attr_accessor :password
+
       # The Connection object
       # @api private
       # @return Connection
       def connection
-        @connection || setup_new_connection
+        @connection = @connection || setup_new_connection
+        @connection.authenticate_with(username: username, password: password) if username && password
+        @connection
       end
 
       private

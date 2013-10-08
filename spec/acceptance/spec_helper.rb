@@ -20,8 +20,9 @@ password = ENV["ARANGODB_PASSWORD"] || ""
 
 DATABASE = Ashikawa::Core::Database.new do |config|
   config.url = "http://localhost:#{port}"
-end
 
-unless ENV["ARANGODB_DISABLE_AUTHENTIFICATION"]
-  DATABASE.authenticate_with(username: username, password: password)
+  unless ENV["ARANGODB_DISABLE_AUTHENTIFICATION"]
+    config.username = username
+    config.password = password
+  end
 end
