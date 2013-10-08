@@ -46,9 +46,6 @@ LineLength:
   Enabled: true
   Max: 120
 
-SpaceAroundBraces:
-  Enabled: true
-
 SpaceInsideHashLiteralBraces:
   Enabled: true
 
