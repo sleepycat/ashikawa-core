@@ -3,7 +3,6 @@ AllCops:
     - '../**/*.rake'
   Excludes:
     - '*_spec.rb'
-    - '*spec_helper.rb'
 
 # Avoid parameter lists longer than five parameters.
 ParameterLists:

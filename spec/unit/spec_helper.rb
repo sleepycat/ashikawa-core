@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
@@ -31,9 +31,9 @@ unless defined?(Guard)
 end
 
 # Helper to simulate Server Responses. Parses the fixtures in the spec folder
-require "json"
+require 'json'
 def server_response(path)
   JSON.parse(File.readlines("spec/fixtures/#{path}.json").join)
 end
 
-ARANGO_HOST = "http://localhost:8529"
+ARANGO_HOST = 'http://localhost:8529'
