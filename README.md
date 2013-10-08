@@ -13,7 +13,7 @@ Ashikawa Core is a Wrapper around the ArangoDB Rest API. It provides low level a
 
 All tests run on Travis CI for the following versions of Ruby:
 
-* MRI 1.9.2, 1.9.3 and 2.0.0
+* MRI 1.9.3 and 2.0.0
 * Rubinius 1.9 mode
 * JRuby 1.9 mode
 
