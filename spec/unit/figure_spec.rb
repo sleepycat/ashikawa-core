@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require "ashikawa-core/figure"
+require 'ashikawa-core/figure'
 
 describe Ashikawa::Core::Figure do
   let(:alive_size) { double }
@@ -14,33 +14,33 @@ describe Ashikawa::Core::Figure do
   let(:shapes_count) { double }
   let(:attributes_count) { double }
 
-  let(:raw_figures) {
+  let(:raw_figures) do
     {
-      "alive" => {
-        "size" => alive_size,
-        "count" => alive_count
+      'alive' => {
+        'size' => alive_size,
+        'count' => alive_count
       },
-      "dead" => {
-        "size" => dead_size,
-        "count" => dead_count,
-        "deletion" => dead_deletion
+      'dead' => {
+        'size' => dead_size,
+        'count' => dead_count,
+        'deletion' => dead_deletion
       },
-      "datafiles" => {
-        "count" => datafiles_count,
-        "fileSize" => datafiles_file_size
+      'datafiles' => {
+        'count' => datafiles_count,
+        'fileSize' => datafiles_file_size
       },
-      "journals" => {
-        "count" => journals_count,
-        "fileSize" => journals_file_size
+      'journals' => {
+        'count' => journals_count,
+        'fileSize' => journals_file_size
       },
-      "shapes" => {
-        "count" => shapes_count
+      'shapes' => {
+        'count' => shapes_count
       },
-      "attributes" => {
-        "count" => attributes_count
+      'attributes' => {
+        'count' => attributes_count
       }
     }
-  }
+  end
 
   subject { Ashikawa::Core::Figure.new(raw_figures) }
 

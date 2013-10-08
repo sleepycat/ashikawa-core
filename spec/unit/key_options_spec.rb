@@ -7,14 +7,16 @@ describe Ashikawa::Core::KeyOptions do
   let(:offset) { double }
   let(:increment) { double }
   let(:allow_user_keys) { double }
-  let(:raw_key_options) {{
-    "type" => type,
-    "offset" => offset,
-    "increment" => increment,
-    "allowUserKeys" => allow_user_keys
-  }}
+  let(:raw_key_options) do
+    {
+      'type' => type,
+      'offset' => offset,
+      'increment' => increment,
+      'allowUserKeys' => allow_user_keys
+    }
+  end
 
-  describe "initialized key options" do
+  describe 'initialized key options' do
     subject { Ashikawa::Core::KeyOptions.new(raw_key_options) }
 
     its(:type) { should eq(type) }

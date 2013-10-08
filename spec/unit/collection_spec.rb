@@ -4,14 +4,16 @@ require 'ashikawa-core/collection'
 
 describe Ashikawa::Core::Collection do
   let(:database) { double }
-  let(:raw_document_collection) { server_response("collections/60768679") }
-  let(:raw_edge_collection) {{
-    "id" => "60768679",
-    "name" => "example_1",
-    "type" => 3
-  }}
+  let(:raw_document_collection) { server_response('collections/60768679') }
+  let(:raw_edge_collection) do
+    {
+      'id' => '60768679',
+      'name' => 'example_1',
+      'type' => 3
+    }
+  end
 
-  describe "an initialized collection" do
+  describe 'an initialized collection' do
     subject { Ashikawa::Core::Collection.new(database, raw_document_collection) }
 
     let(:raw_key_options) { double }
@@ -20,26 +22,26 @@ describe Ashikawa::Core::Collection do
     let(:value) { double }
     let(:figure) { double }
 
-    its(:name) { should eq("example_1") }
-    its(:id) { should eq("60768679") }
+    its(:name) { should eq('example_1') }
+    its(:id) { should eq('60768679') }
 
-    it "should know how many documents the collection has" do
+    it 'should know how many documents the collection has' do
       allow(response).to receive(:[])
-        .with("count")
+        .with('count')
         .and_return(value)
       expect(database).to receive(:send_request)
-        .with("collection/60768679/count", {})
+        .with('collection/60768679/count', {})
         .and_return(response)
 
       expect(subject.length).to be(value)
     end
 
-    it "should check for the figures" do
+    it 'should check for the figures' do
       allow(response).to receive(:[])
-        .with("figures")
+        .with('figures')
         .and_return(value)
       expect(database).to receive(:send_request)
-        .with("collection/60768679/figures", {})
+        .with('collection/60768679/figures', {})
         .and_return(response)
 
       expect(Ashikawa::Core::Figure).to receive(:new)
@@ -50,7 +52,7 @@ describe Ashikawa::Core::Collection do
       expect(subject.figure).to be(figure)
     end
 
-    it "should create a query" do
+    it 'should create a query' do
       expect(Ashikawa::Core::Query).to receive(:new)
         .exactly(1).times
         .with(subject)
@@ -58,74 +60,74 @@ describe Ashikawa::Core::Collection do
       subject.query
     end
 
-    it "should get deleted" do
+    it 'should get deleted' do
       expect(database).to receive(:send_request)
-        .with("collection/60768679/", delete: {})
+        .with('collection/60768679/', delete: {})
 
       subject.delete
     end
 
-    it "should get loaded" do
+    it 'should get loaded' do
       expect(database).to receive(:send_request)
-        .with("collection/60768679/load", put: {})
+        .with('collection/60768679/load', put: {})
 
       subject.load
     end
 
-    it "should get unloaded" do
+    it 'should get unloaded' do
       expect(database).to receive(:send_request)
-        .with("collection/60768679/unload", put: {})
+        .with('collection/60768679/unload', put: {})
 
       subject.unload
     end
 
-    it "should get truncated" do
+    it 'should get truncated' do
       expect(database).to receive(:send_request)
-        .with("collection/60768679/truncate", put: {})
+        .with('collection/60768679/truncate', put: {})
 
       subject.truncate!
     end
 
-    it "should change its name" do
+    it 'should change its name' do
       expect(database).to receive(:send_request)
-        .with("collection/60768679/rename", put: {"name" => value})
+        .with('collection/60768679/rename', put: { 'name' => value })
 
       subject.name = value
     end
 
-    it "should change if it waits for sync" do
+    it 'should change if it waits for sync' do
       expect(database).to receive(:send_request)
-        .with("collection/60768679/properties", put: {"waitForSync" => value})
+        .with('collection/60768679/properties', put: { 'waitForSync' => value })
 
       subject.wait_for_sync = value
     end
 
-    describe "properties" do
+    describe 'properties' do
       before do
         expect(database).to receive(:send_request)
-          .with("collection/60768679/properties", {})
+          .with('collection/60768679/properties', {})
           .and_return(response)
       end
 
-      it "should check if the collection waits for sync" do
+      it 'should check if the collection waits for sync' do
         allow(response).to receive(:[])
-          .with("waitForSync")
+          .with('waitForSync')
           .and_return(value)
 
         expect(subject.wait_for_sync?).to be(value)
       end
 
-      it "should know if the collection is volatile" do
+      it 'should know if the collection is volatile' do
         allow(response).to receive(:[])
-          .with("isVolatile")
+          .with('isVolatile')
           .and_return(value)
 
         expect(subject.volatile?).to be(value)
       end
 
-      it "should check for the key options" do
+      it 'should check for the key options' do
         allow(response).to receive(:[])
-          .with("keyOptions")
+          .with('keyOptions')
           .and_return(value)
         expect(Ashikawa::Core::KeyOptions).to receive(:new)
           .with(value)
@@ -135,60 +137,60 @@ describe Ashikawa::Core::Collection do
       end
     end
 
-    describe "non-existing documents" do
+    describe 'non-existing documents' do
       before do
         allow(database).to receive(:send_request)
           .and_raise(Ashikawa::Core::DocumentNotFoundException)
       end
 
-      it "should throw an exception when using fetch" do
-        expect {
+      it 'should throw an exception when using fetch' do
+        expect do
           subject.fetch(123)
-        }.to raise_exception Ashikawa::Core::DocumentNotFoundException
+        end.to raise_exception Ashikawa::Core::DocumentNotFoundException
       end
 
-      it "should return nil when using []" do
+      it 'should return nil when using []' do
         expect(subject[123]).to be_nil
       end
     end
 
-    describe "indexes" do
+    describe 'indexes' do
       let(:index_response) { double }
 
-      it "should add a new index" do
+      it 'should add a new index' do
         expect(database).to receive(:send_request)
-          .with("index?collection=60768679", post: {
-            "type" => "hash", "fields" => [ "a", "b" ]
+          .with('index?collection=60768679', post: {
+            'type' => 'hash', 'fields' => %w{a b}
           })
           .and_return(index_response)
         expect(Ashikawa::Core::Index).to receive(:new)
           .with(subject, index_response)
 
-        subject.add_index(:hash, on: [ :a, :b ])
+        subject.add_index(:hash, on: [:a, :b])
       end
 
-      it "should get an index by ID" do
+      it 'should get an index by ID' do
         allow(database).to receive(:send_request)
-          .with("index/example_1/168054969")
+          .with('index/example_1/168054969')
           .and_return(index_response)
         expect(Ashikawa::Core::Index).to receive(:new)
           .with(subject, index_response)
 
-        subject.index(168054969)
+        subject.index(168_054_969)
       end
 
-      it "should get all indexes" do
+      it 'should get all indexes' do
         multi_index_response = double
         allow(multi_index_response).to receive(:map)
           .and_yield(index_response)
 
         cursor = double
         allow(cursor).to receive(:[])
-          .with("indexes")
+          .with('indexes')
           .and_return(multi_index_response)
 
         allow(database).to receive(:send_request)
-          .with("index?collection=60768679")
+          .with('index?collection=60768679')
           .and_return(cursor)
 
         expect(Ashikawa::Core::Index).to receive(:new)
@@ -199,7 +201,7 @@ describe Ashikawa::Core::Collection do
     end
   end
 
-  describe "an initialized document collection" do
+  describe 'an initialized document collection' do
     subject { Ashikawa::Core::Collection.new database, raw_document_collection }
 
     let(:document) { double }
@@ -209,35 +211,34 @@ describe Ashikawa::Core::Collection do
 
     its(:content_type) { should be(:document) }
 
-
-    it "should receive a document by ID via fetch" do
+    it 'should receive a document by ID via fetch' do
       expect(database).to receive(:send_request)
-        .with("document/60768679/333", {})
+        .with('document/60768679/333', {})
         .and_return(double)
       expect(Ashikawa::Core::Document).to receive(:new)
 
       subject.fetch(333)
     end
 
-    it "should receive a document by ID via []" do
+    it 'should receive a document by ID via []' do
       expect(database).to receive(:send_request)
-        .with("document/60768679/333", {})
+        .with('document/60768679/333', {})
         .and_return(double)
       expect(Ashikawa::Core::Document).to receive(:new)
 
       subject[333]
     end
 
-    it "should replace a document by ID" do
+    it 'should replace a document by ID' do
       expect(database).to receive(:send_request)
-        .with("document/60768679/333", put: {"name" => value})
+        .with('document/60768679/333', put: { 'name' => value })
 
-      subject.replace(333, {"name" => value})
+      subject.replace(333, { 'name' => value })
     end
 
-    it "should create a new document" do
+    it 'should create a new document' do
       allow(database).to receive(:send_request)
-        .with("document?collection=60768679", post: raw_document)
+        .with('document?collection=60768679', post: raw_document)
         .and_return(response)
       expect(Ashikawa::Core::Document).to receive(:new)
         .with(database, response, raw_document)
@@ -246,14 +247,14 @@ describe Ashikawa::Core::Collection do
       subject.create_document(raw_document)
     end
 
-    it "should not create a new edge" do
-      expect {
-        subject.create_edge(double, double, {"quote" => "D'ya have to use s'many cuss words?"})
-      }.to raise_exception(RuntimeError, "Can't create an edge in a document collection")
+    it 'should not create a new edge' do
+      expect do
+        subject.create_edge(double, double, { 'quote' => "D'ya have to use s'many cuss words?" })
+      end.to raise_exception(RuntimeError, "Can't create an edge in a document collection")
     end
   end
 
-  describe "an initialized edge collection" do
+  describe 'an initialized edge collection' do
     subject { Ashikawa::Core::Collection.new database, raw_edge_collection }
 
     let(:document) { double }
@@ -262,46 +263,46 @@ describe Ashikawa::Core::Collection do
 
     its(:content_type) { should be(:edge) }
 
-    it "should receive an edge by ID via fetch" do
+    it 'should receive an edge by ID via fetch' do
       expect(database).to receive(:send_request)
-        .with("edge/60768679/333", {})
+        .with('edge/60768679/333', {})
         .and_return(double)
       expect(Ashikawa::Core::Edge).to receive(:new)
 
       subject.fetch(333)
     end
 
-    it "should receive an edge by ID via []" do
+    it 'should receive an edge by ID via []' do
       expect(database).to receive(:send_request)
-        .with("edge/60768679/333", {})
+        .with('edge/60768679/333', {})
         .and_return(double)
       expect(Ashikawa::Core::Edge).to receive(:new)
 
       subject[333]
     end
 
-    it "should replace an edge by ID" do
+    it 'should replace an edge by ID' do
       expect(database).to receive(:send_request)
-        .with("edge/60768679/333", put: {"name" => "The Dude"})
+        .with('edge/60768679/333', put: { 'name' => 'The Dude' })
 
-      subject.replace(333, {"name" => "The Dude"})
+      subject.replace(333, { 'name' => 'The Dude' })
     end
 
-    it "should create a new edge" do
+    it 'should create a new edge' do
       allow(database).to receive(:send_request)
-        .with("edge?collection=60768679&from=1&to=2", post: raw_document)
+        .with('edge?collection=60768679&from=1&to=2', post: raw_document)
         .and_return(response)
       expect(Ashikawa::Core::Edge).to receive(:new)
         .with(database, response, raw_document)
         .and_return(document)
 
-      subject.create_edge(double(id: "1"), double(id: "2"), raw_document)
+      subject.create_edge(double(id: '1'), double(id: '2'), raw_document)
     end
 
-    it "should not create a new document" do
-      expect {
-        subject.create_document({"quote" => "D'ya have to use s'many cuss words?"})
-      }.to raise_exception(RuntimeError, "Can't create a document in an edge collection")
+    it 'should not create a new document' do
+      expect do
+        subject.create_document({ 'quote' => "D'ya have to use s'many cuss words?" })
+      end.to raise_exception(RuntimeError, "Can't create a document in an edge collection")
     end
   end
 end
