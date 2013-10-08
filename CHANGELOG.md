@@ -1,3 +1,27 @@
+# Version 0.9
+
+**Codename: Weramur**
+
+* Support for ArangoDB 1.4
+* Dropping support for Ruby 1.9.2
+* Additions:
+    * Support for multiple databases
+    * Create unique indexes
+* Performance Improvements:
+    * Document creation is faster now
+* Deprecations: 
+    * `Database#authenticate_with`: Use the initializer block instead
+    * Methods deprecated in 0.8 were removed
+* Bug Fixes:
+    * Getting single attributes via an AQL query works now
+* Continuous Integration
+    * All specs now also run on a ArangoDB with authentication activated
+* A lot of refactoring, more enforced coding guidelines
+    * Especially the Specs were heavily refactored
+    * Specs are now in the new RSpec Syntax
+
+*Codename in honor of Saor Patrol.*
+
 # Version 0.8
 
 [Release on Github](https://github.com/triAGENS/ashikawa-core/releases/tag/v0.8.0)
