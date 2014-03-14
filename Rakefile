@@ -1,12 +1,22 @@
 #!/usr/bin/env rake
 # -*- encoding : utf-8 -*-
-require 'devtools'
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 
-Devtools.init_rake_tasks
+desc 'Run all specs'
+task spec: ['spec:unit', 'spec:acceptance']
 
-import('./tasks/adjustments.rake')
+namespace :spec do
+  desc 'Run unit specs'
+  RSpec::Core::RakeTask.new(:unit) do |task|
+    task.pattern = 'spec/unit/**/*_spec.rb'
+  end
 
-# Default task is running everything except mutant
-task default: %w[ spec ci:metrics ]
+  desc 'Run acceptance specs'
+  RSpec::Core::RakeTask.new(:acceptance) do |task|
+    task.pattern = 'spec/acceptance/**/*_spec.rb'
+  end
+end
+
+task default: :spec
+task ci: :spec
