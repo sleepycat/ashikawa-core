@@ -16,3 +16,6 @@ matrix:
   allow_failures:
     - rvm: 2.1.0
 script: "bundle exec rake ci"
+addons:
+  code_climate:
+    repo_token: 4d49e70568a106875f85f2918698df75118b4a83af20ad57317b10f5fc40d5e0
