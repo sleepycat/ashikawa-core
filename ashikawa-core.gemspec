@@ -12,8 +12,8 @@ Gem::Specification.new do |gem|
   gem.description = "Ashikawa Core is a wrapper around the ArangoDB REST API. It provides low level access and is intended to be used in ArangoDB ODMs and other tools."
   gem.license = "Apache License 2.0"
 
-  gem.required_ruby_version = '>= 1.9.2'
-  gem.requirements << "ArangoDB, v1.4"
+  gem.required_ruby_version = '>= 1.9.3'
+  gem.requirements << "ArangoDB, v1.4 or v2.0"
 
   gem.rubyforge_project = "ashikawa-core"
 
@@ -23,9 +23,9 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "faraday", "~> 0.8.8"
+  gem.add_dependency "faraday_middleware", "~> 0.9.0"
   gem.add_dependency "json", "~> 1.8.1"
   gem.add_dependency "null_logger", "~> 0.0.1"
   gem.add_dependency "equalizer", "~> 0.0.8"
-  gem.add_dependency "faraday_middleware", "~> 0.9.0"
   gem.add_dependency "rubysl-base64" if RUBY_ENGINE == "rbx"
 end
