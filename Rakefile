@@ -22,5 +22,10 @@ require 'yard/rake/yardoc_task'
 
 YARD::Rake::YardocTask.new
 
+require 'inch'
+require 'inch/rake'
+
+Inch::Rake::Suggest.new
+
 task default: :spec
 task ci: :spec
