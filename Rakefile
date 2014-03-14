@@ -18,5 +18,9 @@ namespace :spec do
   end
 end
 
+require 'yard/rake/yardoc_task'
+
+YARD::Rake::YardocTask.new
+
 task default: :spec
 task ci: :spec
