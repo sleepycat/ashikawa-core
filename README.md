@@ -5,7 +5,7 @@
 | Homepage        | http://triagens.github.io/ashikawa-core/
 | Documentation   | [RubyDoc](http://www.rubydoc.info/gems/ashikawa-core)
 | CI              | [![Build Status](https://secure.travis-ci.org/triAGENS/ashikawa-core.png?branch=master)](http://travis-ci.org/triAGENS/ashikawa-core)
-| Code Metrics    | [![Code Climate](https://codeclimate.com/github/triAGENS/ashikawa-core.png)](https://codeclimate.com/github/triAGENS/ashikawa-core) [![Coverage Status](https://coveralls.io/repos/triAGENS/ashikawa-core/badge.png?branch=coverall)](https://coveralls.io/r/triAGENS/ashikawa-core)
+| Code Metrics    | [![Code Climate](https://codeclimate.com/github/triAGENS/ashikawa-core.png)](https://codeclimate.com/github/triAGENS/ashikawa-core) [![Coverage Status](https://coveralls.io/repos/triAGENS/ashikawa-core/badge.png?branch=master)](https://coveralls.io/r/triAGENS/ashikawa-core)
 | Gem Version     | [![Gem Version](https://badge.fury.io/rb/ashikawa-core.png)](http://badge.fury.io/rb/ashikawa-core)
 | Dependencies    | [![Dependency Status](https://gemnasium.com/triAGENS/ashikawa-core.png)](https://gemnasium.com/triAGENS/ashikawa-core)
 
