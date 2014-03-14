@@ -27,5 +27,12 @@ require 'inch/rake'
 
 Inch::Rake::Suggest.new
 
+require 'reek/rake/task'
+
+Reek::Rake::Task.new do |t|
+  t.fail_on_error = true
+  t.config_files = 'config/reek.yml'
+end
+
 task default: :spec
 task ci: :spec
