@@ -1,3 +1,28 @@
+# Version 0.10
+
+**Codename: Sepia Tone Laboratory**
+
+* Support for ArangoDB 1.4 and 2.0
+* Big Refactoring Release
+    * Including significant refactoring of the test suite
+* Breaking change:
+    * `Document#hash` is now `Document#to_h`. This was a huge mistake before, sorry for that! #86
+* Bug Fixes:
+    * Crashes on Rubinius have been fixed – it's now supported #75
+* Allow the usage of both keys and IDs for `Collection#fetch` and `Collection#replace` #77
+* Logging
+    * Don't spam the log files #88
+* Use Faraday Middleware and middleware included in Faraday instead of custom tailored middleware #92
+* The branching model has been changed: There's no development branch anymore
+    * This was confusing to both users and contributors #79
+* Other adjustments:
+    * Most classes are now 100% mutation tested via mutant #37
+* New Contributors
+    * Nikita Vasiliev (@sharpyfox)
+    * Dirk Breuer (@railsbros-dirk)
+
+*Codename in honor of Lifeformed.*
+
 # Version 0.9
 
 **Codename: Weramur**
