@@ -34,5 +34,12 @@ Reek::Rake::Task.new do |t|
   t.config_files = 'config/reek.yml'
 end
 
+require 'rubocop/rake_task'
+
+Rubocop::RakeTask.new do |task|
+  task.options = %w[--config config/rubocop.yml]
+  task.fail_on_error = true
+end
+
 task default: :spec
 task ci: :spec
