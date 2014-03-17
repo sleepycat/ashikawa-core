@@ -2,6 +2,11 @@
 # -*- encoding : utf-8 -*-
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
+require 'yard/rake/yardoc_task'
+require 'inch' # see: https://github.com/rrrene/inch/issues/7
+require 'inch/rake'
+require 'reek/rake/task'
+require 'rubocop/rake_task'
 
 desc 'Run all specs'
 task spec: ['spec:unit', 'spec:acceptance']
@@ -12,44 +17,37 @@ namespace :spec do
     task.pattern = 'spec/unit/**/*_spec.rb'
   end
 
-  desc 'Run acceptance specs'
+  desc 'Run acceptance specs – requires running instance of ArangoDB'
   RSpec::Core::RakeTask.new(:acceptance) do |task|
     task.pattern = 'spec/acceptance/**/*_spec.rb'
   end
 end
 
-require 'yard/rake/yardoc_task'
+YARD::Rake::YardocTask.new(:doc)
 
-YARD::Rake::YardocTask.new
+namespace :metrics do
+  Inch::Rake::Suggest.new
 
-require 'inch'
-require 'inch/rake'
+  Reek::Rake::Task.new do |t|
+    t.fail_on_error = true
+    t.config_files = 'config/reek.yml'
+  end
 
-Inch::Rake::Suggest.new
+  Rubocop::RakeTask.new do |task|
+    task.options = %w[--config config/rubocop.yml]
+    task.fail_on_error = true
+  end
 
-require 'reek/rake/task'
+  desc 'Run mutant to check for mutation coverage'
+  task :mutant do
+    require 'mutant'
+    require 'mutant-rspec'
 
-Reek::Rake::Task.new do |t|
-  t.fail_on_error = true
-  t.config_files = 'config/reek.yml'
-end
-
-require 'rubocop/rake_task'
-
-Rubocop::RakeTask.new do |task|
-  task.options = %w[--config config/rubocop.yml]
-  task.fail_on_error = true
-end
-
-require 'mutant'
-require 'mutant-rspec'
-
-desc 'Run mutant to check for mutation coverage'
-task :mutant do
-  namespaces = YAML.load_file('config/mutant.yml').map { |n| "::#{n}*" }
-  arguments  = %w[ --include lib --require ashikawa-core --use rspec ].concat(namespaces)
-  status = Mutant::CLI.run(arguments)
-  exit 'Mutant task is not successful' if status.nonzero?
+    namespaces = YAML.load_file('config/mutant.yml').map { |n| "::#{n}*" }
+    arguments  = %w[ --include lib --require ashikawa-core --use rspec ].concat(namespaces)
+    status = Mutant::CLI.run(arguments)
+    exit 'Mutant task is not successful' if status.nonzero?
+  end
 end
 
 desc 'Start a REPL with guacamole loaded (not the Rails part)'
