@@ -39,6 +39,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rubocop', '~> 0.19.0'
   gem.add_development_dependency 'mutant', '~> 0.5.6'
   gem.add_development_dependency 'mutant-rspec', '~> 0.5.3'
+  gem.add_development_dependency 'pry', '~> 0.9.12.6'
 
   # Rubinius specific dependencies
   if RUBY_ENGINE == 'rbx'

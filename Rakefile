@@ -52,5 +52,15 @@ task :mutant do
   exit 'Mutant task is not successful' if status.nonzero?
 end
 
+desc 'Start a REPL with guacamole loaded (not the Rails part)'
+task :console do
+  require 'bundler/setup'
+
+  require 'pry'
+  require 'ashikawa-core'
+  ARGV.clear
+  Pry.start
+end
+
 task default: :spec
 task ci: :spec
