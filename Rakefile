@@ -41,5 +41,16 @@ Rubocop::RakeTask.new do |task|
   task.fail_on_error = true
 end
 
+require 'mutant'
+require 'mutant-rspec'
+
+desc 'Run mutant to check for mutation coverage'
+task :mutant do
+  namespaces = YAML.load_file('config/mutant.yml').map { |n| "::#{n}*" }
+  arguments  = %w[ --include lib --require ashikawa-core --use rspec ].concat(namespaces)
+  status = Mutant::CLI.run(arguments)
+  exit 'Mutant task is not successful' if status.nonzero?
+end
+
 task default: :spec
 task ci: :spec

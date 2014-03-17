@@ -37,6 +37,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'inch', '~> 0.3.2'
   gem.add_development_dependency 'reek', '~> 1.3.6'
   gem.add_development_dependency 'rubocop', '~> 0.19.0'
+  gem.add_development_dependency 'mutant', '~> 0.5.6'
+  gem.add_development_dependency 'mutant-rspec', '~> 0.5.3'
 
   # Rubinius specific dependencies
   if RUBY_ENGINE == 'rbx'
