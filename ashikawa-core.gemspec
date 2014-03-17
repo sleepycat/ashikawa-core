@@ -34,7 +34,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec', '~> 2.99.0.beta2'
   gem.add_development_dependency 'codeclimate-test-reporter', '~> 0.3.0'
   gem.add_development_dependency 'yard', '~> 0.8.7.3'
-  gem.add_development_dependency 'inch', '~> 0.3.2'
+  gem.add_development_dependency 'inch', '~> 0.3.3'
   gem.add_development_dependency 'reek', '~> 1.3.6'
   gem.add_development_dependency 'rubocop', '~> 0.19.0'
   gem.add_development_dependency 'mutant', '~> 0.5.6'
