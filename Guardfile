@@ -3,7 +3,7 @@ guard 'bundler' do
   watch(/^.+\.gemspec/)
 end
 
-guard 'rspec', spec_paths: 'spec/unit' do
-  watch('spec/.+\.rb')
-  watch(%r{lib/ashikawa-core/(.+)\.rb$}) { |m| "spec/unit/#{m[1]}_spec.rb" }
+guard 'rspec', cmd: 'bundle exec rspec' do
+  watch(%r{^spec/.+_spec\.rb$})
+  watch(%r{^lib/ashikawa-core/(.+)\.rb$})     { |m| p m[1]; "spec/unit/#{m[1]}_spec.rb" }
 end
