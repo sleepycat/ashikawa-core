@@ -29,7 +29,12 @@ describe Ashikawa::Core::Index do
 
     its(:id) { should be(id) }
     its(:type) { should be(type_as_sym) }
-    its(:on) { should include(field_as_sym) }
+
+    it 'should know which fields it is on' do
+      pending 'Currently not working on Rubinius'
+      expect(subject).to include(field_as_sym)
+    end
+
     its(:unique) { should be(unique) }
 
     it 'should be deletable' do

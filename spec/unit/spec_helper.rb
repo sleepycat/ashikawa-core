@@ -2,6 +2,9 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
+require 'codeclimate-test-reporter'
+CodeClimate::TestReporter.start
+
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
@@ -11,26 +14,6 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
-
-# Do not run SimpleCov in Guard
-if ENV['COVERAGE'] == 'true'
-  require 'simplecov'
-  require 'coveralls'
-
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-    SimpleCov::Formatter::HTMLFormatter,
-    Coveralls::SimpleCov::Formatter
-  ]
-
-  SimpleCov.start do
-    command_name     'spec:unit'
-    add_filter       'config'
-    add_filter       'spec'
-    minimum_coverage 99
-  end
-end
-
-require 'json'
 
 # Helper to simulate Server Responses. Parses the fixtures in the spec folder
 def server_response(path)
