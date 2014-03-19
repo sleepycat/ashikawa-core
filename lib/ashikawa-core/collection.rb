@@ -535,7 +535,7 @@ module Ashikawa
 
       # Send a request for the content with the given key
       #
-      # @param [Integer] document_id The id of the document
+      # @param [Integer] document_key The id of the document
       # @param [Hash] opts The options for the request
       # @return [Hash] parsed JSON response from the server
       # @api private

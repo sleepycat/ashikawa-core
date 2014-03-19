@@ -187,8 +187,8 @@ module Ashikawa
 
       # Removes the keys that are not allowed from an object
       #
+      # @param [String] path The path for the request
       # @param [Hash] options
-      # @param [Array<Symbol>] allowed_keys
       # @return [Hash] The filtered Hash
       # @api private
       def prepare_request(path, options)
@@ -213,7 +213,6 @@ module Ashikawa
       #
       # @param [String] path The path for the request
       # @param [Hash] request The data send to the database
-      # @param [Array<Symbol>] allowed_keys The keys allowed for this request
       # @return [String] Server response
       # @raise [NoCollectionProvidedException] If you provided a database, no collection
       # @api private
@@ -226,7 +225,6 @@ module Ashikawa
       # @param [String] path The path for the request
       # @param [Symbol] request_method The request method to perform
       # @param [Hash] request The data send to the database
-      # @param [Array] allowed_keys Keys allowed in request, if nil: All keys are allowed
       # @return [Cursor]
       # @api private
       def wrapped_request(path, request_method, request)
