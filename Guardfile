@@ -4,6 +4,6 @@ guard 'bundler' do
 end
 
 guard 'rspec', cmd: 'bundle exec rspec' do
-  watch(%r{^spec/.+_spec\.rb$})
-  watch(%r{^lib/ashikawa-core/(.+)\.rb$})     { |m| p m[1]; "spec/unit/#{m[1]}_spec.rb" }
+  watch(/^spec\/.+_spec\.rb/)
+  watch(%r{^lib/ashikawa-core/(.+)\.rb$})     { |m| "spec/unit/#{m[1]}_spec.rb" }
 end

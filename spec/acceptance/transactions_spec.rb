@@ -12,8 +12,8 @@ describe 'Transactions' do
   end
 
   let(:js_function) { 'function (x) { return x.a; }' }
-  let(:write_collections) { %w{collection_1 collection_2} }
-  let(:read_collections) { %w{collection_2} }
+  let(:write_collections) { %w(collection_1 collection_2) }
+  let(:read_collections) { %w(collection_2) }
 
   it 'should create and execute a transaction' do
     transaction = subject.create_transaction js_function, write: write_collections, read: read_collections

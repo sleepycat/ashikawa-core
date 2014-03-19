@@ -95,3 +95,15 @@ SignalException:
 ClassLength:
   CountComments: false
   Max: 140
+
+# The suggested style does not match the common ruby way of aligning the content of a hash
+IndentHash:
+  Enabled: false
+
+# This cop seems to not work correctly. Also we don't agree with it.
+FileName:
+  Enabled: false
+
+# Double negations are extremely useful
+DoubleNegation:
+  Enabled: false
