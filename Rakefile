@@ -60,4 +60,4 @@ task :console do
 end
 
 task default: :spec
-task ci: ['spec', 'metrics:reek']
+task ci: ['spec', 'metrics:reek', 'metrics:rubocop']
