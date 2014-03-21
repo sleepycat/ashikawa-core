@@ -10,7 +10,6 @@ rvm:
   - jruby-19mode
   - rbx-2.2.5
 env:
-  - ARANGODB_DISABLE_AUTHENTIFICATION=false VERSION=1.4
   - ARANGODB_DISABLE_AUTHENTIFICATION=false VERSION=2.0
 matrix:
   allow_failures:
