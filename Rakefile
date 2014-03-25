@@ -33,7 +33,7 @@ namespace :metrics do
   end
 
   Rubocop::RakeTask.new do |task|
-    task.options = %w[--config config/rubocop.yml]
+    task.options = %w(--config config/rubocop.yml)
     task.fail_on_error = true
   end
 
@@ -43,7 +43,7 @@ namespace :metrics do
     require 'mutant-rspec'
 
     namespaces = YAML.load_file('config/mutant.yml').map { |n| "::#{n}*" }
-    arguments  = %w[ --include lib --require ashikawa-core --use rspec ].concat(namespaces)
+    arguments  = %w(--include lib --require ashikawa-core --use rspec).concat(namespaces)
     status = Mutant::CLI.run(arguments)
     exit 'Mutant task is not successful' if status.nonzero?
   end
@@ -60,4 +60,4 @@ task :console do
 end
 
 task default: :spec
-task ci: [ 'spec', 'metrics:reek' ]
+task ci: ['spec', 'metrics:reek', 'metrics:rubocop']

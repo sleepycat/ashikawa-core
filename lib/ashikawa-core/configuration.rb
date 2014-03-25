@@ -39,7 +39,7 @@ module Ashikawa
       # @api private
       # @return Connection
       def connection
-        @connection = @connection || setup_new_connection
+        @connection ||= setup_new_connection
         @connection.authenticate_with(username, password) if username && password
         @connection
       end

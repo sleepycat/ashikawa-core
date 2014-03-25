@@ -169,7 +169,7 @@ describe Ashikawa::Core::Collection do
       it 'should add a new index' do
         expect(database).to receive(:send_request)
           .with('index?collection=60768679', post: {
-            'type' => 'hash', 'fields' => %w{a b}, 'unique' => false
+            'type' => 'hash', 'fields' => %w(a b), 'unique' => false
           })
           .and_return(index_response)
         expect(Ashikawa::Core::Index).to receive(:new)
@@ -181,7 +181,7 @@ describe Ashikawa::Core::Collection do
       it 'should add a new unique index' do
         expect(database).to receive(:send_request)
           .with('index?collection=60768679', post: {
-            'type' => 'hash', 'fields' => %w{a b}, 'unique' => true
+            'type' => 'hash', 'fields' => %w(a b), 'unique' => true
           })
           .and_return(index_response)
         expect(Ashikawa::Core::Index).to receive(:new)
