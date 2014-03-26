@@ -17,8 +17,6 @@ All tests run on Travis CI for the following versions of Ruby:
 * Rubinius 2.2.5
 * JRuby 1.7.9 in 1.9 mode
 
-Please note that the [`master`](https://github.com/triAGENS/ashikawa-core) branch is always the stable version released on Ruby Gems and documented on [RDoc](http://www.rubydoc.info/github/triAGENS/ashikawa-core). If you want the most recent version, please refer to the [`development`](https://github.com/triAGENS/ashikawa-core/tree/development) branch.
-
 ## How to install it?
 
 ```shell
