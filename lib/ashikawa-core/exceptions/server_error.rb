@@ -5,7 +5,7 @@ module Ashikawa
     class ServerError < RuntimeError
       # Create a new instance
       #
-      # @param [Integer] description
+      # @param [Fixnum] description
       # @return RuntimeError
       # @api private
       def initialize(description)

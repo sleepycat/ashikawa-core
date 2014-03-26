@@ -14,7 +14,7 @@ module Ashikawa
 
       # A specific start value
       #
-      # @return Integer
+      # @return Fixnum
       # @api public
       # @example Get the type of the KeyOptions
       #   keyOptions = KeyOptions.new({ :offset => 12 })
@@ -23,7 +23,7 @@ module Ashikawa
 
       # Size of increment steps
       #
-      # @return Integer
+      # @return Fixnum
       # @api public
       # @example Get the type of the KeyOptions
       #   keyOptions = KeyOptions.new({ :increment => 12 })

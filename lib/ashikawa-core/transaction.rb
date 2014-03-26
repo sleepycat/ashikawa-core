@@ -45,7 +45,7 @@ module Ashikawa
 
       # An optional numeric value used to set a timeout for waiting on collection locks
       #
-      # @return [Integer]
+      # @return [Fixnum]
       # @api public
       # @example Check how long the lock timeout is
       #   transaction.lock_timeout # => 30
@@ -55,7 +55,7 @@ module Ashikawa
 
       # An optional numeric value used to set a timeout for waiting on collection locks
       #
-      # @param [Integer] timeout
+      # @param [Fixnum] timeout
       # @api public
       # @example Set the lock timeout to 30
       #   transaction.lock_timeout = 30
