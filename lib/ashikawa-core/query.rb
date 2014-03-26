@@ -11,6 +11,7 @@ module Ashikawa
     class Query
       extend Forwardable
 
+      # For each simple query define the allowed attributes for filtering
       ALLOWED_KEYS_FOR_PATH = {
         'simple/all'           => [:limit, :skip, :collection],
         'simple/by-example'    => [:limit, :skip, :example, :collection],
