@@ -18,11 +18,13 @@ module Ashikawa
 
       include Equalizer.new(:id, :name, :content_type, :database)
 
+      # ArangoDB's collections contain either only documents or only edges
       CONTENT_TYPES = {
         2 => :document,
         3 => :edge
       }
 
+      # Map the content types to the classes from Ashikawa
       CONTENT_CLASS = {
         document: Document,
         edge: Edge
