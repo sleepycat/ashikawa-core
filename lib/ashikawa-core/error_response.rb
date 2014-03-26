@@ -28,6 +28,17 @@ module Ashikawa
       # All status codes for server errors
       ServerErrorStatuses = 500...599
 
+      # On completion of the request raise errors depending on the status
+      #
+      # @raise [BadSyntax] If the status code is a 400
+      # @raise [AuthenticationFailed] If the status code is a 401
+      # @raise [DocumentNotFoundException] If the status code is 404 and a document was requested
+      # @raise [CollectionNotFoundException] If the status code is 404 and a collection was requested
+      # @raise [IndexNotFoundException] If the status code is 404 and an index was requested
+      # @raise [ResourceNotFoundError] If the status code is 404 and any other resource was requested
+      # @raise [ClientError] If the status code is any other 4XX code
+      # @raise [ServerError] If the status code is any of the 5XX codes
+      # @return nil
       def on_complete(env)
         @body = env[:body]
         @url = env[:url]
