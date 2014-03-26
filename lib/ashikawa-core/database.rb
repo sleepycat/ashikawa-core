@@ -12,6 +12,7 @@ module Ashikawa
   module Core
     # An ArangoDB database
     class Database
+      # ArangoDB defines two different kinds of collections: Document and Edge Collections
       COLLECTION_TYPES = {
         document: 2,
         edge: 3
