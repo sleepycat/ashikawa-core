@@ -32,6 +32,7 @@ Gem::Specification.new do |gem|
   # Development Dependencies
   gem.add_development_dependency 'rake', '~> 10.2.0'
   gem.add_development_dependency 'rspec', '~> 2.99.0.beta2'
+  gem.add_development_dependency 'rspec-its', '~> 1.0.0'
   gem.add_development_dependency 'codeclimate-test-reporter', '~> 0.3.0'
   gem.add_development_dependency 'yard', '~> 0.8.7.4'
   gem.add_development_dependency 'inch', '~> 0.3.3'

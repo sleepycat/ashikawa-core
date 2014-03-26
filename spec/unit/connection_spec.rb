@@ -52,16 +52,16 @@ describe Ashikawa::Core::Connection do
 
   describe 'authentication' do
     it 'should have authentication turned off by default' do
-      expect(subject.authentication?).to be_false
+      expect(subject.authentication?).to be_falsey
     end
 
     it 'should tell if authentication is enabled' do
       subject.authenticate_with('testuser', 'testpassword')
-      expect(subject.authentication?).to be_true
+      expect(subject.authentication?).to be_truthy
     end
 
     it 'should send the authentication data with every GET request' do
-      pending 'Find out how to check for basic auth via Faraday Stubs'
+      skip 'Find out how to check for basic auth via Faraday Stubs'
 
       request_stub.get('/_api/my/path') do |request|
         [200, response_headers, JSON.generate({ 'name' => 'dude' })]

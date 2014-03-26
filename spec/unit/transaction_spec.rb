@@ -43,9 +43,9 @@ describe Ashikawa::Core::Transaction do
     subject { Ashikawa::Core::Transaction.new(db, action, read_and_write_collections) }
 
     it 'should be possible to activate waiting for sync' do
-      expect(subject.wait_for_sync).to be_false
+      expect(subject.wait_for_sync).to be_falsey
       subject.wait_for_sync = true
-      expect(subject.wait_for_sync).to be_true
+      expect(subject.wait_for_sync).to be_truthy
     end
 
     it 'should be possible to set the lock timeout' do
@@ -64,7 +64,7 @@ describe Ashikawa::Core::Transaction do
       before do
         allow(response).to receive(:[])
         allow(db).to receive(:send_request)
-          .and_return { response }
+          .and_return(response)
       end
 
       it 'should return the result from the database' do
@@ -72,7 +72,7 @@ describe Ashikawa::Core::Transaction do
           .with('result')
           .and_return(result)
         expect(db).to receive(:send_request)
-          .and_return { response }
+          .and_return(response)
         expect(subject.execute).to eq(result)
       end
 

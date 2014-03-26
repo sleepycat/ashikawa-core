@@ -25,11 +25,11 @@ describe 'Indices' do
   it 'should be possible to create an unique index' do
     index = subject.add_index :skiplist, on: [:identifier], unique: true
 
-    expect(index.unique).to be_true
+    expect(index.unique).to be_truthy
   end
 
   it 'should be possible to remove indices' do
-    pending 'See Bug #34'
+    skip 'See Bug #34'
 
     expect {
       index.delete

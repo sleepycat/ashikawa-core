@@ -22,10 +22,10 @@ describe 'Queries' do
 
     it 'should be possible to validate' do
       valid_query = 'FOR u IN my_collection FILTER u.bowling == true RETURN u'
-      expect(database.query.valid?(valid_query)).to be_true
+      expect(database.query.valid?(valid_query)).to be_truthy
 
       invalid_query = 'FOR u IN my_collection FILTER u.bowling == true'
-      expect(database.query.valid?(invalid_query)).to be_false
+      expect(database.query.valid?(invalid_query)).to be_falsey
     end
   end
 
