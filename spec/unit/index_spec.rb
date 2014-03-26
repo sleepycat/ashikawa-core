@@ -31,7 +31,7 @@ describe Ashikawa::Core::Index do
     its(:type) { should be(type_as_sym) }
 
     it 'should know which fields it is on' do
-      pending 'Currently not working on Rubinius'
+      skip 'Currently not working on Rubinius'
       expect(subject).to include(field_as_sym)
     end
 

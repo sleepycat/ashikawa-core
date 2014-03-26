@@ -27,12 +27,12 @@ describe 'Basics' do
 
     it 'should create a non-volatile collection by default' do
       subject.create_collection('nonvolatile_collection')
-      expect(subject['nonvolatile_collection'].volatile?).to be_false
+      expect(subject['nonvolatile_collection'].volatile?).to be_falsey
     end
 
     it 'should create a volatile collection' do
       subject.create_collection('volatile_collection', is_volatile: true)
-      expect(subject['volatile_collection'].volatile?).to be_true
+      expect(subject['volatile_collection'].volatile?).to be_truthy
     end
 
     it 'should create an autoincrementing collection' do
@@ -72,11 +72,11 @@ describe 'Basics' do
 
     it 'should be possible to load and unload collections' do
       my_collection = subject['test_collection']
-      expect(my_collection.status.loaded?).to be_true
+      expect(my_collection.status.loaded?).to be_truthy
       my_collection.unload
       my_id = my_collection.id
       subject[my_id]
-      expect(subject[my_id].status.loaded?).to be_false
+      expect(subject[my_id].status.loaded?).to be_falsey
     end
 
     it 'should be possible to get figures' do
@@ -96,9 +96,9 @@ describe 'Basics' do
     it 'should change and receive information about waiting for sync' do
       my_collection = subject['my_collection']
       my_collection.wait_for_sync = false
-      expect(my_collection.wait_for_sync?).to be_false
+      expect(my_collection.wait_for_sync?).to be_falsey
       my_collection.wait_for_sync = true
-      expect(my_collection.wait_for_sync?).to be_true
+      expect(my_collection.wait_for_sync?).to be_truthy
     end
 
     it 'should be possible to get information about the number of documents' do

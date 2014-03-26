@@ -48,52 +48,52 @@ describe Ashikawa::Core::Query do
     end
 
     describe 'first by example' do
-      let(:example) { double }
+      let(:example_document) { double }
       let(:response) { server_response('simple-queries/example') }
 
       it 'should find exactly one fitting document' do
         allow(collection).to receive(:database)
           .and_return(double)
         expect(collection).to receive(:send_request)
-          .with('simple/first-example', put: { 'collection' => name, 'example' => example })
+          .with('simple/first-example', put: { 'collection' => name, 'example' => example_document })
           .and_return(response)
         expect(Ashikawa::Core::Document).to receive(:new)
 
-        subject.first_example(example)
+        subject.first_example(example_document)
       end
     end
 
     describe 'all by example' do
-      let(:example) { { hello: 'world' } }
+      let(:example_document) { { hello: 'world' } }
       let(:response) { server_response('simple-queries/example') }
       let(:limit) { double }
       let(:skip) { double }
 
       it 'should find all fitting documents' do
         expect(collection).to receive(:send_request)
-          .with('simple/by-example', put: { 'collection' => name, 'example' => example })
+          .with('simple/by-example', put: { 'collection' => name, 'example' => example_document })
           .and_return(response)
         expect(Ashikawa::Core::Cursor).to receive(:new)
 
-        subject.by_example(example)
+        subject.by_example(example_document)
       end
 
       it 'should be able to limit the number of documents' do
         expect(collection).to receive(:send_request)
-          .with('simple/by-example', put: { 'collection' => name, 'limit' => limit, 'example' => example })
+          .with('simple/by-example', put: { 'collection' => name, 'limit' => limit, 'example' => example_document })
           .and_return(response)
         expect(Ashikawa::Core::Cursor).to receive(:new)
 
-        subject.by_example(example, limit: limit)
+        subject.by_example(example_document, limit: limit)
       end
 
       it 'should be able to skip documents' do
         expect(collection).to receive(:send_request)
-          .with('simple/by-example', put: { 'collection' => name, 'skip' => skip, 'example' => example })
+          .with('simple/by-example', put: { 'collection' => name, 'skip' => skip, 'example' => example_document })
           .and_return(response)
         expect(Ashikawa::Core::Cursor).to receive(:new)
 
-        subject.by_example(example, skip: skip)
+        subject.by_example(example_document, skip: skip)
       end
     end
 
@@ -199,7 +199,7 @@ describe Ashikawa::Core::Query do
           .with('query', post: { 'query' => query })
           .and_return { server_response('query/valid') }
 
-        expect(subject.valid?(query)).to be_true
+        expect(subject.valid?(query)).to be_truthy
       end
 
       it 'should return false when asked if an invalid query is valid' do
@@ -208,7 +208,7 @@ describe Ashikawa::Core::Query do
         expect(collection).to receive(:send_request)
           .with('query', post: { 'query' => query })
 
-        expect(subject.valid?(query)).to be_false
+        expect(subject.valid?(query)).to be_falsey
       end
     end
   end
@@ -251,7 +251,7 @@ describe Ashikawa::Core::Query do
           .with('query', post: { 'query' => query })
           .and_return { valid_response }
 
-        expect(subject.valid?(query)).to be_true
+        expect(subject.valid?(query)).to be_truthy
       end
 
       it 'should return false when asked if an invalid query is valid' do
@@ -259,7 +259,7 @@ describe Ashikawa::Core::Query do
           .with('query', post: { 'query' => query })
           .and_raise(Ashikawa::Core::BadSyntax)
 
-        expect(subject.valid?(query)).to be_false
+        expect(subject.valid?(query)).to be_falsey
       end
     end
   end

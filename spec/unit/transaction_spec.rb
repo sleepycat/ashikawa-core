@@ -43,9 +43,9 @@ describe Ashikawa::Core::Transaction do
     subject { Ashikawa::Core::Transaction.new(db, action, read_and_write_collections) }
 
     it 'should be possible to activate waiting for sync' do
-      expect(subject.wait_for_sync).to be_false
+      expect(subject.wait_for_sync).to be_falsey
       subject.wait_for_sync = true
-      expect(subject.wait_for_sync).to be_true
+      expect(subject.wait_for_sync).to be_truthy
     end
 
     it 'should be possible to set the lock timeout' do
