@@ -4,10 +4,10 @@
 |:----------------|:--------------------------------------------------
 | Homepage        | http://triagens.github.io/ashikawa-core/
 | Documentation   | [RubyDoc](http://www.rubydoc.info/gems/ashikawa-core)
-| CI              | [![Build Status](https://secure.travis-ci.org/triAGENS/ashikawa-core.png?branch=master)](http://travis-ci.org/triAGENS/ashikawa-core)
-| Code Metrics    | [![Code Climate](https://codeclimate.com/github/triAGENS/ashikawa-core.png)](https://codeclimate.com/github/triAGENS/ashikawa-core)
-| Gem Version     | [![Gem Version](https://badge.fury.io/rb/ashikawa-core.png)](http://badge.fury.io/rb/ashikawa-core)
-| Dependencies    | [![Dependency Status](https://gemnasium.com/triAGENS/ashikawa-core.png)](https://gemnasium.com/triAGENS/ashikawa-core)
+| CI              | [![Build Status](http://img.shields.io/travis/triAGENS/ashikawa-core.svg)](http://travis-ci.org/triAGENS/ashikawa-core)
+| Code Metrics    | [![Code Climate](http://img.shields.io/codeclimate/github/triAGENS/ashikawa-core.svg)](https://codeclimate.com/github/triAGENS/ashikawa-core)
+| Gem Version     | [![Gem Version](http://img.shields.io/gem/v/ashikawa-core.svg)](http://rubygems.org/gems/ashikawa-core)
+| Dependencies    | [![Dependency Status](http://img.shields.io/gemnasium/triAGENS/ashikawa-core.svg)](https://gemnasium.com/triAGENS/ashikawa-core)
 
 Ashikawa Core is a Wrapper around the ArangoDB Rest API. It provides low level access and is intended to be used in ArangoDB ODMs and other projects related to the database. It is always working with the stable version of ArangoDB, this is currently the preview of version **2.0**.
 
