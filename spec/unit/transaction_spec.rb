@@ -64,7 +64,7 @@ describe Ashikawa::Core::Transaction do
       before do
         allow(response).to receive(:[])
         allow(db).to receive(:send_request)
-          .and_return { response }
+          .and_return(response)
       end
 
       it 'should return the result from the database' do
@@ -72,7 +72,7 @@ describe Ashikawa::Core::Transaction do
           .with('result')
           .and_return(result)
         expect(db).to receive(:send_request)
-          .and_return { response }
+          .and_return(response)
         expect(subject.execute).to eq(result)
       end
 

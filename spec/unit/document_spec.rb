@@ -87,9 +87,9 @@ describe Ashikawa::Core::Document do
     end
 
     it 'should be refreshable' do
-      expect(database).to receive(:send_request).with(path, {}).and_return {
-        { 'name' => 'Jeff' }
-      }
+      expect(database).to receive(:send_request)
+        .with(path, {})
+        .and_return({ 'name' => 'Jeff' })
 
       refreshed_subject = subject.refresh!
       expect(refreshed_subject).to eq(subject)

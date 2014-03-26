@@ -22,7 +22,7 @@ describe Ashikawa::Core::Query do
       it 'should list all documents' do
         expect(collection).to receive(:send_request)
           .with('simple/all', put: { 'collection' => name })
-          .and_return { server_response('simple-queries/all') }
+          .and_return(server_response('simple-queries/all'))
         expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.all
@@ -31,7 +31,7 @@ describe Ashikawa::Core::Query do
       it 'should be able to limit the number of documents' do
         expect(collection).to receive(:send_request)
           .with('simple/all', put: { 'collection' => name, 'limit' => limit })
-          .and_return { server_response('simple-queries/all_skip') }
+          .and_return(server_response('simple-queries/all_skip'))
         expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.all(limit: limit)
@@ -40,7 +40,7 @@ describe Ashikawa::Core::Query do
       it 'should be able to skip documents' do
         expect(collection).to receive(:send_request)
           .with('simple/all', put: { 'collection' => name, 'skip' => skip })
-          .and_return { server_response('simple-queries/all_limit') }
+          .and_return(server_response('simple-queries/all_limit'))
         expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.all(skip: skip)
@@ -112,7 +112,7 @@ describe Ashikawa::Core::Query do
       it 'should find documents based on latitude/longitude' do
         expect(collection).to receive(:send_request)
           .with('simple/near', put: arguments)
-          .and_return { response }
+          .and_return(response)
         expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.near(latitude: latitude, longitude: longitude)
@@ -136,7 +136,7 @@ describe Ashikawa::Core::Query do
       it 'should look for documents based on latidude/longitude' do
         expect(collection).to receive(:send_request)
           .with('simple/within' , put: arguments)
-          .and_return { response }
+          .and_return(response)
         expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.within(latitude: latitude, longitude: longitude, radius: radius)
@@ -162,7 +162,7 @@ describe Ashikawa::Core::Query do
       it 'should look for documents with an attribute in that range' do
         expect(collection).to receive(:send_request)
           .with('simple/range' , put: arguments)
-          .and_return { response }
+          .and_return(response)
         expect(Ashikawa::Core::Cursor).to receive(:new)
 
         subject.in_range(attribute: attribute, left: left, right: right, closed: closed)
@@ -197,7 +197,7 @@ describe Ashikawa::Core::Query do
       it 'should return true when asked if a valid query is valid' do
         expect(collection).to receive(:send_request)
           .with('query', post: { 'query' => query })
-          .and_return { server_response('query/valid') }
+          .and_return(server_response('query/valid'))
 
         expect(subject.valid?(query)).to be_truthy
       end
@@ -249,7 +249,7 @@ describe Ashikawa::Core::Query do
       it 'should return true when asked if a valid query is valid' do
         expect(database).to receive(:send_request)
           .with('query', post: { 'query' => query })
-          .and_return { valid_response }
+          .and_return(valid_response)
 
         expect(subject.valid?(query)).to be_truthy
       end

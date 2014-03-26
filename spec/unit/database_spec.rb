@@ -44,7 +44,7 @@ describe Ashikawa::Core::Database do
     it 'should fetch all available non-system collections' do
       expect(connection).to receive(:send_request)
         .with('collection')
-        .and_return { server_response('collections/all') }
+        .and_return(server_response('collections/all'))
 
       (0..1).each do |k|
         expect(Ashikawa::Core::Collection).to receive(:new)
@@ -57,7 +57,7 @@ describe Ashikawa::Core::Database do
     it 'should fetch all available non-system collections' do
       expect(connection).to receive(:send_request)
         .with('collection')
-        .and_return { server_response('collections/all') }
+        .and_return(server_response('collections/all'))
 
       expect(Ashikawa::Core::Collection).to receive(:new)
         .exactly(5).times
@@ -68,7 +68,7 @@ describe Ashikawa::Core::Database do
     it 'should create a non volatile collection by default' do
       expect(connection).to receive(:send_request)
         .with('collection', post: { name: 'volatile_collection' })
-        .and_return { raw_collection }
+        .and_return(raw_collection)
 
       expect(Ashikawa::Core::Collection).to receive(:new)
         .with(subject, raw_collection)
@@ -79,7 +79,7 @@ describe Ashikawa::Core::Database do
     it 'should create a volatile collection when asked' do
       expect(connection).to receive(:send_request)
         .with('collection', post: { name: 'volatile_collection', isVolatile: true })
-        .and_return { |path| raw_collection }
+        .and_return(raw_collection)
 
       expect(Ashikawa::Core::Collection).to receive(:new)
         .with(subject, raw_collection)
@@ -112,7 +112,7 @@ describe Ashikawa::Core::Database do
     it 'should create an edge collection when asked' do
       expect(connection).to receive(:send_request)
         .with('collection', post: { name: 'volatile_collection', type: 3 })
-        .and_return { |path| raw_collection }
+        .and_return(raw_collection)
 
       expect(Ashikawa::Core::Collection).to receive(:new)
         .with(subject, raw_collection)
@@ -123,7 +123,7 @@ describe Ashikawa::Core::Database do
     it 'should fetch a single collection if it exists' do
       expect(connection).to receive(:send_request)
         .with('collection/60768679')
-        .and_return { |path| raw_collection }
+        .and_return(raw_collection)
 
       expect(Ashikawa::Core::Collection).to receive(:new)
         .with(subject, raw_collection)
@@ -134,7 +134,7 @@ describe Ashikawa::Core::Database do
     it 'should fetch a single collection with the array syntax' do
       expect(connection).to receive(:send_request)
         .with('collection/60768679')
-        .and_return { |path| raw_collection }
+        .and_return(raw_collection)
 
       expect(Ashikawa::Core::Collection).to receive(:new)
         .with(subject, raw_collection)
