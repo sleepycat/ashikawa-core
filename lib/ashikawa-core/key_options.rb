@@ -41,6 +41,7 @@ module Ashikawa
 
       # Create a new KeyOptions object from the raw key options
       #
+      # @param [Hash] raw_key_options The raw options for the key returned from the server
       # @api public
       # @example Create a new KeyOptions object
       #   KeyOptions.new({ :type => :autoincrement })
