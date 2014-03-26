@@ -12,6 +12,7 @@ module Ashikawa
   module Core
     # An ArangoDB database
     class Database
+      # ArangoDB defines two different kinds of collections: Document and Edge Collections
       COLLECTION_TYPES = {
         document: 2,
         edge: 3
@@ -131,8 +132,8 @@ module Ashikawa
       # Create a new Transaction for this database
       #
       # @param [String] action The JS action you want to execute
-      # @options collections [Array<String>] :read The collections you want to read from
-      # @options collections [Array<String>] :write The collections you want to write to
+      # @option collections [Array<String>] :read The collections you want to read from
+      # @option collections [Array<String>] :write The collections you want to write to
       # @return [Object] The result of the transaction
       # @api public
       # @example Create a new Transaction

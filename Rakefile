@@ -25,7 +25,9 @@ end
 YARD::Rake::YardocTask.new(:doc)
 
 namespace :metrics do
-  Inch::Rake::Suggest.new
+  Inch::Rake::Suggest.new do |t|
+    t.args << '--pedantic'
+  end
 
   Reek::Rake::Task.new do |t|
     t.fail_on_error = true

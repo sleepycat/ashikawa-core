@@ -11,6 +11,7 @@ module Ashikawa
     class Query
       extend Forwardable
 
+      # For each simple query define the allowed attributes for filtering
       ALLOWED_KEYS_FOR_PATH = {
         'simple/all'           => [:limit, :skip, :collection],
         'simple/by-example'    => [:limit, :skip, :example, :collection],
@@ -40,8 +41,8 @@ module Ashikawa
       # Retrieves all documents for a collection
       #
       # @note It is advised to NOT use this method due to possible HUGE data amounts requested
-      # @option options [Integer] :limit limit the maximum number of queried and returned elements.
-      # @option options [Integer] :skip skip the first <n> documents of the query.
+      # @option options [Fixnum] :limit limit the maximum number of queried and returned elements.
+      # @option options [Fixnum] :skip skip the first <n> documents of the query.
       # @return [Cursor]
       # @raise [NoCollectionProvidedException] If you provided a database, no collection
       # @api public
@@ -56,8 +57,8 @@ module Ashikawa
       #
       # @option example [Hash] a Hash with data matching the documents you are looking for.
       # @option options [Hash] a Hash with additional settings for the query.
-      # @option options [Integer] :limit limit the maximum number of queried and returned elements.
-      # @option options [Integer] :skip skip the first <n> documents of the query.
+      # @option options [Fixnum] :limit limit the maximum number of queried and returned elements.
+      # @option options [Fixnum] :skip skip the first <n> documents of the query.
       # @return [Cursor]
       # @raise [NoCollectionProvidedException] If you provided a database, no collection
       # @api public
@@ -85,12 +86,12 @@ module Ashikawa
 
       # Looks for documents in a collection based on location
       #
-      # @option options [Integer] :latitude Latitude location for your search.
-      # @option options [Integer] :longitude Longitude location for your search.
-      # @option options [Integer] :skip The documents to skip in the query.
-      # @option options [Integer] :distance If given, the attribute key used to store the distance.
-      # @option options [Integer] :limit The maximal amount of documents to return (default: 100).
-      # @option options [Integer] :geo If given, the identifier of the geo-index to use.
+      # @option options [Fixnum] :latitude Latitude location for your search.
+      # @option options [Fixnum] :longitude Longitude location for your search.
+      # @option options [Fixnum] :skip The documents to skip in the query.
+      # @option options [Fixnum] :distance If given, the attribute key used to store the distance.
+      # @option options [Fixnum] :limit The maximal amount of documents to return (default: 100).
+      # @option options [Fixnum] :geo If given, the identifier of the geo-index to use.
       # @return [Cursor]
       # @raise [NoCollectionProvidedException] If you provided a database, no collection
       # @api public
@@ -103,13 +104,13 @@ module Ashikawa
 
       # Looks for documents in a collection within a radius
       #
-      # @option options [Integer] :latitude Latitude location for your search.
-      # @option options [Integer] :longitude Longitude location for your search.
-      # @option options [Integer] :radius Radius around the given location you want to search in.
-      # @option options [Integer] :skip The documents to skip in the query.
-      # @option options [Integer] :distance If given, the attribute key used to store the distance.
-      # @option options [Integer] :limit The maximal amount of documents to return (default: 100).
-      # @option options [Integer] :geo If given, the identifier of the geo-index to use.
+      # @option options [Fixnum] :latitude Latitude location for your search.
+      # @option options [Fixnum] :longitude Longitude location for your search.
+      # @option options [Fixnum] :radius Radius around the given location you want to search in.
+      # @option options [Fixnum] :skip The documents to skip in the query.
+      # @option options [Fixnum] :distance If given, the attribute key used to store the distance.
+      # @option options [Fixnum] :limit The maximal amount of documents to return (default: 100).
+      # @option options [Fixnum] :geo If given, the identifier of the geo-index to use.
       # @return [Cursor]
       # @api public
       # @raise [NoCollectionProvidedException] If you provided a database, no collection
@@ -122,12 +123,12 @@ module Ashikawa
 
       # Looks for documents in a collection with an attribute between two values
       #
-      # @option options [Integer] :attribute The attribute path to check.
-      # @option options [Integer] :left The lower bound
-      # @option options [Integer] :right The upper bound
-      # @option options [Integer] :closed If true, the interval includes right
-      # @option options [Integer] :skip The documents to skip in the query (optional).
-      # @option options [Integer] :limit The maximal amount of documents to return (optional).
+      # @option options [Fixnum] :attribute The attribute path to check.
+      # @option options [Fixnum] :left The lower bound
+      # @option options [Fixnum] :right The upper bound
+      # @option options [Fixnum] :closed If true, the interval includes right
+      # @option options [Fixnum] :skip The documents to skip in the query (optional).
+      # @option options [Fixnum] :limit The maximal amount of documents to return (optional).
       # @return [Cursor]
       # @raise [NoCollectionProvidedException] If you provided a database, no collection
       # @api public
@@ -141,8 +142,8 @@ module Ashikawa
       # Send an AQL query to the database
       #
       # @param [String] query
-      # @option options [Integer] :count Should the number of results be counted?
-      # @option options [Integer] :batch_size Set the number of results returned at once
+      # @option options [Fixnum] :count Should the number of results be counted?
+      # @option options [Fixnum] :batch_size Set the number of results returned at once
       # @return [Cursor]
       # @api public
       # @example Send an AQL query to the database
@@ -187,8 +188,8 @@ module Ashikawa
 
       # Removes the keys that are not allowed from an object
       #
+      # @param [String] path The path for the request
       # @param [Hash] options
-      # @param [Array<Symbol>] allowed_keys
       # @return [Hash] The filtered Hash
       # @api private
       def prepare_request(path, options)
@@ -213,7 +214,6 @@ module Ashikawa
       #
       # @param [String] path The path for the request
       # @param [Hash] request The data send to the database
-      # @param [Array<Symbol>] allowed_keys The keys allowed for this request
       # @return [String] Server response
       # @raise [NoCollectionProvidedException] If you provided a database, no collection
       # @api private
@@ -226,7 +226,6 @@ module Ashikawa
       # @param [String] path The path for the request
       # @param [Symbol] request_method The request method to perform
       # @param [Hash] request The data send to the database
-      # @param [Array] allowed_keys Keys allowed in request, if nil: All keys are allowed
       # @return [Cursor]
       # @api private
       def wrapped_request(path, request_method, request)

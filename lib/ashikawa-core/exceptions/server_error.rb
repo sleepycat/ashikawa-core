@@ -5,11 +5,11 @@ module Ashikawa
     class ServerError < RuntimeError
       # Create a new instance
       #
-      # @param [Integer] status
+      # @param [Fixnum] status_code
       # @return RuntimeError
       # @api private
-      def initialize(description)
-        @description = description
+      def initialize(status_code)
+        @status_code = status_code
       end
 
       # String representation of the exception
@@ -17,7 +17,7 @@ module Ashikawa
       # @return String
       # @api private
       def to_s
-        @description
+        @status_code
       end
     end
   end

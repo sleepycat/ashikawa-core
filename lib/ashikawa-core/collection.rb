@@ -18,11 +18,13 @@ module Ashikawa
 
       include Equalizer.new(:id, :name, :content_type, :database)
 
+      # ArangoDB's collections contain either only documents or only edges
       CONTENT_TYPES = {
         2 => :document,
         3 => :edge
       }
 
+      # Map the content types to the classes from Ashikawa
       CONTENT_CLASS = {
         document: Document,
         edge: Edge
@@ -344,7 +346,7 @@ module Ashikawa
 
       # Fetch a certain document by its key
       #
-      # @param [Integer] document_key the key of the document
+      # @param [Fixnum] document_key the key of the document
       # @raise [DocumentNotFoundException] If the requested document was not found
       # @return Document
       # @api public
@@ -357,7 +359,7 @@ module Ashikawa
 
       # Fetch a certain document by its key, return nil if the document does not exist
       #
-      # @param [Integer] document_key the id of the document
+      # @param [Fixnum] document_key the id of the document
       # @return Document
       # @api public
       # @example Fetch the document with the key 12345
@@ -370,7 +372,7 @@ module Ashikawa
 
       # Replace a document by its key
       #
-      # @param [Integer] document_key the key of the document
+      # @param [Fixnum] document_key the key of the document
       # @param [Hash] raw_document the data you want to replace it with
       # @return [Hash] parsed JSON response from the server
       # @api public
@@ -431,7 +433,7 @@ module Ashikawa
 
       # Get an index by ID
       #
-      # @param [Integer] id
+      # @param [Fixnum] id
       # @return Index
       # @api public
       # @example Get an Index by its ID
@@ -535,7 +537,7 @@ module Ashikawa
 
       # Send a request for the content with the given key
       #
-      # @param [Integer] document_id The id of the document
+      # @param [Fixnum] document_key The id of the document
       # @param [Hash] opts The options for the request
       # @return [Hash] parsed JSON response from the server
       # @api private
