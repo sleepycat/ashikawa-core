@@ -113,6 +113,7 @@ module Ashikawa
       #
       # @param [String] username
       # @param [String] password
+      # @return [String] Basic Auth info (Base 64 of username:password)
       # @api private
       def authenticate_with(username, password)
         @authentication = @connection.basic_auth(username, password)
