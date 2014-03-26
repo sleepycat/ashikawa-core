@@ -3,10 +3,19 @@ module Ashikawa
   module Core
     # Wrapper around the status of a collection
     class Status
+      # ArangoDB Status for a new born collection
       STATUS_NEW_BORN       = 1
+
+      # ArangoDB Status for a collection that is unloaded
       STATUS_UNLOADED       = 2
+
+      # ArangoDB Status for a collection that is loaded
       STATUS_LOADED         = 3
+
+      # ArangoDB Status for a collection that is being unloaded
       STATUS_BEING_UNLOADED = 4
+
+      # Highest ArangoDB Status that means that the collection is not corrupted
       MAX_UNCORRUPTED       = 5
 
       # Create a wrapper around a given status
