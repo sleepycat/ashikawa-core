@@ -30,7 +30,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'equalizer', '~> 0.0.8'
 
   # Development Dependencies
-  gem.add_development_dependency 'rake', '~> 10.2.0'
+  gem.add_development_dependency 'rake', '~> 10.2.2'
   gem.add_development_dependency 'rspec', '~> 2.99.0.beta2'
   gem.add_development_dependency 'rspec-its', '~> 1.0.0'
   gem.add_development_dependency 'codeclimate-test-reporter', '~> 0.3.0'
@@ -38,7 +38,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'inch', '~> 0.3.3'
   gem.add_development_dependency 'reek', '~> 1.3.7'
   gem.add_development_dependency 'rubocop', '~> 0.19.1'
-  gem.add_development_dependency 'mutant', '~> 0.5.7'
+  gem.add_development_dependency 'mutant', '~> 0.5.9'
   gem.add_development_dependency 'mutant-rspec', '~> 0.5.3'
   gem.add_development_dependency 'pry', '~> 0.9.12.6'
   gem.add_development_dependency 'guard', '~> 2.6.0'
