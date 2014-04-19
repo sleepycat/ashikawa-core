@@ -16,7 +16,7 @@ describe 'Queries' do
       collection.create_document({ 'name' => 'Jeffrey Lebowski', 'bowling' => false })
 
       names = database.query.execute(query, options).map { |person| person['name'] }
-      expect(names).to     include 'Jeff Lebowski'
+      expect(names).to include 'Jeff Lebowski'
       expect(names).not_to include 'Jeffrey Lebowski'
     end
 
