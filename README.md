@@ -86,4 +86,5 @@ If you want to contribute to the project, see CONTRIBUTING.md for details. It co
 * Ettore Berardi ([@ettomatic](https://github.com/ettomatic)): Contributor
 * Samuel Richardson ([@Rodeoclash](https://github.com/Rodeoclash)): Contributor
 * Nikita Vasiliev ([@sharpyfox](https://github.com/sharpyfox)): Contributor
-* Dirk Breuer ([@railsbros-dirk](https://github.com/railsbros-dirk))): Contributor
+* Dirk Breuer ([@railsbros-dirk](https://github.com/railsbros-dirk)): Contributor
+* Mike Williamson ([@sleepycat](https://github.com/sleepycat)): Contributor
