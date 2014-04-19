@@ -1,10 +1,10 @@
 AllCops:
-  Includes:
+  Include:
     - '../**/*.rake'
     - 'Gemfile'
     - 'Guardfile'
     - 'Rakefile'
-  Excludes:
+  Exclude:
     - !ruby/regexp /spec\/setup/
 
 # Avoid parameter lists longer than five parameters.
