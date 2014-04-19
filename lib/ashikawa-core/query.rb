@@ -149,6 +149,11 @@ module Ashikawa
       # @example Send an AQL query to the database
       #   query = Ashikawa::Core::Query.new(collection)
       #   query.execute('FOR u IN users LIMIT 2') # => #<Cursor id=33>
+      # @example Usage of bind variables
+      #    db = Ashikawa::Core::Database.new(){|conf| conf.url="http://127.0.0.1:8529"}
+      #    query = 'FOR t IN TRAVERSAL(imdb_vertices, imdb_edges, "imdb_vertices/759", "outbound", {maxDepth: 2})' +
+      #     'FILTER t.vertex.genre == @foo RETURN t'
+      #    db.query.execute(query, bindVars: {'foo' => 'Comedy'}).to_a
       def execute(query, options = {})
         wrapped_request('cursor', :post, options.merge({ query: query }))
       end
