@@ -37,7 +37,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'yard', '~> 0.8.7.4'
   gem.add_development_dependency 'inch', '~> 0.3.3'
   gem.add_development_dependency 'reek', '~> 1.3.7'
-  gem.add_development_dependency 'rubocop', '~> 0.19.1'
   gem.add_development_dependency 'mutant', '~> 0.5.9'
   gem.add_development_dependency 'mutant-rspec', '~> 0.5.3'
   gem.add_development_dependency 'pry', '~> 0.9.12.6'

@@ -1,11 +1,9 @@
-#!/usr/bin/env rake
 # -*- encoding : utf-8 -*-
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 require 'yard/rake/yardoc_task'
 require 'inch/rake'
 require 'reek/rake/task'
-require 'rubocop/rake_task'
 
 desc 'Run all specs'
 task spec: ['spec:unit', 'spec:acceptance']
@@ -34,11 +32,6 @@ namespace :metrics do
     t.config_files = 'config/reek.yml'
   end
 
-  Rubocop::RakeTask.new do |task|
-    task.options = %w(--config config/rubocop.yml)
-    task.fail_on_error = true
-  end
-
   desc 'Run mutant to check for mutation coverage'
   task :mutant do
     require 'mutant'
@@ -62,4 +55,4 @@ task :console do
 end
 
 task default: :spec
-task ci: ['spec', 'metrics:reek', 'metrics:rubocop']
+task ci: ['spec', 'metrics:reek']
