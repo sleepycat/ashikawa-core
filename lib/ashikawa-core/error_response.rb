@@ -60,7 +60,7 @@ module Ashikawa
       # @return nil
       # @api private
       def bad_syntax
-        raise BadSyntax
+        raise BadSyntax, error
       end
 
       # Raise an Authentication Failed Error
