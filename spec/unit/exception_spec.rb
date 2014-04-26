@@ -21,7 +21,11 @@ describe Ashikawa::Core::ClientError do
 end
 
 describe Ashikawa::Core::BadSyntax do
-  its(:to_s) { should include 'syntax' }
+  let(:error_message) { 'foo' }
+  let(:bad_syntax) { Ashikawa::Core::BadSyntax.new(error_message) }
+  it 'accepts an error message to be included in to_s' do
+    expect(bad_syntax.to_s).to include error_message
+  end
 end
 
 describe Ashikawa::Core::AuthenticationFailed do

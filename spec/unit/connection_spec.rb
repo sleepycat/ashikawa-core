@@ -96,7 +96,7 @@ describe Ashikawa::Core::Connection do
 
     it 'should throw its own exception when doing a bad request' do
       request_stub.get('/_api/bad/request') do
-        [400, response_headers, '']
+        [400, response_headers, '{}']
       end
 
       expect do
