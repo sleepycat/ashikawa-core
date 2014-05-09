@@ -70,6 +70,17 @@ module Ashikawa
         @connection.send_request_without_database_suffix('database', post: { name: @connection.database_name })
       end
 
+      # Drop the database
+      #
+      # @example Drop a new database with the name 'ashikawa'
+      #   database = Ashikawa::Core::Database.new do |config|
+      #     config.url = 'http://localhost:8529/_db/ashikawa'
+      #   end
+      #   database.drop
+      def drop
+        @connection.send_request_without_database_suffix("database/#{name}", delete: {})
+      end
+
       # The name of the database
       #
       # @return [String]

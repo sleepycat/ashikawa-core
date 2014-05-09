@@ -66,6 +66,15 @@ describe Ashikawa::Core::Database do
 
         it 'should return an error message if the database name is already taken'
       end
+
+      describe 'drop' do
+        it 'should be able to drop itself' do
+          expect(connection).to receive(:send_request_without_database_suffix)
+            .with('database/ashikawa', delete: {})
+
+          subject.drop
+        end
+      end
     end
 
     it 'should fetch all available non-system collections' do
