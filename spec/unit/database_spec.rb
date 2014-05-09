@@ -111,7 +111,7 @@ describe Ashikawa::Core::Database do
       collection = double('Collection')
       allow(subject).to receive(:collections)
         .and_return([collection])
-      expect(collection).to receive(:truncate!)
+      expect(collection).to receive(:truncate)
 
       subject.truncate
     end
