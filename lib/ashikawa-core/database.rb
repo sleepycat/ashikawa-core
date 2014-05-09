@@ -59,6 +59,64 @@ module Ashikawa
         @connection = configuration.connection
       end
 
+      # Create the database
+      #
+      # @example Create a new database with the name 'ashikawa'
+      #   database = Ashikawa::Core::Database.new do |config|
+      #     config.url = 'http://localhost:8529/_db/ashikawa'
+      #   end
+      #   database.create
+      def create
+        @connection.send_request_without_database_suffix('database', post: { name: @connection.database_name })
+      end
+
+      # Drop the database
+      #
+      # @example Drop a new database with the name 'ashikawa'
+      #   database = Ashikawa::Core::Database.new do |config|
+      #     config.url = 'http://localhost:8529/_db/ashikawa'
+      #   end
+      #   database.drop
+      def drop
+        @connection.send_request_without_database_suffix("database/#{name}", delete: {})
+      end
+
+      # Truncate all collections of the database
+      #
+      # @example Truncate all collections of the database
+      #   database = Ashikawa::Core::Database.new do |config|
+      #     config.url = 'http://localhost:8529'
+      #   end
+      #   database.truncate
+      def truncate
+        collections.each { |collection| collection.truncate! }
+      end
+
+      # The name of the database
+      #
+      # @return [String]
+      # @api public
+      # @example Get the name of the databasse
+      #   database = Ashikawa::Core::Database.new do |config|
+      #     config.url = 'http://localhost:8529/_api/ashikawa'
+      #   end
+      #   database.name # => 'ashikawa'
+      def name
+        @connection.database_name
+      end
+
+      # Get a list of all databases
+      #
+      # @api public
+      # @example Get a list of all databases
+      #   database = Ashikawa::Core::Database.new do |config|
+      #     config.url = 'http://localhost:8529'
+      #   end
+      #   database.all_databases # => ['_system']
+      def all_databases
+        send_request('database')['result']
+      end
+
       # Returns a list of all non-system collections defined in the database
       #
       # @return [Array<Collection>]

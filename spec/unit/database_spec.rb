@@ -41,6 +41,48 @@ describe Ashikawa::Core::Database do
       subject.query
     end
 
+    let(:database_list) { double('DatabaseList') }
+
+    it 'should list all databases' do
+      expect(connection).to receive(:send_request)
+        .with('database')
+        .and_return({ 'result' => database_list, 'error' => false, 'code' => 200 })
+
+      expect(subject.all_databases).to be database_list
+    end
+
+    context "using a database called 'ashikawa'" do
+      before { allow(connection).to receive(:database_name).and_return('ashikawa') }
+
+      its(:name) { should eq 'ashikawa' }
+
+      describe 'create' do
+        it 'should be able to create itself' do
+          expect(connection).to receive(:send_request_without_database_suffix)
+            .with('database', post: { name: 'ashikawa' })
+
+          subject.create
+        end
+
+        it 'should return an error message if the database name is already taken' do
+          expect(connection).to receive(:send_request_without_database_suffix)
+            .with('database', post: { name: 'ashikawa' })
+            .and_raise(Ashikawa::Core::ClientError, '1207: duplicate name')
+
+          expect { subject.create }.to raise_error(Ashikawa::Core::ClientError, '1207: duplicate name')
+        end
+      end
+
+      describe 'drop' do
+        it 'should be able to drop itself' do
+          expect(connection).to receive(:send_request_without_database_suffix)
+            .with('database/ashikawa', delete: {})
+
+          subject.drop
+        end
+      end
+    end
+
     it 'should fetch all available non-system collections' do
       expect(connection).to receive(:send_request)
         .with('collection')
@@ -63,6 +105,15 @@ describe Ashikawa::Core::Database do
         .exactly(5).times
 
       expect(subject.system_collections.length).to eq(5)
+    end
+
+    it 'should truncate all documents in all collections' do
+      collection = double('Collection')
+      allow(subject).to receive(:collections)
+        .and_return([collection])
+      expect(collection).to receive(:truncate!)
+
+      subject.truncate
     end
 
     it 'should create a non volatile collection by default' do

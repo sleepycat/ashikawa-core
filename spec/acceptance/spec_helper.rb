@@ -14,17 +14,32 @@ end
 
 require 'ashikawa-core'
 
-port = ENV.fetch('ARANGODB_PORT', 8529)
-username = ENV.fetch('ARANGODB_USERNAME', 'root')
-password = ENV.fetch('ARANGODB_PASSWORD', '')
-authentification_enabled = ENV['ARANGODB_DISABLE_AUTHENTIFICATION'] == 'false'
+PORT = ENV.fetch('ARANGODB_PORT', 8529)
+USERNAME = ENV.fetch('ARANGODB_USERNAME', 'root')
+PASSWORD = ENV.fetch('ARANGODB_PASSWORD', '')
+AUTHENTIFICATION_ENABLED = ENV['ARANGODB_DISABLE_AUTHENTIFICATION'] == 'false'
 
-# The database instance to use for all specs
+# System Database for general use in specs
 DATABASE = Ashikawa::Core::Database.new do |config|
-  config.url = "http://localhost:#{port}"
+  config.url = "http://localhost:#{PORT}"
 
-  if authentification_enabled
-    config.username = username
-    config.password = password
+  if AUTHENTIFICATION_ENABLED
+    config.username = USERNAME
+    config.password = PASSWORD
+  end
+end
+
+def database_with_random_name
+  # This results in a database that has a valid name according to:
+  # https://www.arangodb.org/manuals/2/NamingConventions.html#DatabaseNames
+  name = "a#{rand.to_s[2, 10]}"
+
+  Ashikawa::Core::Database.new do |config|
+    config.url = "http://localhost:#{PORT}/_db/#{name}"
+
+    if AUTHENTIFICATION_ENABLED
+      config.username = USERNAME
+      config.password = PASSWORD
+    end
   end
 end

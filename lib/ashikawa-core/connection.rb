@@ -77,6 +77,22 @@ module Ashikawa
         end
       end
 
+      # Get the name of the current database
+      #
+      # @api public
+      # @example Get the name of the database
+      #   connection = Connection.new('http://localhost:8529/_db/ashikawa')
+      #   connection.database_name # => 'ashikawa'
+      def database_name
+        database_regexp = %r{_db/(?<db_name>\w+)/_api}
+        result = @connection.url_prefix.to_s.match(database_regexp)
+        if result.nil?
+          '_system'
+        else
+          result['db_name']
+        end
+      end
+
       # Sends a request to a given path returning the parsed result
       # @note prepends the api_string automatically
       #
@@ -94,6 +110,21 @@ module Ashikawa
         result.body
       rescue Faraday::Error::ParsingError
         raise Ashikawa::Core::JsonError
+      end
+
+      # Sends a request to a given path without the database suffix returning the parsed result
+      # @note prepends the api_string automatically
+      #
+      # @param [string] path the path you wish to send a request to.
+      # @option params [hash] :post post data in case you want to send a post request.
+      # @return [hash] parsed json response from the server
+      # @api public
+      # @example get request
+      #   connection.send_request('/collection/new_collection')
+      # @example post request
+      #   connection.send_request('/collection/new_collection', :post => { :name => 'new_collection' })
+      def send_request_without_database_suffix(path, params = {})
+        send_request(uri_without_database_suffix(path), params)
       end
 
       # Checks if authentication for this Connection is active or not
@@ -120,6 +151,17 @@ module Ashikawa
       end
 
       private
+
+      # Build an URI without the database suffix
+      #
+      # @param [String] additional_path The path you want to access
+      # @return [URI] The resulting URI
+      # @api private
+      def uri_without_database_suffix(additional_path = '')
+        uri = @connection.url_prefix
+        base_uri = [uri.scheme, '://', uri.host, ':', uri.port].join
+        [base_uri, '_api', additional_path].join('/')
+      end
 
       # Return the HTTP Verb for the given parameters
       #
