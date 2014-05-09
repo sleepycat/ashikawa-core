@@ -9,7 +9,7 @@ module Ashikawa
       #
       # @return RuntimeError
       # @api private
-      def initialize message = 'Status 400: The syntax of the request was bad'
+      def initialize(message = 'Status 400: The syntax of the request was bad')
         @message = message
         super(400)
       end

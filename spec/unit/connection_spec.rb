@@ -42,7 +42,7 @@ describe Ashikawa::Core::Connection do
   end
 
   it 'should send a delete request' do
-    request_stub.delete('/_api/my/path') do |request|
+    request_stub.delete('/_api/my/path') do |_|
       [200, response_headers, JSON.generate({ 'name' => 'dude' })]
     end
 
@@ -95,7 +95,7 @@ describe Ashikawa::Core::Connection do
     it 'should send the authentication data with every GET request' do
       skip 'Find out how to check for basic auth via Faraday Stubs'
 
-      request_stub.get('/_api/my/path') do |request|
+      request_stub.get('/_api/my/path') do |_|
         [200, response_headers, JSON.generate({ 'name' => 'dude' })]
       end
 

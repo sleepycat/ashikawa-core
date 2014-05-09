@@ -110,7 +110,7 @@ module Ashikawa
       # @return [String] The formatted error message
       # @api private
       def error
-        "#{@body['errorNum']}: #{@body["errorMessage"]}"
+        "#{@body['errorNum']}: #{@body['errorMessage']}"
       end
     end
 
