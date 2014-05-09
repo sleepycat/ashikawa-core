@@ -51,15 +51,20 @@ describe Ashikawa::Core::Database do
       expect(subject.all_databases).to be database_list
     end
 
-    it 'should be able to create itself' do
-      allow(connection).to receive(:database_name).and_return('ashikawa')
-      expect(connection).to receive(:send_request_without_database_suffix)
-        .with('database', post: { name: 'ashikawa' })
+    context "using a database called 'ashikawa'" do
+      before { allow(connection).to receive(:database_name).and_return('ashikawa') }
 
-      subject.create
+      describe 'create' do
+        it 'should be able to create itself' do
+          expect(connection).to receive(:send_request_without_database_suffix)
+            .with('database', post: { name: 'ashikawa' })
+
+          subject.create
+        end
+
+        it 'should return an error message if the database name is already taken'
+      end
     end
-
-    it 'should return an error message if the database name is already taken'
 
     it 'should fetch all available non-system collections' do
       expect(connection).to receive(:send_request)
