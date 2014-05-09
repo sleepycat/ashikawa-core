@@ -201,7 +201,7 @@ describe Ashikawa::Core::Query do
           .with('cursor', post: { 'bindVars' => { 'foo' => 'bar' }, 'query' => query })
           .and_return(response)
 
-        subject.execute(query, bindVars: { 'foo' => 'bar' })
+        subject.execute(query, bind_vars: { 'foo' => 'bar' })
       end
 
       it 'should return true when asked if a valid query is valid' do

@@ -18,7 +18,7 @@ module Ashikawa
         'simple/near'          => [:latitude, :longitude, :distance, :skip, :limit, :geo, :collection],
         'simple/within'        => [:latitude, :longitude, :radius, :distance, :skip, :limit, :geo, :collection],
         'simple/range'         => [:attribute, :left, :right, :closed, :limit, :skip, :collection],
-        'cursor'               => [:query, :count, :batch_size, :collection, :bindVars],
+        'cursor'               => [:query, :count, :batch_size, :collection, :bind_vars],
         'query'                => [:query],
         'simple/first-example' => [:example, :collection]
       }
@@ -153,7 +153,7 @@ module Ashikawa
       #    db = Ashikawa::Core::Database.new(){|conf| conf.url="http://127.0.0.1:8529"}
       #    query = 'FOR t IN TRAVERSAL(imdb_vertices, imdb_edges, "imdb_vertices/759", "outbound", {maxDepth: 2})' +
       #     'FILTER t.vertex.genre == @foo RETURN t'
-      #    db.query.execute(query, bindVars: {'foo' => 'Comedy'}).to_a
+      #    db.query.execute(query, bind_vars: {'foo' => 'Comedy'}).to_a
       def execute(query, options = {})
         wrapped_request('cursor', :post, options.merge({ query: query }))
       end
