@@ -89,7 +89,7 @@ module Ashikawa
       #   end
       #   database.truncate
       def truncate
-        collections.each { |collection| collection.truncate! }
+        collections.each { |collection| collection.truncate }
       end
 
       # The name of the database

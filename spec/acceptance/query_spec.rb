@@ -31,7 +31,7 @@ describe 'Queries' do
 
   describe 'simple query via collection object' do
     subject { collection }
-    before(:each) { subject.truncate! }
+    before(:each) { subject.truncate }
 
     it 'should return all documents of a collection' do
       subject.create_document({ name: 'testname', age: 27 })

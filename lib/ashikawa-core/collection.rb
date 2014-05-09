@@ -339,8 +339,8 @@ module Ashikawa
       #     'code' => 200
       #   }
       #   collection = Ashikawa::Core::Collection.new(database, raw_collection)
-      #   collection.truncate!
-      def truncate!
+      #   collection.truncate
+      def truncate
         send_command_to_server(:truncate)
       end
 

@@ -94,7 +94,7 @@ describe Ashikawa::Core::Collection do
       expect(database).to receive(:send_request)
         .with('collection/60768679/truncate', put: {})
 
-      subject.truncate!
+      subject.truncate
     end
 
     it 'should change its name' do

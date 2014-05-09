@@ -113,7 +113,7 @@ describe 'Basics' do
       empty_collection.create_document(name: 'testname', age: 27)
       empty_collection.create_document(name: 'anderer name', age: 28)
       expect(empty_collection.length).to eq(2)
-      empty_collection.truncate!
+      empty_collection.truncate
       expect(empty_collection.length).to eq(0)
     end
 
@@ -161,7 +161,7 @@ describe 'Basics' do
 
     it 'should be possible to get a single attribute by AQL query' do
       collection = subject['documenttests']
-      collection.truncate!
+      collection.truncate
       collection.create_document(name: 'The Dude', bowling: true)
 
       expect(subject.query.execute('FOR doc IN documenttests RETURN doc.name').to_a.first). to eq 'The Dude'
