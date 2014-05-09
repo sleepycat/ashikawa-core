@@ -37,6 +37,9 @@ LineLength:
   Enabled: true
   Max: 120
 
+DotPosition:
+  EnforcedStyle: 'leading'
+
 SpaceInsideHashLiteralBraces:
   Enabled: true
 
