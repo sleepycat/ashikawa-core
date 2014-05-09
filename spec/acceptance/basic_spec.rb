@@ -15,6 +15,14 @@ describe 'Basics' do
       subject['new_name'].delete
     end
 
+    it 'should have one more database if a database with random name is created' do
+      skip 'Not implemented'
+
+      expect {
+        database_with_random_name.create
+      }.to change { DATABASE.all_databases.length }.by(1)
+    end
+
     it 'should create and delete collections' do
       subject.collections.each { |collection| collection.delete }
       subject['collection_1']
