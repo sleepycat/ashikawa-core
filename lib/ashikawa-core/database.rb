@@ -70,6 +70,19 @@ module Ashikawa
         @connection.send_request_without_database_suffix('database', post: { name: @connection.database_name })
       end
 
+      # The name of the database
+      #
+      # @return [String]
+      # @api public
+      # @example Get the name of the databasse
+      #   database = Ashikawa::Core::Database.new do |config|
+      #     config.url = 'http://localhost:8529/_api/ashikawa'
+      #   end
+      #   database.name # => 'ashikawa'
+      def name
+        @connection.database_name
+      end
+
       # Get a list of all databases
       #
       # @api public

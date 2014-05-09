@@ -54,6 +54,8 @@ describe Ashikawa::Core::Database do
     context "using a database called 'ashikawa'" do
       before { allow(connection).to receive(:database_name).and_return('ashikawa') }
 
+      its(:name) { should eq 'ashikawa' }
+
       describe 'create' do
         it 'should be able to create itself' do
           expect(connection).to receive(:send_request_without_database_suffix)
