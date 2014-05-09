@@ -59,6 +59,7 @@ TooManyMethods:
   enabled: true
   exclude:
   - Ashikawa::Core::Collection
+  - Ashikawa::Core::Database
   max_methods: 15
 TooManyStatements:
   enabled: true

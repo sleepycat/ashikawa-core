@@ -101,6 +101,15 @@ describe Ashikawa::Core::Database do
       expect(subject.system_collections.length).to eq(5)
     end
 
+    it 'should truncate all documents in all collections' do
+      collection = double('Collection')
+      allow(subject).to receive(:collections)
+        .and_return([collection])
+      expect(collection).to receive(:truncate!)
+
+      subject.truncate
+    end
+
     it 'should create a non volatile collection by default' do
       expect(connection).to receive(:send_request)
         .with('collection', post: { name: 'volatile_collection' })

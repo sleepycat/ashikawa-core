@@ -81,6 +81,17 @@ module Ashikawa
         @connection.send_request_without_database_suffix("database/#{name}", delete: {})
       end
 
+      # Truncate all collections of the database
+      #
+      # @example Truncate all collections of the database
+      #   database = Ashikawa::Core::Database.new do |config|
+      #     config.url = 'http://localhost:8529'
+      #   end
+      #   database.truncate
+      def truncate
+        collections.each { |collection| collection.truncate! }
+      end
+
       # The name of the database
       #
       # @return [String]
