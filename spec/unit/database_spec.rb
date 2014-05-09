@@ -64,7 +64,13 @@ describe Ashikawa::Core::Database do
           subject.create
         end
 
-        it 'should return an error message if the database name is already taken'
+        it 'should return an error message if the database name is already taken' do
+          expect(connection).to receive(:send_request_without_database_suffix)
+            .with('database', post: { name: 'ashikawa' })
+            .and_raise(Ashikawa::Core::ClientError, '1207: duplicate name')
+
+          expect { subject.create }.to raise_error(Ashikawa::Core::ClientError, '1207: duplicate name')
+        end
       end
 
       describe 'drop' do
