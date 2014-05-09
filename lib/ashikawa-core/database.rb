@@ -59,6 +59,18 @@ module Ashikawa
         @connection = configuration.connection
       end
 
+      # Get a list of all databases
+      #
+      # @api public
+      # @example Get a list of all databases
+      #   database = Ashikawa::Core::Database.new do |config|
+      #     config.url = 'http://localhost:8529'
+      #   end
+      #   database.all_databases # => ['_system']
+      def all_databases
+        send_request('database')['result']
+      end
+
       # Returns a list of all non-system collections defined in the database
       #
       # @return [Array<Collection>]

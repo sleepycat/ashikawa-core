@@ -41,6 +41,16 @@ describe Ashikawa::Core::Database do
       subject.query
     end
 
+    let(:database_list) { double('DatabaseList') }
+
+    it 'should list all databases' do
+      expect(connection).to receive(:send_request)
+        .with('database')
+        .and_return({ 'result' => database_list, 'error' => false, 'code' => 200 })
+
+      expect(subject.all_databases).to be database_list
+    end
+
     it 'should fetch all available non-system collections' do
       expect(connection).to receive(:send_request)
         .with('collection')
