@@ -50,6 +50,38 @@ describe Ashikawa::Core::Connection do
     request_stub.verify_stubbed_calls
   end
 
+  context 'with database suffix' do
+    let(:database_name) { 'ashikawa' }
+    subject do
+      Ashikawa::Core::Connection.new("#{ARANGO_HOST}/_db/#{database_name}", adapter: [:test, request_stub])
+    end
+
+    its(:database_name) { should eq database_name }
+
+    let(:options) { double('Options') }
+    it 'should be able to send a request without database suffix' do
+      expect(subject).to receive(:send_request)
+        .with("#{ARANGO_HOST}/_api/some_endpoint", options)
+
+      subject.send_request_without_database_suffix('some_endpoint', options)
+    end
+  end
+
+  context 'without database suffix' do
+    subject do
+      Ashikawa::Core::Connection.new(ARANGO_HOST, adapter: [:test, request_stub])
+    end
+
+    its(:database_name) { should eq '_system' }
+    let(:options) { double('Options') }
+    it 'should be able to send a request without database suffix' do
+      expect(subject).to receive(:send_request)
+        .with("#{ARANGO_HOST}/_api/some_endpoint", options)
+
+      subject.send_request_without_database_suffix('some_endpoint', options)
+    end
+  end
+
   describe 'authentication' do
     it 'should have authentication turned off by default' do
       expect(subject.authentication?).to be_falsey
