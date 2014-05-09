@@ -9,7 +9,7 @@
 | Gem Version     | [![Gem Version](http://img.shields.io/gem/v/ashikawa-core.svg)](http://rubygems.org/gems/ashikawa-core)
 | Dependencies    | [![Dependency Status](http://img.shields.io/gemnasium/triAGENS/ashikawa-core.svg)](https://gemnasium.com/triAGENS/ashikawa-core)
 
-Ashikawa Core is a Wrapper around the ArangoDB Rest API. It provides low level access and is intended to be used in ArangoDB ODMs and other projects related to the database. It is always working with the stable version of ArangoDB, this is currently the preview of version **2.0**.
+Ashikawa Core is a Wrapper around the ArangoDB Rest API. It provides low level access and is intended to be used in ArangoDB ODMs and other projects related to the database. It is always working with the stable version of ArangoDB, this is currently version **2.0**.
 
 All tests run on Travis CI for the following versions of Ruby:
 
@@ -26,7 +26,7 @@ gem install ashikawa-core
 or, when using bundler:
 
 ```ruby
-gem "ashikawa-core", "~> 0.10"
+gem "ashikawa-core", "~> 0.11"
 ```
 
 ## How to Setup a Connection?

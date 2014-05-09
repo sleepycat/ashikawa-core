@@ -1,3 +1,25 @@
+# Version 0.11
+
+**Codename: R3C0NF1GUR3D**
+
+* Only supports ArangoDB 2.0 officially from now on.
+* **Breaking Change:** Collection#truncate! is now Collection#truncate
+* New feature: Create and Drop Databases – and get their name and truncate all collections at once #103 
+* New feature: Allow to pass `bind_vars` to the execution of AQL #107 #113 
+* Dependency Update: Faraday and Faraday Middleware #111 
+* Documentation Improvements #95 
+* README improvements #100 #102 #106 
+* Development Setup Changes:
+    * Removed Devtools entirely #93 
+    * Updated to RSpec 3.0 #94 #112 
+    * Use HoundCI as our code style checker #105 
+    * Use Inch for documentation checking #93 
+    * Bring all development dependencies up to date #111 
+* New Contributors
+    * Mike Williamson (@sleepycat)
+
+*Codename in honor of Daft Punk.*
+
 # Version 0.10
 
 **Codename: Sepia Tone Laboratory**
