@@ -16,8 +16,6 @@ describe 'Basics' do
     end
 
     it 'should have one more database if a database with random name is created' do
-      skip 'Not implemented'
-
       expect {
         database_with_random_name.create
       }.to change { DATABASE.all_databases.length }.by(1)

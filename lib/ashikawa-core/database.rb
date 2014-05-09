@@ -59,6 +59,17 @@ module Ashikawa
         @connection = configuration.connection
       end
 
+      # Create the database
+      #
+      # @example Create a new database with the name 'ashikawa'
+      #   database = Ashikawa::Core::Database.new do |config|
+      #     config.url = 'http://localhost:8529/_db/ashikawa'
+      #   end
+      #   database.create
+      def create
+        @connection.send_request_without_database_suffix('database', post: { name: @connection.database_name })
+      end
+
       # Get a list of all databases
       #
       # @api public
