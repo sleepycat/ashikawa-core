@@ -1,14 +1,12 @@
 language: ruby
-before_install:
-  - gem install bundler -v '= 1.5.1' # http://changelog.travis-ci.com/post/71633370723/mri-ruby-2-1-0-and-jruby-1-7-9-available
 before_script:
   - ./spec/setup/arangodb.sh
 rvm:
   - 1.9.3
   - 2.0.0
-  - 2.1.0
-  - jruby-19mode
-  - rbx-2.2.5
+  - 2.1.2
+  - jruby-1.7.12
+  - rbx-2.2.6
 env:
   - ARANGODB_DISABLE_AUTHENTIFICATION=false VERSION=2.0
 matrix:
