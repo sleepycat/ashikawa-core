@@ -114,6 +114,6 @@ module Ashikawa
       end
     end
 
-    Faraday.register_middleware :response, error_response: -> { ErrorResponse }
+    Faraday::Response.register_middleware error_response: -> { ErrorResponse }
   end
 end
