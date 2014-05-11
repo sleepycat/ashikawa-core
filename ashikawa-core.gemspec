@@ -17,9 +17,9 @@ Gem::Specification.new do |gem|
 
   gem.rubyforge_project = 'ashikawa-core'
 
-  gem.files         = `git ls-files`.split('\n')
-  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split('\n')
-  gem.executables   = `git ls-files -- bin/*`.split('\n').map{ |f| File.basename(f) }
+  gem.files         = `git ls-files`.split("\n")
+  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.require_paths = ['lib']
 
   # Runtime Dependencies
