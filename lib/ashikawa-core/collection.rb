@@ -421,6 +421,7 @@ module Ashikawa
       #   people = database['people']
       #   people.add_index(:hash, :on => [:name, :profession])
       def add_index(type, options)
+        options[:on] = [options[:on]].flatten
         unique = options.fetch(:unique, false)
         response = send_request("index?collection=#{@id}", post: {
           'type' => type.to_s,
