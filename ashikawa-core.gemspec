@@ -25,23 +25,23 @@ Gem::Specification.new do |gem|
   # Runtime Dependencies
   gem.add_dependency 'faraday', '~> 0.9.0'
   gem.add_dependency 'faraday_middleware', '~> 0.9.1'
-  gem.add_dependency 'json', '~> 1.8.1'
   gem.add_dependency 'null_logger', '~> 0.0.1'
   gem.add_dependency 'equalizer', '~> 0.0.8'
 
   # Development Dependencies
-  gem.add_development_dependency 'rake', '~> 10.3.1'
+  gem.add_development_dependency 'rake', '~> 10.3.2'
+  gem.add_development_dependency 'json', '~> 1.8.1'
   gem.add_development_dependency 'rspec', '~> 3.0.0.beta2'
   gem.add_development_dependency 'rspec-its', '~> 1.0.1'
   gem.add_development_dependency 'codeclimate-test-reporter', '~> 0.3.0'
   gem.add_development_dependency 'yard', '~> 0.8.7.4'
-  gem.add_development_dependency 'inch', '~> 0.4.5'
+  gem.add_development_dependency 'inch', '~> 0.4.6'
   gem.add_development_dependency 'reek', '~> 1.3.7'
   gem.add_development_dependency 'mutant', '~> 0.5.12'
   gem.add_development_dependency 'mutant-rspec', '~> 0.5.3'
   gem.add_development_dependency 'pry', '~> 0.9.12.6'
   gem.add_development_dependency 'guard', '~> 2.6.1'
-  # gem.add_development_dependency 'guard-rspec', '~> 4.2.8'
+  gem.add_development_dependency 'guard-rspec', '~> 4.2.9'
   gem.add_development_dependency 'guard-bundler', '~> 2.0.0'
 
   # Rubinius specific dependencies
@@ -49,6 +49,4 @@ Gem::Specification.new do |gem|
     gem.add_dependency 'rubysl-base64'
     gem.add_dependency 'rubysl-singleton'
   end
-
-  # JRuby specific dependencies
 end
