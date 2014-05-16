@@ -72,9 +72,10 @@ module Ashikawa
       # @example Create a new Connection
       #  connection = Connection.new('http://localhost:8529', '_system')
       def initialize(api_string, database_name, options = {})
+        @api_string = api_string
+        @database_name = database_name
         logger  = options.fetch(:logger) { NullLogger.instance }
         adapter = options.fetch(:adapter) { Faraday.default_adapter }
-        @database_name = database_name
 
         @connection = Faraday.new("#{api_string}/_db/#{database_name}/_api") do |connection|
           connection.request :json
@@ -152,9 +153,7 @@ module Ashikawa
       # @return [URI] The resulting URI
       # @api private
       def uri_without_database_suffix(additional_path = '')
-        uri = @connection.url_prefix
-        base_uri = [uri.scheme, '://', uri.host, ':', uri.port].join
-        [base_uri, '_api', additional_path].join('/')
+        "#{@api_string}/_api/#{additional_path}"
       end
 
       # Return the HTTP Verb for the given parameters
