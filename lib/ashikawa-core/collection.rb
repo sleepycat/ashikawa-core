@@ -420,7 +420,11 @@ module Ashikawa
       # @example Add a hash-index to the fields :name and :profession of a collection
       #   people = database['people']
       #   people.add_index(:hash, :on => [:name, :profession])
+      # @example Add a hash-index to the field :email of a collection
+      #   user = database['user']
+      #   user.add_index(:hash, :on => :email)
       def add_index(type, options)
+        options[:on] = [options[:on]].flatten
         unique = options.fetch(:unique, false)
         response = send_request("index?collection=#{@id}", post: {
           'type' => type.to_s,

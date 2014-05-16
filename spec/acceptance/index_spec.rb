@@ -6,6 +6,11 @@ describe 'Indices' do
   subject { database['documenttest'] }
   let(:index) { subject.add_index(:skiplist, on: [:identifier]) }
 
+  it 'should accept a single attribute' do
+    single_attr_index = subject.add_index(:hash, on: :identifier)
+    expect(single_attr_index.on).to eq [:identifier]
+  end
+
   it 'should be possible to set indices' do
     index.delete
 
