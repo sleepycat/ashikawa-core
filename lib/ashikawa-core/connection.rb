@@ -21,7 +21,7 @@ module Ashikawa
       # @return [String]
       # @api public
       # @example Get the host part of the connection
-      #   connection = Connection.new('http://localhost:8529')
+      #   connection = Connection.new('http://localhost:8529', '_system')
       #   connection.host # => 'localhost'
       def_delegator :@connection, :host
 
@@ -31,7 +31,7 @@ module Ashikawa
       # @return [String]
       # @api public
       # @example Get the scheme of the connection
-      #   connection = Connection.new('http://localhost:8529')
+      #   connection = Connection.new('http://localhost:8529', '_system')
       #   connection.scheme # => 'http'
       def_delegator :@connection, :scheme
 
@@ -41,7 +41,7 @@ module Ashikawa
       # @return [Fixnum]
       # @api public
       # @example Get the port of the connection
-      #   connection = Connection.new('http://localhost:8529')
+      #   connection = Connection.new('http://localhost:8529', '_system')
       #   connection.port # => 8529
       def_delegator :@connection, :port
 
@@ -50,23 +50,33 @@ module Ashikawa
       # @return [Faraday]
       # @api public
       # @example Set additional response middleware
-      #   connection = Connection.new('http://localhost:8529')
+      #   connection = Connection.new('http://localhost:8529', '_system')
       #   connection.connection.response :caching
       attr_reader :connection
+
+      # The name of the database you want to talk with
+      # @return [String]
+      # @api public
+      # @example Get the name of the database
+      #   connection = Connection.new('http://localhost:8529', 'ashikawa')
+      #   connection.database_name # => 'ashikawa'
+      attr_reader :database_name
 
       # Initialize a Connection with a given API String
       #
       # @param [String] api_string scheme, hostname and port as a String
+      # @param [String] database_name The name of the database you want to communicate with
       # @option options [Object] adapter The Faraday adapter you want to use. Defaults to Default Adapter
       # @option options [Object] logger The logger you want to use. Defaults to Null Logger.
       # @api public
       # @example Create a new Connection
-      #  connection = Connection.new('http://localhost:8529')
-      def initialize(api_string, options = {})
+      #  connection = Connection.new('http://localhost:8529', '_system')
+      def initialize(api_string, database_name, options = {})
         logger  = options.fetch(:logger) { NullLogger.instance }
         adapter = options.fetch(:adapter) { Faraday.default_adapter }
+        @database_name = database_name
 
-        @connection = Faraday.new("#{api_string}/_api") do |connection|
+        @connection = Faraday.new("#{api_string}/_db/#{database_name}/_api") do |connection|
           connection.request :json
 
           connection.response :logger, logger
@@ -74,22 +84,6 @@ module Ashikawa
           connection.response :json
 
           connection.adapter(*adapter)
-        end
-      end
-
-      # Get the name of the current database
-      #
-      # @api public
-      # @example Get the name of the database
-      #   connection = Connection.new('http://localhost:8529/_db/ashikawa')
-      #   connection.database_name # => 'ashikawa'
-      def database_name
-        database_regexp = %r{_db/(?<db_name>\w+)/_api}
-        result = @connection.url_prefix.to_s.match(database_regexp)
-        if result.nil?
-          '_system'
-        else
-          result['db_name']
         end
       end
 
@@ -132,7 +126,7 @@ module Ashikawa
       # @return [Boolean]
       # @api public
       # @example Is authentication activated for this connection?
-      #   connection = Connection.new('http://localhost:8529')
+      #   connection = Connection.new('http://localhost:8529', '_system')
       #   connection.authentication? #=> false
       #   connection.authenticate_with(:username => 'james', :password => 'bond')
       #   connection.authentication? #=> true

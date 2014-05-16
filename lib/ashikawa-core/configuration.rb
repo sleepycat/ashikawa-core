@@ -35,6 +35,11 @@ module Ashikawa
       # @return String
       attr_accessor :password
 
+      # The name of the database you want to talk with
+      # @api private
+      # @return String
+      attr_writer :database_name
+
       # The Connection object
       # @api private
       # @return Connection
@@ -42,6 +47,13 @@ module Ashikawa
         @connection ||= setup_new_connection
         @connection.authenticate_with(username, password) if username && password
         @connection
+      end
+
+      # The name of the database you want to talk with
+      # @api private
+      # @return String
+      def database_name
+        @database_name ||= '_system'
       end
 
       private
@@ -56,7 +68,7 @@ module Ashikawa
       def setup_new_connection
         raise(ArgumentError, 'Please provide either an url or a connection to setup the database') if url.nil?
 
-        Connection.new(url, connection_options)
+        Connection.new(url, database_name, connection_options)
       end
 
       def connection_options

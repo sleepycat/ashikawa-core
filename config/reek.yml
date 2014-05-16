@@ -45,7 +45,6 @@ NilCheck:
   enabled: true
   exclude:
   - Ashikawa::Core::Configuration#setup_new_connection
-  - Ashikawa::Core::Connection#database_name
 RepeatedConditional:
   enabled: true
   exclude:

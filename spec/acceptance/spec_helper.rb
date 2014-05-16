@@ -30,12 +30,12 @@ DATABASE = Ashikawa::Core::Database.new do |config|
 end
 
 def database_with_random_name
-  # This results in a database that has a valid name according to:
-  # https://www.arangodb.org/manuals/2/NamingConventions.html#DatabaseNames
-  name = "a#{rand.to_s[2, 10]}"
-
   Ashikawa::Core::Database.new do |config|
-    config.url = "http://localhost:#{PORT}/_db/#{name}"
+    config.url = "http://localhost:#{PORT}"
+
+    # This results in a database that has a valid name according to:
+    # https://www.arangodb.org/manuals/2/NamingConventions.html#DatabaseNames
+    config.database_name = "a#{rand.to_s[2, 10]}"
 
     if AUTHENTIFICATION_ENABLED
       config.username = USERNAME

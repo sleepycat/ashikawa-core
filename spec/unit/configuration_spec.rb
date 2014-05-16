@@ -38,7 +38,7 @@ describe Ashikawa::Core::Configuration do
 
     it 'should construct a connection' do
       expect(Ashikawa::Core::Connection).to receive(:new)
-        .with(url, { logger: logger, adapter: adapter })
+        .with(url, '_system', { logger: logger, adapter: adapter })
         .and_return(connection)
       expect(subject.connection).to be connection
     end
@@ -55,7 +55,7 @@ describe Ashikawa::Core::Configuration do
 
     it 'should construct a connection' do
       expect(Ashikawa::Core::Connection).to receive(:new)
-        .with(url, {})
+        .with(url, '_system', {})
         .and_return(connection)
       expect(subject.connection).to be connection
     end
