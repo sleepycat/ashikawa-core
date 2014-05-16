@@ -49,6 +49,4 @@ Gem::Specification.new do |gem|
     gem.add_dependency 'rubysl-base64'
     gem.add_dependency 'rubysl-singleton'
   end
-
-  # JRuby specific dependencies
 end
