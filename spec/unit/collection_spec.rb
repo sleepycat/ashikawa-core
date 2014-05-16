@@ -190,6 +190,18 @@ describe Ashikawa::Core::Collection do
         subject.add_index(:hash, on: [:a, :b], unique: true)
       end
 
+      it 'should accept a single attribute for indexing' do
+        expect(database).to receive(:send_request)
+          .with('index?collection=60768679', post: {
+            'type' => 'hash', 'fields' => %w(a), 'unique' => true
+          })
+          .and_return(index_response)
+        expect(Ashikawa::Core::Index).to receive(:new)
+          .with(subject, index_response)
+
+        subject.add_index(:hash, on: :a, unique: true)
+      end
+
       it 'should get an index by ID' do
         allow(database).to receive(:send_request)
           .with('index/example_1/168054969')
