@@ -119,7 +119,7 @@ module Ashikawa
       # @example post request
       #   connection.send_request('/collection/new_collection', :post => { :name => 'new_collection' })
       def send_request_without_database_suffix(path, params = {})
-        send_request(uri_without_database_suffix(path), params)
+        send_request("#{@api_string}/_api/#{path}", params)
       end
 
       # Checks if authentication for this Connection is active or not
@@ -146,15 +146,6 @@ module Ashikawa
       end
 
       private
-
-      # Build an URI without the database suffix
-      #
-      # @param [String] additional_path The path you want to access
-      # @return [URI] The resulting URI
-      # @api private
-      def uri_without_database_suffix(additional_path = '')
-        "#{@api_string}/_api/#{additional_path}"
-      end
 
       # Return the HTTP Verb for the given parameters
       #
