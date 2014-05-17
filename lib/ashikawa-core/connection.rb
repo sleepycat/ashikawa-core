@@ -21,7 +21,7 @@ module Ashikawa
       # @return [String]
       # @api public
       # @example Get the host part of the connection
-      #   connection = Connection.new('http://localhost:8529')
+      #   connection = Connection.new('http://localhost:8529', '_system')
       #   connection.host # => 'localhost'
       def_delegator :@connection, :host
 
@@ -31,7 +31,7 @@ module Ashikawa
       # @return [String]
       # @api public
       # @example Get the scheme of the connection
-      #   connection = Connection.new('http://localhost:8529')
+      #   connection = Connection.new('http://localhost:8529', '_system')
       #   connection.scheme # => 'http'
       def_delegator :@connection, :scheme
 
@@ -41,7 +41,7 @@ module Ashikawa
       # @return [Fixnum]
       # @api public
       # @example Get the port of the connection
-      #   connection = Connection.new('http://localhost:8529')
+      #   connection = Connection.new('http://localhost:8529', '_system')
       #   connection.port # => 8529
       def_delegator :@connection, :port
 
@@ -50,23 +50,34 @@ module Ashikawa
       # @return [Faraday]
       # @api public
       # @example Set additional response middleware
-      #   connection = Connection.new('http://localhost:8529')
+      #   connection = Connection.new('http://localhost:8529', '_system')
       #   connection.connection.response :caching
       attr_reader :connection
+
+      # The name of the database you want to talk with
+      # @return [String]
+      # @api public
+      # @example Get the name of the database
+      #   connection = Connection.new('http://localhost:8529', 'ashikawa')
+      #   connection.database_name # => 'ashikawa'
+      attr_reader :database_name
 
       # Initialize a Connection with a given API String
       #
       # @param [String] api_string scheme, hostname and port as a String
+      # @param [String] database_name The name of the database you want to communicate with
       # @option options [Object] adapter The Faraday adapter you want to use. Defaults to Default Adapter
       # @option options [Object] logger The logger you want to use. Defaults to Null Logger.
       # @api public
       # @example Create a new Connection
-      #  connection = Connection.new('http://localhost:8529')
-      def initialize(api_string, options = {})
+      #  connection = Connection.new('http://localhost:8529', '_system')
+      def initialize(api_string, database_name, options = {})
+        @api_string = api_string
+        @database_name = database_name
         logger  = options.fetch(:logger) { NullLogger.instance }
         adapter = options.fetch(:adapter) { Faraday.default_adapter }
 
-        @connection = Faraday.new("#{api_string}/_api") do |connection|
+        @connection = Faraday.new("#{api_string}/_db/#{database_name}/_api") do |connection|
           connection.request :json
 
           connection.response :logger, logger
@@ -74,22 +85,6 @@ module Ashikawa
           connection.response :json
 
           connection.adapter(*adapter)
-        end
-      end
-
-      # Get the name of the current database
-      #
-      # @api public
-      # @example Get the name of the database
-      #   connection = Connection.new('http://localhost:8529/_db/ashikawa')
-      #   connection.database_name # => 'ashikawa'
-      def database_name
-        database_regexp = %r{_db/(?<db_name>\w+)/_api}
-        result = @connection.url_prefix.to_s.match(database_regexp)
-        if result.nil?
-          '_system'
-        else
-          result['db_name']
         end
       end
 
@@ -124,7 +119,7 @@ module Ashikawa
       # @example post request
       #   connection.send_request('/collection/new_collection', :post => { :name => 'new_collection' })
       def send_request_without_database_suffix(path, params = {})
-        send_request(uri_without_database_suffix(path), params)
+        send_request("#{@api_string}/_api/#{path}", params)
       end
 
       # Checks if authentication for this Connection is active or not
@@ -132,7 +127,7 @@ module Ashikawa
       # @return [Boolean]
       # @api public
       # @example Is authentication activated for this connection?
-      #   connection = Connection.new('http://localhost:8529')
+      #   connection = Connection.new('http://localhost:8529', '_system')
       #   connection.authentication? #=> false
       #   connection.authenticate_with(:username => 'james', :password => 'bond')
       #   connection.authentication? #=> true
@@ -151,17 +146,6 @@ module Ashikawa
       end
 
       private
-
-      # Build an URI without the database suffix
-      #
-      # @param [String] additional_path The path you want to access
-      # @return [URI] The resulting URI
-      # @api private
-      def uri_without_database_suffix(additional_path = '')
-        uri = @connection.url_prefix
-        base_uri = [uri.scheme, '://', uri.host, ':', uri.port].join
-        [base_uri, '_api', additional_path].join('/')
-      end
 
       # Return the HTTP Verb for the given parameters
       #

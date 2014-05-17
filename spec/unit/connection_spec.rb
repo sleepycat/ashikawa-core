@@ -5,14 +5,14 @@ require 'ashikawa-core/connection'
 describe Ashikawa::Core::Connection do
   let(:request_stub) { Faraday::Adapter::Test::Stubs.new }
   let(:response_headers) { { 'content-type' => 'application/json; charset=utf-8' } }
-  subject { Ashikawa::Core::Connection.new(ARANGO_HOST, adapter: [:test, request_stub]) }
+  subject { Ashikawa::Core::Connection.new(ARANGO_HOST, '_system', adapter: [:test, request_stub]) }
 
   its(:scheme) { should eq('http') }
   its(:host) { should eq('localhost') }
   its(:port) { should eq(8529) }
 
   it 'should send a get request' do
-    request_stub.get('/_api/my/path') do
+    request_stub.get('/_db/_system/_api/my/path') do
       [200, response_headers, JSON.generate({ 'name' => 'dude' })]
     end
 
@@ -22,7 +22,7 @@ describe Ashikawa::Core::Connection do
   end
 
   it 'should send a post request' do
-    request_stub.post('/_api/my/path') do |request|
+    request_stub.post('/_db/_system/_api/my/path') do |request|
       expect(request[:body]).to eq("{\"name\":\"new_collection\"}")
       [200, response_headers, JSON.generate({ 'name' => 'dude' })]
     end
@@ -32,7 +32,7 @@ describe Ashikawa::Core::Connection do
   end
 
   it 'should send a put request' do
-    request_stub.put('/_api/my/path') do |request|
+    request_stub.put('/_db/_system/_api/my/path') do |request|
       expect(request[:body]).to eq('{"name":"new_collection"}')
       [200, response_headers, JSON.generate({ 'name' => 'dude' })]
     end
@@ -42,7 +42,7 @@ describe Ashikawa::Core::Connection do
   end
 
   it 'should send a delete request' do
-    request_stub.delete('/_api/my/path') do |_|
+    request_stub.delete('/_db/_system/_api/my/path') do |_|
       [200, response_headers, JSON.generate({ 'name' => 'dude' })]
     end
 
@@ -53,7 +53,7 @@ describe Ashikawa::Core::Connection do
   context 'with database suffix' do
     let(:database_name) { 'ashikawa' }
     subject do
-      Ashikawa::Core::Connection.new("#{ARANGO_HOST}/_db/#{database_name}", adapter: [:test, request_stub])
+      Ashikawa::Core::Connection.new(ARANGO_HOST, database_name, adapter: [:test, request_stub])
     end
 
     its(:database_name) { should eq database_name }
@@ -69,7 +69,7 @@ describe Ashikawa::Core::Connection do
 
   context 'without database suffix' do
     subject do
-      Ashikawa::Core::Connection.new(ARANGO_HOST, adapter: [:test, request_stub])
+      Ashikawa::Core::Connection.new(ARANGO_HOST, '_system', adapter: [:test, request_stub])
     end
 
     its(:database_name) { should eq '_system' }
@@ -95,7 +95,7 @@ describe Ashikawa::Core::Connection do
     it 'should send the authentication data with every GET request' do
       skip 'Find out how to check for basic auth via Faraday Stubs'
 
-      request_stub.get('/_api/my/path') do |_|
+      request_stub.get('/_db/_system/_api/my/path') do |_|
         [200, response_headers, JSON.generate({ 'name' => 'dude' })]
       end
 
@@ -111,7 +111,8 @@ describe Ashikawa::Core::Connection do
     let(:error_num) { 15 }
 
     it "should throw a general client error for I'm a teapot" do
-      request_stub.get('/_api/bad/request') do
+
+      request_stub.get('/_db/_system/_api/bad/request') do
         [
           418,
           response_headers,
@@ -127,7 +128,7 @@ describe Ashikawa::Core::Connection do
     end
 
     it 'should throw its own exception when doing a bad request' do
-      request_stub.get('/_api/bad/request') do
+      request_stub.get('/_db/_system/_api/bad/request') do
         [400, response_headers, '{}']
       end
 
@@ -139,7 +140,7 @@ describe Ashikawa::Core::Connection do
     end
 
     it 'should throw its own exception when doing a bad request' do
-      request_stub.get('/_api/secret') do
+      request_stub.get('/_db/_system/_api/secret') do
         [401, response_headers, '']
       end
 
@@ -151,7 +152,7 @@ describe Ashikawa::Core::Connection do
     end
 
     it 'should throw a general server error for the generic server error' do
-      request_stub.get('/_api/bad/request') do
+      request_stub.get('/_db/_system/_api/bad/request') do
         [
           500,
           response_headers,
@@ -167,7 +168,7 @@ describe Ashikawa::Core::Connection do
     end
 
     it 'should raise an exception if a document is not found' do
-      request_stub.get('/_api/document/4590/333') do
+      request_stub.get('/_db/_system/_api/document/4590/333') do
         [404, response_headers, '']
       end
 
@@ -177,7 +178,7 @@ describe Ashikawa::Core::Connection do
     end
 
     it 'should raise an exception if a collection is not found' do
-      request_stub.get('/_api/collection/4590') do
+      request_stub.get('/_db/_system/_api/collection/4590') do
         [404, response_headers, '']
       end
 
@@ -187,7 +188,7 @@ describe Ashikawa::Core::Connection do
     end
 
     it 'should raise an exception if an index is not found' do
-      request_stub.get('/_api/index/4590/333') do
+      request_stub.get('/_db/_system/_api/index/4590/333') do
         [404, response_headers, '']
       end
 
@@ -197,7 +198,7 @@ describe Ashikawa::Core::Connection do
     end
 
     it 'should raise an exception for unknown pathes' do
-      request_stub.get('/_api/unknown_path/4590/333') do
+      request_stub.get('/_db/_system/_api/unknown_path/4590/333') do
         [404, response_headers, '']
       end
 
@@ -207,7 +208,7 @@ describe Ashikawa::Core::Connection do
     end
 
     it 'should raise an error if a malformed JSON was returned from the server' do
-      request_stub.get('/_api/document/4590/333') do
+      request_stub.get('/_db/_system/_api/document/4590/333') do
         [200, response_headers, '{"a":1']
       end
 
@@ -224,25 +225,25 @@ describe Ashikawa::Core::Connection do
     let(:blocky) { double('Block') }
 
     it 'should initalize with specific logger and adapter' do
-      expect(Faraday).to receive(:new).with("#{ARANGO_HOST}/_api").and_yield(blocky)
+      expect(Faraday).to receive(:new).with("#{ARANGO_HOST}/_db/_system/_api").and_yield(blocky)
       expect(blocky).to receive(:request).with(:json)
       expect(blocky).to receive(:response).with(:logger, logger)
       expect(blocky).to receive(:response).with(:error_response)
       expect(blocky).to receive(:response).with(:json)
       expect(blocky).to receive(:adapter).with(adapter)
 
-      subject.new(ARANGO_HOST, adapter: adapter, logger: logger)
+      subject.new(ARANGO_HOST, '_system', adapter: adapter, logger: logger)
     end
 
     it 'should initialize with defaults when no specific logger and adapter was given' do
-      expect(Faraday).to receive(:new).with("#{ARANGO_HOST}/_api").and_yield(blocky)
+      expect(Faraday).to receive(:new).with("#{ARANGO_HOST}/_db/_system/_api").and_yield(blocky)
       expect(blocky).to receive(:request).with(:json)
       expect(blocky).to receive(:response).with(:logger, NullLogger.instance)
       expect(blocky).to receive(:response).with(:error_response)
       expect(blocky).to receive(:response).with(:json)
       expect(blocky).to receive(:adapter).with(Faraday.default_adapter)
 
-      subject.new(ARANGO_HOST)
+      subject.new(ARANGO_HOST, '_system')
     end
   end
 end

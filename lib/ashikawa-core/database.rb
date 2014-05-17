@@ -36,7 +36,7 @@ module Ashikawa
       #     config.url = 'http://localhost:8529'
       #   end
       # @example Access a Database by providing a Connection and authentication
-      #   connection = Connection.new('http://localhost:8529')
+      #   connection = Connection.new('http://localhost:8529', '_system')
       #   database = Ashikawa::Core::Database.new do |config|
       #     config.connection = connection
       #     config.username = 'lebowski'
@@ -44,8 +44,9 @@ module Ashikawa
       #   end
       # @example Access a certain database from ArangoDB
       #   database = Ashikawa::Core::Database.new do |config|
-      #     config.url = 'http://localhost:8529/_db/my_db'
+      #     config.url = 'http://localhost:8529'
       #     config.connection = connection
+      #     config.database_name = 'my_db'
       #   end
       # @example Access a Database with a logger and custom HTTP adapter
       #   database = Ashikawa::Core::Database.new do |config|
@@ -63,7 +64,8 @@ module Ashikawa
       #
       # @example Create a new database with the name 'ashikawa'
       #   database = Ashikawa::Core::Database.new do |config|
-      #     config.url = 'http://localhost:8529/_db/ashikawa'
+      #     config.url = 'http://localhost:8529'
+      #     config.database_name = 'ashikawa'
       #   end
       #   database.create
       def create
@@ -74,7 +76,8 @@ module Ashikawa
       #
       # @example Drop a new database with the name 'ashikawa'
       #   database = Ashikawa::Core::Database.new do |config|
-      #     config.url = 'http://localhost:8529/_db/ashikawa'
+      #     config.url = 'http://localhost:8529'
+      #     config.database_name = 'ashikawa'
       #   end
       #   database.drop
       def drop
@@ -98,7 +101,8 @@ module Ashikawa
       # @api public
       # @example Get the name of the databasse
       #   database = Ashikawa::Core::Database.new do |config|
-      #     config.url = 'http://localhost:8529/_api/ashikawa'
+      #     config.url = 'http://localhost:8529'
+      #     config.database_name = 'ashikawa'
       #   end
       #   database.name # => 'ashikawa'
       def name
