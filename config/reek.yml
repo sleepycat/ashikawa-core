@@ -29,7 +29,8 @@ IrresponsibleModule:
   exclude: []
 LongParameterList:
   enabled: true
-  exclude: []
+  exclude:
+  - Ashikawa::Core::Connection#create_connection
   max_params: 3
   overrides: {}
 LongYieldList:
