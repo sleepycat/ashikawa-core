@@ -6,6 +6,7 @@
 | Documentation   | [RubyDoc](http://www.rubydoc.info/gems/ashikawa-core)
 | CI              | [![Build Status](http://img.shields.io/travis/triAGENS/ashikawa-core.svg)](http://travis-ci.org/triAGENS/ashikawa-core)
 | Code Metrics    | [![Code Climate](http://img.shields.io/codeclimate/github/triAGENS/ashikawa-core.svg)](https://codeclimate.com/github/triAGENS/ashikawa-core) [![Code Climate Coverage](http://img.shields.io/codeclimate/coverage/github/triAGENS/ashikawa-core.svg)](https://codeclimate.com/github/triAGENS/ashikawa-core)
+| Inline docs     | [![Inline docs](http://inch-pages.github.io/github/triAGENS/ashikawa-core.svg)](http://inch-pages.github.io/github/triAGENS/ashikawa-core)
 | Gem Version     | [![Gem Version](http://img.shields.io/gem/v/ashikawa-core.svg)](http://rubygems.org/gems/ashikawa-core)
 | Dependencies    | [![Dependency Status](http://img.shields.io/gemnasium/triAGENS/ashikawa-core.svg)](https://gemnasium.com/triAGENS/ashikawa-core)
 
