@@ -65,8 +65,8 @@ module Ashikawa
       # @param [String] api_string scheme, hostname and port as a String
       # @param [String] database_name The name of the database you want to communicate with
       # @option options [Object] adapter The Faraday adapter you want to use. Defaults to Default Adapter
-      # @option options [Object] logger The logger you want to use. Defaults to Null Logger.
       # @option options [Object] debug_headers Should HTTP header be logged or not
+      # @option options [Object] logger The logger you want to use. Defaults to no logger.
       # @api public
       # @example Create a new Connection
       #  connection = Connection.new('http://localhost:8529', '_system')

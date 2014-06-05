@@ -1,6 +1,5 @@
 require 'faraday'
 require 'faraday_middleware'
-require 'null_logger'
 require 'ashikawa-core/minimal_logger'
 
 module Ashikawa
@@ -11,14 +10,14 @@ module Ashikawa
       #
       # @param [String] url The complete URL of the ArangoDB instance
       # @option options [Object] adapter The Faraday adapter you want to use. Defaults to Default Adapter
-      # @option options [Object] logger The logger you want to use. Defaults to Null Logger.
+      # @option options [Object] logger The logger you want to use. Defaults to no logger.
       # @api private
       # @example Create a FaradayObject with the given configuration
       #  faraday = FaradayFactory.new('http://localhost:8529/_db/mydb/_api', logger: my_logger)
       def self.create_connection(url, options)
         faraday = new
         faraday.debug_headers = options.fetch(:debug_headers) { false }
-        faraday.logger = options.fetch(:logger) { NullLogger.instance }
+        faraday.logger = options.fetch(:logger) if options.has_key?(:logger)
         faraday.adapter = options.fetch(:adapter) { Faraday.default_adapter }
         faraday.faraday_for(url)
       end

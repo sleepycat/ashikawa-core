@@ -24,7 +24,6 @@ describe Ashikawa::Core::FaradayFactory do
     it 'should initialize with defaults when no specific logger and adapter was given' do
       expect(Faraday).to receive(:new).with(api_string).and_yield(blocky)
       expect(blocky).to receive(:request).with(:json)
-      expect(blocky).to receive(:response).with(:minimal_logger, NullLogger.instance, debug_headers: false)
       expect(blocky).to receive(:response).with(:error_response)
       expect(blocky).to receive(:response).with(:json)
       expect(blocky).to receive(:adapter).with(Faraday.default_adapter)
