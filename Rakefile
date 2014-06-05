@@ -34,6 +34,7 @@ namespace :metrics do
 
   desc 'Run mutant to check for mutation coverage'
   task :mutant do
+    raise 'mutant-rspec is not compatible with RSpec 3.0.0 right now'
     require 'mutant'
     require 'mutant-rspec'
 
