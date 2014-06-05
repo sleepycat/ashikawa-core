@@ -53,7 +53,7 @@ RepeatedConditional:
 TooManyInstanceVariables:
   enabled: true
   exclude: []
-  max_instance_variables: 12
+  max_instance_variables: 6
 TooManyMethods:
   enabled: true
   exclude:
@@ -106,5 +106,5 @@ UtilityFunction:
   exclude: []
   max_helper_calls: 0
 PrimaDonnaMethod:
-  enabled: false
+  enabled: true
   exclude: []
