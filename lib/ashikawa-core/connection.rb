@@ -1,12 +1,9 @@
 # -*- encoding : utf-8 -*-
 require 'forwardable'
 require 'faraday'
-require 'null_logger'
-require 'uri'
 require 'equalizer'
-require 'faraday_middleware'
 require 'ashikawa-core/error_response'
-require 'ashikawa-core/minimal_logger'
+require 'ashikawa-core/faraday_factory'
 
 module Ashikawa
   module Core
@@ -76,10 +73,7 @@ module Ashikawa
       def initialize(api_string, database_name, options = {})
         @api_string = api_string
         @database_name = database_name
-        debug_headers = options.fetch(:debug_headers) { false }
-        logger  = options.fetch(:logger) { NullLogger.instance }
-        adapter = options.fetch(:adapter) { Faraday.default_adapter }
-        @connection = create_connection("#{api_string}/_db/#{database_name}/_api", logger, adapter, debug_headers)
+        @connection = FaradayFactory.create_connection("#{api_string}/_db/#{database_name}/_api", options)
       end
 
       # Sends a request to a given path returning the parsed result
@@ -140,23 +134,6 @@ module Ashikawa
       end
 
       private
-
-      # Create the Faraday connection
-      #
-      # @param [String] url
-      # @param [Logger] logger
-      # @param [Faraday::Adapter] adapter
-      # @return [Faraday] Initialized Faraday
-      # @api private
-      def create_connection(url, logger, adapter, debug_headers)
-        Faraday.new(url) do |connection|
-          connection.request(:json)
-          connection.response(:minimal_logger, logger, debug_headers: debug_headers)
-          connection.response(:error_response)
-          connection.response(:json)
-          connection.adapter(*adapter)
-        end
-      end
 
       # Return the HTTP Verb for the given parameters
       #
