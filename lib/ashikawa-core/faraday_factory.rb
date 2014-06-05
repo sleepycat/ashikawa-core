@@ -16,15 +16,31 @@ module Ashikawa
       # @example Create a FaradayObject with the given configuration
       #  faraday = FaradayFactory.new('http://localhost:8529/_db/mydb/_api', logger: my_logger)
       def self.create_connection(url, options)
-        debug_headers = options.fetch(:debug_headers) { false }
-        logger  = options.fetch(:logger) { NullLogger.instance }
-        adapter = options.fetch(:adapter) { Faraday.default_adapter }
+        faraday = new
+        faraday.debug_headers = options.fetch(:debug_headers) { false }
+        faraday.logger = options.fetch(:logger) { NullLogger.instance }
+        faraday.adapter = options.fetch(:adapter) { Faraday.default_adapter }
+        faraday.faraday_for(url)
+      end
+
+      attr_accessor :debug_headers
+      attr_accessor :request_middlewares
+      attr_accessor :response_middlewares
+      attr_accessor :adapter
+
+      def initialize
+        @request_middlewares = [:json]
+        @response_middlewares = [:error_response, :json]
+      end
+
+      def logger=(logger)
+        response_middlewares << [:minimal_logger, logger, debug_headers: debug_headers]
+      end
+
+      def faraday_for(url)
         Faraday.new(url) do |connection|
-          connection.request(:json)
-          connection.response(:logger, logger)
-          connection.response(:minimal_logger, logger, debug_headers: debug_headers)
-          connection.response(:error_response)
-          connection.response(:json)
+          request_middlewares.each { |middleware| connection.request(*middleware) }
+          response_middlewares.each { |middleware| connection.response(*middleware) }
           connection.adapter(*adapter)
         end
       end
