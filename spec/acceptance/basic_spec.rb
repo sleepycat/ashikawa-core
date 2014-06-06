@@ -18,7 +18,7 @@ describe 'Basics' do
     it 'should have one more database if a database with random name is created' do
       expect {
         database_with_random_name.create
-      }.to change { DATABASE.all_databases.length }.by(1)
+      }.to change { SYSTEM_DATABASE.all_databases.length }.by(1)
     end
 
     it 'should create and delete collections' do

@@ -34,6 +34,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec', '~> 3.0.0'
   gem.add_development_dependency 'rspec-its', '~> 1.0.1'
   gem.add_development_dependency 'codeclimate-test-reporter', '~> 0.3.0'
+  gem.add_development_dependency 'logging', '~> 1.8.1'
   gem.add_development_dependency 'yard', '~> 0.8.7.4'
   gem.add_development_dependency 'inch', '~> 0.4.6'
   gem.add_development_dependency 'reek', '~> 1.3.7'
