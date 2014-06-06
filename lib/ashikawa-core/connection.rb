@@ -69,6 +69,7 @@ module Ashikawa
       # @option options [Object] logger The logger you want to use. Defaults to no logger.
       # @option options [Array] additional_request_middlewares Additional request middlewares
       # @option options [Array] additional_response_middlewares Additional response middlewares
+      # @option options [Array] additional_middlewares Additional middlewares
       # @api public
       # @example Create a new Connection with no additional options
       #  connection = Connection.new('http://localhost:8529', '_system')

@@ -29,9 +29,8 @@ IrresponsibleModule:
   exclude: []
 LongParameterList:
   enabled: true
-  exclude:
-  - Ashikawa::Core::Connection#create_connection
-  max_params: 3
+  exclude: []
+  max_params: 4
   overrides: {}
 LongYieldList:
   enabled: true
@@ -65,6 +64,7 @@ TooManyStatements:
   enabled: true
   exclude:
   - Ashikawa::Core::FaradayFactory#self.create_connection
+  - Ashikawa::Core::FaradayFactory#faraday_for
   - Ashikawa::Core::ErrorResponse#on_complete
   - Ashikawa::Core::Figure#initialize
   max_statements: 6

@@ -42,5 +42,10 @@ describe Ashikawa::Core::FaradayFactory do
       expect(blocky).to receive(:response).with(:my_middleware, :options)
       subject.create_connection(api_string, additional_response_middlewares: [[:my_middleware, :options]])
     end
+
+    it 'should allow to add additional middlewares with options' do
+      expect(blocky).to receive(:use).with(:my_middleware, :options)
+      subject.create_connection(api_string, additional_middlewares: [[:my_middleware, :options]])
+    end
   end
 end
