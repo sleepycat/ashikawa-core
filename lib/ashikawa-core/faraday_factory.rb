@@ -19,10 +19,9 @@ module Ashikawa
       #  faraday = FaradayFactory.new('http://localhost:8529/_db/mydb/_api', logger: my_logger)
       def self.create_connection(url, options)
         options = DEFAULTS.merge(options)
-        faraday = new(options.fetch(:additional_request_middlewares), options.fetch(:additional_response_middlewares))
+        faraday = new(options.fetch(:adapter), options.fetch(:additional_request_middlewares), options.fetch(:additional_response_middlewares))
         faraday.debug_headers = options.fetch(:debug_headers) { false }
         faraday.logger = options.fetch(:logger) if options.has_key?(:logger)
-        faraday.adapter = options.fetch(:adapter)
         faraday.faraday_for(url)
       end
 
@@ -31,17 +30,14 @@ module Ashikawa
       # @api private
       attr_accessor :debug_headers
 
-      # Adapter to be used by Faraday
-      #
-      # @api private
-      attr_writer :adapter
-
       # Create a new Faraday Factory with additional middlewares
       #
+      # @param [Adapter] adapter The adapter to use
       # @param [Array] additional_request_middlewares Additional request middlewares
       # @param [Array] additional_response_middlewares Additional response middlewares
       # @api private
-      def initialize(additional_request_middlewares, additional_response_middlewares)
+      def initialize(adapter, additional_request_middlewares, additional_response_middlewares)
+        @adapter = adapter
         @request_middlewares = [:json] + additional_request_middlewares
         @response_middlewares = [:error_response, :json] + additional_response_middlewares
       end
