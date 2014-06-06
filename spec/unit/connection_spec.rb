@@ -223,23 +223,29 @@ describe Ashikawa::Core::Connection do
     let(:logger) { instance_double('Logger') }
     let(:faraday_block) { double('FaradayBlock') }
 
+    before do
+      allow(Faraday).to receive(:new).with("#{ARANGO_HOST}/_db/_system/_api").and_yield(faraday_block)
+      allow(faraday_block).to receive(:request).with(:json)
+      allow(faraday_block).to receive(:response).with(:error_response)
+      allow(faraday_block).to receive(:response).with(:json)
+      allow(faraday_block).to receive(:adapter).with(adapter)
+    end
+
     it 'should initalize with specific logger and adapter' do
-      expect(Faraday).to receive(:new).with("#{ARANGO_HOST}/_db/_system/_api").and_yield(faraday_block)
-      expect(faraday_block).to receive(:request).with(:json)
-      expect(faraday_block).to receive(:response).with(:logger, logger)
-      expect(faraday_block).to receive(:response).with(:error_response)
-      expect(faraday_block).to receive(:response).with(:json)
+      expect(faraday_block).to receive(:response).with(:minimal_logger, logger, false)
       expect(faraday_block).to receive(:adapter).with(adapter)
 
       subject.new(ARANGO_HOST, '_system', adapter: adapter, logger: logger)
     end
 
+    it 'should initialize with debug_header flag for logger' do
+      expect(faraday_block).to receive(:response).with(:minimal_logger, logger, true)
+
+      subject.new(ARANGO_HOST, '_system', adapter: adapter, logger: logger, debug_headers: true)
+    end
+
     it 'should initialize with defaults when no specific logger and adapter was given' do
-      expect(Faraday).to receive(:new).with("#{ARANGO_HOST}/_db/_system/_api").and_yield(faraday_block)
-      expect(faraday_block).to receive(:request).with(:json)
-      expect(faraday_block).to receive(:response).with(:logger, NullLogger.instance)
-      expect(faraday_block).to receive(:response).with(:error_response)
-      expect(faraday_block).to receive(:response).with(:json)
+      expect(faraday_block).to receive(:response).with(:minimal_logger, NullLogger.instance, false)
       expect(faraday_block).to receive(:adapter).with(Faraday.default_adapter)
 
       subject.new(ARANGO_HOST, '_system')

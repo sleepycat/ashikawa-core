@@ -6,7 +6,7 @@ require 'uri'
 require 'equalizer'
 require 'faraday_middleware'
 require 'ashikawa-core/error_response'
-require 'ashikawa-core/faraday/minimal_logger'
+require 'ashikawa-core/minimal_logger'
 
 module Ashikawa
   module Core
