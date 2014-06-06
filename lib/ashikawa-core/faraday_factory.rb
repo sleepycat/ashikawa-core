@@ -7,7 +7,11 @@ module Ashikawa
     # Create Faraday objects
     class FaradayFactory
       # Defaults for the options of create connection
-      DEFAULTS = { additional_request_middlewares: [], additional_response_middlewares: [], adapter: Faraday.default_adapter }
+      DEFAULTS = {
+        additional_request_middlewares: [],
+        additional_response_middlewares: [],
+        adapter: Faraday.default_adapter
+      }
 
       # Create a Faraday object
       #
@@ -21,7 +25,7 @@ module Ashikawa
         options = DEFAULTS.merge(options)
         faraday = new(options.fetch(:adapter), options.fetch(:additional_request_middlewares), options.fetch(:additional_response_middlewares))
         faraday.debug_headers = options.fetch(:debug_headers) { false }
-        faraday.logger = options.fetch(:logger) if options.has_key?(:logger)
+        faraday.logger = options.fetch(:logger) if options.key?(:logger)
         faraday.faraday_for(url)
       end
 
