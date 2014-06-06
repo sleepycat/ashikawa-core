@@ -6,6 +6,7 @@ module Ashikawa
   module Core
     # Create Faraday objects
     class FaradayFactory
+      # Defaults for the options of create connection
       DEFAULTS = { additional_request_middlewares: [], additional_response_middlewares: [], adapter: Faraday.default_adapter }
 
       # Create a Faraday object
@@ -25,23 +26,44 @@ module Ashikawa
         faraday.faraday_for(url)
       end
 
+      # Debug headers to be used by Faraday
+      #
+      # @api private
       attr_accessor :debug_headers
-      attr_accessor :adapter
 
+      # Adapter to be used by Faraday
+      #
+      # @api private
+      attr_writer :adapter
+
+      # Create a new Faraday Factory with additional middlewares
+      #
+      # @param [Array] additional_request_middlewares Additional request middlewares
+      # @param [Array] additional_response_middlewares Additional response middlewares
+      # @api private
       def initialize(additional_request_middlewares, additional_response_middlewares)
         @request_middlewares = [:json] + additional_request_middlewares
         @response_middlewares = [:error_response, :json] + additional_response_middlewares
       end
 
+      # Logger to be used by Faraday
+      #
+      # @param [Logger] logger The logger you want to use
+      # @api private
       def logger=(logger)
         @response_middlewares << [:minimal_logger, logger, debug_headers: debug_headers]
       end
 
+      # Create the Faraday for the given URL
+      #
+      # @param [String] url
+      # @return [Faraday]
+      # @api private
       def faraday_for(url)
         Faraday.new(url) do |connection|
           @request_middlewares.each { |middleware| connection.request(*middleware) }
           @response_middlewares.each { |middleware| connection.response(*middleware) }
-          connection.adapter(*adapter)
+          connection.adapter(*@adapter)
         end
       end
     end
