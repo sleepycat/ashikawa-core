@@ -41,5 +41,16 @@ describe Ashikawa::Core::FaradayFactory do
 
       subject.create_connection(api_string, additional_request_middlewares: [[:my_middleware, :options]])
     end
+
+    it 'should allow to add additional response middlewares' do
+      allow(Faraday).to receive(:new).with(api_string).and_yield(blocky)
+      allow(blocky).to receive(:request).with(:json)
+      allow(blocky).to receive(:response).with(:error_response)
+      allow(blocky).to receive(:response).with(:json)
+      allow(blocky).to receive(:adapter).with(Faraday.default_adapter)
+      expect(blocky).to receive(:response).with(:my_middleware, :options)
+
+      subject.create_connection(api_string, additional_response_middlewares: [[:my_middleware, :options]])
+    end
   end
 end

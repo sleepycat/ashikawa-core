@@ -18,6 +18,7 @@ module Ashikawa
         faraday = new
         faraday.debug_headers = options.fetch(:debug_headers) { false }
         faraday.request_middlewares += options.fetch(:additional_request_middlewares, [])
+        faraday.response_middlewares += options.fetch(:additional_response_middlewares, [])
         faraday.logger = options.fetch(:logger) if options.has_key?(:logger)
         faraday.adapter = options.fetch(:adapter) { Faraday.default_adapter }
         faraday.faraday_for(url)
