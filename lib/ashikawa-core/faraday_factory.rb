@@ -14,6 +14,12 @@ module Ashikawa
         adapter: Faraday.default_adapter
       }
 
+      # Request middlewares that will be prepended
+      DEFAULT_REQUEST_MIDDLEWARES = [:json]
+
+      # Response middlewares that will be prepended
+      DEFAULT_RESPONSE_MIDDLEWARES = [:error_response, :json]
+
       # Create a Faraday object
       #
       # @param [String] url The complete URL of the ArangoDB instance
@@ -52,8 +58,8 @@ module Ashikawa
       # @api private
       def initialize(adapter, additional_request_middlewares, additional_response_middlewares, additional_middlewares)
         @adapter = adapter
-        @request_middlewares = [:json] + additional_request_middlewares
-        @response_middlewares = [:error_response, :json] + additional_response_middlewares
+        @request_middlewares = DEFAULT_REQUEST_MIDDLEWARES + additional_request_middlewares
+        @response_middlewares = DEFAULT_RESPONSE_MIDDLEWARES + additional_response_middlewares
         @additional_middlewares = additional_middlewares
       end
 
