@@ -27,7 +27,7 @@ gem install ashikawa-core
 or, when using bundler:
 
 ```ruby
-gem "ashikawa-core", "~> 0.11"
+gem "ashikawa-core"
 ```
 
 ## How to Setup a Connection?
@@ -90,3 +90,5 @@ If you want to contribute to the project, see CONTRIBUTING.md for details. It co
 * Nikita Vasiliev ([@sharpyfox](https://github.com/sharpyfox)): Contributor
 * Dirk Breuer ([@railsbros-dirk](https://github.com/railsbros-dirk)): Contributor
 * Mike Williamson ([@sleepycat](https://github.com/sleepycat)): Contributor
+* Ujjwal Thaakar ([@ujjwalt](https://github.com/ujjwalt)): Contributor
+* René Föhring ([@rrrene](https://github.com/rrrene)): Contributor
