@@ -28,7 +28,7 @@ module Ashikawa
       def initialize(app, logger, debug_headers = false)
         super(app)
         @logger        = logger
-        @debug_headers = false
+        @debug_headers = debug_headers
       end
 
       # Calls the this middleware and passes on to `super`
