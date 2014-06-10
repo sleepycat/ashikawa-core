@@ -55,7 +55,7 @@ module Ashikawa
       # @api private
       # @params [Hash] headers A headers hash
       def dump_headers(headers)
-        " #{headers.map { |k, v| "#{k}: #{v.inspect}" }.join(' ')}" if debug_headers
+        " #{headers.map { |field_name, field_value| "#{field_name}: #{field_value.inspect}" }.join(' ')}" if debug_headers
       end
     end
 
