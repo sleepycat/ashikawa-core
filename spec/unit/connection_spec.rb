@@ -232,20 +232,20 @@ describe Ashikawa::Core::Connection do
     end
 
     it 'should initalize with specific logger and adapter' do
-      expect(faraday_block).to receive(:response).with(:minimal_logger, logger, false)
+      expect(faraday_block).to receive(:response).with(:minimal_logger, logger, debug_headers: false)
       expect(faraday_block).to receive(:adapter).with(adapter)
 
       subject.new(ARANGO_HOST, '_system', adapter: adapter, logger: logger)
     end
 
     it 'should initialize with debug_header flag for logger' do
-      expect(faraday_block).to receive(:response).with(:minimal_logger, logger, true)
+      expect(faraday_block).to receive(:response).with(:minimal_logger, logger, debug_headers: true)
 
       subject.new(ARANGO_HOST, '_system', adapter: adapter, logger: logger, debug_headers: true)
     end
 
     it 'should initialize with defaults when no specific logger and adapter was given' do
-      expect(faraday_block).to receive(:response).with(:minimal_logger, NullLogger.instance, false)
+      expect(faraday_block).to receive(:response).with(:minimal_logger, NullLogger.instance, debug_headers: false)
       expect(faraday_block).to receive(:adapter).with(Faraday.default_adapter)
 
       subject.new(ARANGO_HOST, '_system')

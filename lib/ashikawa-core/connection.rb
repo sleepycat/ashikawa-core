@@ -84,7 +84,7 @@ module Ashikawa
         @connection = Faraday.new("#{api_string}/_db/#{database_name}/_api") do |connection|
           connection.request :json
 
-          connection.response :minimal_logger, logger, debug_headers
+          connection.response :minimal_logger, logger, debug_headers: debug_headers
           connection.response :error_response
           connection.response :json
 

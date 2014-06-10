@@ -36,7 +36,7 @@ describe Ashikawa::Core::MinimalLogger do
   end
 
   context 'with debug_headers' do
-    subject { Ashikawa::Core::MinimalLogger.new(app, logger, true) }
+    subject { Ashikawa::Core::MinimalLogger.new(app, logger, debug_headers: true) }
 
     it 'should log the request upon call with headers' do
       allow(env).to receive(:request_headers).and_return(bar: 'foo')

@@ -24,11 +24,11 @@ module Ashikawa
       # @api public
       # @param [Faraday::Middleware] app The middleware to nest this one in
       # @param [Logger] logger The logger to be used
-      # @param [Boolean] debug_headers Should the headers be logged. Defaults to `false`
-      def initialize(app, logger, debug_headers = false)
+      # @option options [Boolean] :debug_headers Should the headers be logged. Defaults to `false`
+      def initialize(app, logger, options = {})
         super(app)
         @logger        = logger
-        @debug_headers = debug_headers
+        @debug_headers = options.fetch(:debug_headers) { false }
       end
 
       # Calls the this middleware and passes on to `super`
