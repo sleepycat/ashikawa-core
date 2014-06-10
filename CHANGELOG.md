@@ -1,3 +1,20 @@
+# Version 0.12.0
+
+**Codename: V for Verifying**
+
+* Accept single attributes in add_index (#120)
+* JSON is no longer a runtime dependency but a development dependency (#118)
+* Make database name explicit (#117)
+* **Breaking Change:** Removed 'prima donna methods' 
+* Using a less verbose logging middleware (#124)
+* Refactored the internal connection creation to support better external configuration (#126)
+* Development only:
+  * Using Rspec 3.0
+  * Switched to verifying doubles
+* New Contributors
+  * Ujjwal Thaakar (@ujjwalt)
+  * René Föhring (@rrrene)
+
 # Version 0.11
 
 **Codename: R3C0NF1GUR3D**
