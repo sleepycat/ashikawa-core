@@ -2,6 +2,7 @@
 
 **Codename: V for Verifying**
 
+* Support for ArangoDB 2.1
 * Accept single attributes in add_index (#120)
 * JSON is no longer a runtime dependency but a development dependency (#118)
 * Make database name explicit (#117)
