@@ -1,12 +1,9 @@
 # -*- encoding : utf-8 -*-
 require 'forwardable'
 require 'faraday'
-require 'null_logger'
-require 'uri'
 require 'equalizer'
-require 'faraday_middleware'
 require 'ashikawa-core/error_response'
-require 'ashikawa-core/minimal_logger'
+require 'ashikawa-core/faraday_factory'
 
 module Ashikawa
   module Core
@@ -68,28 +65,25 @@ module Ashikawa
       # @param [String] api_string scheme, hostname and port as a String
       # @param [String] database_name The name of the database you want to communicate with
       # @option options [Object] adapter The Faraday adapter you want to use. Defaults to Default Adapter
-      # @option options [Object] logger The logger you want to use. Defaults to Null Logger.
       # @option options [Object] debug_headers Should HTTP header be logged or not
+      # @option options [Object] logger The logger you want to use. Defaults to no logger.
+      # @option options [Array] additional_request_middlewares Additional request middlewares
+      # @option options [Array] additional_response_middlewares Additional response middlewares
+      # @option options [Array] additional_middlewares Additional middlewares
       # @api public
-      # @example Create a new Connection
+      # @example Create a new Connection with no additional options
       #  connection = Connection.new('http://localhost:8529', '_system')
+      # @example Create a new Connection with additional options
+      #  connection = Connection.new('http://localhost:8529', '_system', {
+      #    adapter: :typhoeus,
+      #    logger: Yell.new(STDOUT),
+      #    additional_request_middleware: [:my_request_middleware]
+      #    additional_response_middleware: [:my_response_middleware]
+      #  })
       def initialize(api_string, database_name, options = {})
         @api_string = api_string
         @database_name = database_name
-
-        logger        = options.fetch(:logger) { NullLogger.instance }
-        adapter       = options.fetch(:adapter) { Faraday.default_adapter }
-        debug_headers = options.fetch(:debug_headers) { false }
-
-        @connection = Faraday.new("#{api_string}/_db/#{database_name}/_api") do |connection|
-          connection.request :json
-
-          connection.response :minimal_logger, logger, debug_headers: debug_headers
-          connection.response :error_response
-          connection.response :json
-
-          connection.adapter(*adapter)
-        end
+        @connection = FaradayFactory.create_connection("#{api_string}/_db/#{database_name}/_api", options)
       end
 
       # Sends a request to a given path returning the parsed result
