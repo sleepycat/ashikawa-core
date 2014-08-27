@@ -28,7 +28,7 @@ HashSyntax:
   Enabled: true
 
 StringLiterals:
-  Enabled: true
+  EnforcedStyle: single_quotes
 
 Void:
   Enabled: true
