@@ -1,6 +1,8 @@
 # -*- encoding : utf-8 -*-
 require 'ashikawa-core/exceptions/client_error/resource_not_found/collection_not_found'
+require 'ashikawa-core/exceptions/client_error/resource_not_found/graph_not_found'
 require 'ashikawa-core/collection'
+require 'ashikawa-core/graph'
 require 'ashikawa-core/connection'
 require 'ashikawa-core/cursor'
 require 'ashikawa-core/configuration'
@@ -205,6 +207,47 @@ module Ashikawa
         Transaction.new(self, action, collections)
       end
 
+      # Fetches a single graph from this database or creates it if does not exist yet.
+      #
+      # @param [String] name The name of the Graph
+      # @return [Graph] The requested graph
+      # @api public
+      def graph(graph_name)
+        begin
+          response = send_request("gharial/#{graph_name}")
+          Graph.new(self, response)
+        rescue Ashikawa::Core::GraphNotFoundException
+          return create_graph(graph_name)
+        end
+      end
+
+      # Creates a new Graph for this database.
+      #
+      # @param [String] name The name of the Graph
+      # @option options [Array<Hash>] :edge_definitions A list of edge definitions
+      # @option options [Array<String>] :orphan_collections A list of orphan collections
+      # @return [Graph] The graph that was created
+      # @api public
+      # @example Create a graph without additional options
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
+      #   database.create_graph('a') # => #<Graph name="a">
+      # @example Create a graph with edge definitions and orphan collections
+      #   database = Ashikawa::Core::Database.new('http://localhost:8529')
+      #   database.create_graph('g', {
+      #       edge_definitions: [{ collection: 'c', from: 'a', to: 'b'}],
+      #       orphan_collections: ['d']
+      #     })
+      def create_graph(graph_name, options = {})
+        response = send_request('gharial', post: translate_params(graph_name, options))
+        Graph.new(self, response)
+      end
+
+      # Fetches all graphs for this database
+      def graphs
+        response = send_request('gharial')
+        response['graphs'].map { |raw_graph| Graph.new(self, raw_graph) }
+      end
+
       private
 
       # Parse a raw collection
@@ -232,12 +275,14 @@ module Ashikawa
 
       # Translate the params into the required format
       #
-      # @param [String] collection_identifier
+      # @param [String] identifier
       # @param [Hash] opts
       # @return [Hash]
       # @api private
-      def translate_params(collection_identifier, opts)
-        params = { name: collection_identifier }
+      def translate_params(identifier, opts)
+        params = { name: identifier }
+        params[:edgeDefinitions] = opts[:edge_definitions] if opts.key?(:edge_definitions)
+        params[:orphanCollections] = opts[:orphan_collections] if opts.key?(:orphan_collections)
         params[:isVolatile] = true if opts[:is_volatile]
         params[:type] = COLLECTION_TYPES[opts[:content_type]] if opts.key?(:content_type)
         params[:keyOptions] = translate_key_options(opts[:key_options]) if opts.key?(:key_options)

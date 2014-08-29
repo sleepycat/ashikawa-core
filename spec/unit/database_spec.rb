@@ -208,5 +208,111 @@ describe Ashikawa::Core::Database do
 
       expect(subject.create_transaction(js_function, collections)).to be(transaction)
     end
+
+    context 'managing graphs' do
+      let(:raw_graph) { double('RawGraph') }
+      let(:graph)     { instance_double(Ashikawa::Core::Graph) }
+
+      it 'should fetch a single graph if it exists' do
+        expect(connection).to receive(:send_request)
+          .with('gharial/my_awesome_graph')
+          .and_return(raw_graph)
+
+        expect(Ashikawa::Core::Graph).to receive(:new)
+          .with(subject, raw_graph)
+          .and_return(graph)
+
+        expect(subject.graph('my_awesome_graph')).to eq graph
+      end
+
+      it "should create a single graph if it doesn't exist" do
+        expect(connection).to receive(:send_request).with('gharial/my_awesome_graph') do
+          raise Ashikawa::Core::GraphNotFoundException
+        end
+
+        expect(subject).to receive(:create_graph).with('my_awesome_graph').and_return(graph)
+
+        expect(subject.graph('my_awesome_graph')).to eq graph
+      end
+
+      it 'should create a graph' do
+        expect(connection).to receive(:send_request)
+          .with('gharial', post: { name: 'my_awesome_graph' })
+          .and_return(raw_graph)
+
+        expect(Ashikawa::Core::Graph).to receive(:new)
+          .with(subject, raw_graph)
+          .and_return(graph)
+
+        expect(subject.create_graph('my_awesome_graph')).to eq graph
+      end
+
+      it 'should create a single graph with list of edge_definitions' do
+        create_params = {
+          name: 'my_awesome_graph',
+          edgeDefinitions: [
+            { collection: 'visited', from: ['ponies'], to: ['places'] }
+          ]
+        }
+        expect(connection).to receive(:send_request)
+          .with('gharial', post: create_params)
+          .and_return(raw_graph)
+
+        expect(Ashikawa::Core::Graph).to receive(:new)
+          .with(subject, raw_graph)
+          .and_return(graph)
+
+        options = {
+          edge_definitions: [
+            {
+              collection: 'visited',
+              from: [ 'ponies' ],
+              to: [ 'places' ]
+            }
+          ]
+        }
+
+        expect(subject.create_graph('my_awesome_graph', options)).to eq graph
+      end
+
+      it 'should create a single graph with list of orphan_collections' do
+        create_params = {
+          name: 'my_awesome_graph',
+          orphanCollections: [ 'i_am_alone' ]
+        }
+        expect(connection).to receive(:send_request)
+          .with('gharial', post: create_params)
+          .and_return(raw_graph)
+
+        expect(Ashikawa::Core::Graph).to receive(:new)
+          .with(subject, raw_graph)
+          .and_return(graph)
+
+        options = {
+          orphan_collections: [ 'i_am_alone' ]
+        }
+
+        expect(subject.create_graph('my_awesome_graph', options)).to eq graph
+
+      end
+
+      it 'should fetch a list of all graphs in the database' do
+        raw_list_of_graphs = double('ListOfGraphs')
+        allow(raw_list_of_graphs).to receive(:[])
+          .with('graphs')
+          .and_return([raw_graph])
+
+        expect(connection).to receive(:send_request)
+          .with('gharial')
+          .and_return(raw_list_of_graphs)
+
+        expect(Ashikawa::Core::Graph).to receive(:new)
+          .with(subject, raw_graph)
+          .and_return(graph)
+
+        expect(subject.graphs).to eq [graph]
+      end
+    end
+
   end
 end
