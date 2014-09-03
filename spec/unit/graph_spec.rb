@@ -47,6 +47,21 @@ describe Ashikawa::Core::Graph do
       it 'should have a list of vertex collections' do
         expect(subject.vertex_collections).to match_array %w{ponies dragons orphan}
       end
+
+      it 'should be able to add a vertex collection to the graph' do
+        updated_raw_graph = double('UpdatedRawGraph')
+        allow(updated_raw_graph).to receive(:[]).with('orphan_collections').and_return(['books'])
+        allow(updated_raw_graph).to receive(:[]).with('name').and_return('my_graph')
+        allow(updated_raw_graph).to receive(:[]).with('edge_definitions').and_return([edge_definition])
+
+        expect(database).to receive(:send_request)
+          .with('gharial/my_graph/vertex', post: { collection: 'books' })
+          .and_return(updated_raw_graph)
+
+        subject.add_vertex_collection 'books'
+
+        expect(subject.vertex_collections).to include 'books'
+      end
     end
 
     context 'edge collections' do

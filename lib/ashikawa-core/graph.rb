@@ -62,6 +62,17 @@ module Ashikawa
         @vertex_collections
       end
 
+      # Adds a vertex collection to this graph
+      #
+      # If the collection does not yet exist it will be created. If it already exists it will just be added
+      # to the list of vertex collections.
+      #
+      # @param [String] collection_name The name of the vertex collection
+      def add_vertex_collection(collection_name)
+        response = send_request("gharial/#@name/vertex", post: { collection: collection_name })
+        parse_raw_graph(response)
+      end
+
       # Gets a list of edge collections
       #
       # Due to the fact we need to fetch each of the collections by hand this will just return an
