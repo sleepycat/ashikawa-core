@@ -48,5 +48,11 @@ describe Ashikawa::Core::Graph do
         expect(subject.vertex_collections).to match_array %w{ponies dragons orphan}
       end
     end
+
+    context 'edge collections' do
+      it 'should have a list of edge collections' do
+        expect(subject.edge_collections).to match_array %w{friends}
+      end
+    end
   end
 end

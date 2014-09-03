@@ -62,6 +62,16 @@ module Ashikawa
         @vertex_collections
       end
 
+      # Gets a list of edge collections
+      #
+      # Due to the fact we need to fetch each of the collections by hand this will just return an
+      # enumerator which will lazily fetch the collections from the database.
+      #
+      # @return [Enumerator] An Enumerator referencing the edge collections
+      def edge_collections
+        @edge_collections
+      end
+
       private
 
       # Parses the raw graph structure as returned from the database
@@ -70,6 +80,7 @@ module Ashikawa
       def parse_raw_graph(raw_graph)
         @name               = raw_graph['name'] || raw_graph['_key']
         @vertex_collections = extract_vertex_collections(raw_graph)
+        @edge_collections   = extract_edge_collections(raw_graph)
       end
 
       # Extracts the names of all the vertex collections from the raw graph
@@ -87,6 +98,14 @@ module Ashikawa
           .map(&:values)
 
         collections.flatten.uniq
+      end
+
+      # Extracts the names of all the edge collections from the raw graph
+      #
+      # @param [Hash] raw_graph The structure as returned from the database
+      # @return [Array] Names of all edge collections
+      def extract_edge_collections(raw_graph)
+        raw_graph['edge_definitions'].map { |edge_def| edge_def['collection'] }
       end
     end
   end
