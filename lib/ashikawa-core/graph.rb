@@ -8,6 +8,11 @@ module Ashikawa
     #       through their corresponding graph class. Not doing so will eventually lead to inconsistency
     #       and data corruption.
     class Graph
+      extend Forwardable
+
+      # Sending requests is delegated to the database
+      def_delegator :@database, :send_request
+
       # The database the Graph belongs to
       #
       # @return [Database] The associated database

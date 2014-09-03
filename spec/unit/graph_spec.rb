@@ -14,6 +14,12 @@ describe Ashikawa::Core::Graph do
       expect(subject.database).to eq database
     end
 
+    it 'should delegate send_request to the database' do
+      expect(database).to receive(:send_request).with('gharial/my_graph')
+
+      subject.send_request 'gharial/my_graph'
+    end
+
     it 'should know the name of the graph' do
       allow(raw_graph).to receive(:[]).with('name').and_return('my_graph')
       expect(subject.name).to eq 'my_graph'
