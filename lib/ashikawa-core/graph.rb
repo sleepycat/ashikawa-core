@@ -49,7 +49,44 @@ module Ashikawa
       # @param [Hash] raw_graph The parsed JSON response from the database representing the graph
       def initialize(database, raw_graph)
         @database = database
-        @name     = raw_graph['name'] || raw_graph['_key']
+        parse_raw_graph(raw_graph)
+      end
+
+      # Gets a list of vertex collections
+      #
+      # Due to the fact we need to fetch each of the collections by hand this will just return an
+      # enumerator which will lazily fetch the collections from the database.
+      #
+      # @return [Enumerator] An Enumerator referencing the vertex collections
+      def vertex_collections
+        @vertex_collections
+      end
+
+      private
+
+      # Parses the raw graph structure as returned from the database
+      #
+      # @param [Hash] raw_graph The structure as returned from the database
+      def parse_raw_graph(raw_graph)
+        @name               = raw_graph['name'] || raw_graph['_key']
+        @vertex_collections = extract_vertex_collections(raw_graph)
+      end
+
+      # Extracts the names of all the vertex collections from the raw graph
+      #
+      # @param [Hash] raw_graph The structure as returned from the database
+      # @return [Array] Names of all vertex collections
+      def extract_vertex_collections(raw_graph)
+        collections = raw_graph['orphan_collections']
+
+        from_to_keys            = -> (k,v) { k == 'from' || k == 'to' }
+        select_from_and_to_keys = -> (hsh) { hsh.select(&from_to_keys)}
+
+        collections += raw_graph['edge_definitions']
+          .map(&select_from_and_to_keys)
+          .map(&:values)
+
+        collections.flatten.uniq
       end
     end
   end
