@@ -136,8 +136,8 @@ module Ashikawa
       def parse_raw_graph(raw_graph)
         @name               = raw_graph['name'] || raw_graph['_key']
         @revision           = raw_graph['_rev']
-        @edge_definitions   = raw_graph['edge_definitions']
-        @orphan_collections = raw_graph['orphan_collections']
+        @edge_definitions   = raw_graph.fetch('edgeDefinitions') { [] }
+        @orphan_collections = raw_graph.fetch('orphanCollections') { [] }
         @vertex_collections = extract_vertex_collections
         @edge_collections   = extract_edge_collections
       end

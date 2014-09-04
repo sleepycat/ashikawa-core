@@ -28,8 +28,8 @@ describe Ashikawa::Core::Graph do
     before do
       allow(raw_graph).to receive(:[]).with('name').and_return('my_graph')
       allow(raw_graph).to receive(:[]).with('_rev').and_return('A113')
-      allow(raw_graph).to receive(:[]).with('orphan_collections').and_return(['orphan'])
-      allow(raw_graph).to receive(:[]).with('edge_definitions').and_return([edge_definition])
+      allow(raw_graph).to receive(:fetch).with('orphanCollections').and_return(['orphan'])
+      allow(raw_graph).to receive(:fetch).with('edgeDefinitions').and_return([edge_definition])
     end
 
     its(:database) { should eq database }
@@ -91,10 +91,10 @@ describe Ashikawa::Core::Graph do
         let(:new_vertex_collection) { instance_double('Ashikawa::Core::VertexCollection') }
 
         before do
-          allow(updated_raw_graph).to receive(:[]).with('orphan_collections').and_return(['books'])
           allow(updated_raw_graph).to receive(:[]).with('name').and_return('my_graph')
           allow(updated_raw_graph).to receive(:[]).with('_rev')
-          allow(updated_raw_graph).to receive(:[]).with('edge_definitions').and_return([edge_definition])
+          allow(updated_raw_graph).to receive(:fetch).with('orphanCollections').and_return(['books'])
+          allow(updated_raw_graph).to receive(:fetch).with('edgeDefinitions').and_return([edge_definition])
 
           allow(database).to receive(:send_request)
             .with('gharial/my_graph/vertex', post: { collection: 'books' })
