@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 
 require 'ashikawa-core/vertex_collection'
+require 'ashikawa-core/edge_collection'
 
 module Ashikawa
   module Core
@@ -111,7 +112,14 @@ module Ashikawa
       #
       # @return [Enumerator] An Enumerator referencing the edge collections
       def edge_collections
-        @edge_collections
+        Enumerator.new do |yielder|
+          @edge_collections.each do |collection_name|
+            yielder.yield edge_collection(collection_name)
+          end
+        end
+      end
+
+      def edge_collection(collection_name)
       end
 
       private

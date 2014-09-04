@@ -18,6 +18,10 @@ describe Ashikawa::Core::Graph do
     instance_double('Ashikawa::Core::VertexCollection', name: name.to_s)
   end
 
+  def edge_collection_double(name)
+    instance_double('Ashikawa::Core::EdgeCollection', name: name.to_s)
+  end
+
   context 'an initialized graph' do
     subject { Ashikawa::Core::Graph.new(database, raw_graph) }
 
@@ -121,7 +125,10 @@ describe Ashikawa::Core::Graph do
 
     context 'edge collections' do
       it 'should have a list of edge collections' do
-        expect(subject.edge_collections).to match_array %w{friends}
+        expected_edge_collections = [edge_collection_double(:friends)]
+        allow(subject).to receive(:edge_collection).and_return(*expected_edge_collections)
+
+        expect(subject.edge_collections).to match_array expected_edge_collections
       end
     end
   end
