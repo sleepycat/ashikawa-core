@@ -52,6 +52,12 @@ module Ashikawa
       # @api public
       attr_reader :revision
 
+      # The edge definitions for this Graph
+      #
+      # @return [Hash] The edge definitons of this Graph as a simple data structure
+      # @api public
+      attr_reader :edge_definitions
+
       # Initialize a new graph instance
       #
       # @param [Database] database A reference to the database this graph belongs to
@@ -132,6 +138,7 @@ module Ashikawa
         @revision           = raw_graph['_rev']
         @vertex_collections = extract_vertex_collections(raw_graph)
         @edge_collections   = extract_edge_collections(raw_graph)
+        @edge_definitions   = raw_graph['edge_definitions']
       end
 
       # Extracts the names of all the vertex collections from the raw graph

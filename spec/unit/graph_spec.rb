@@ -35,6 +35,7 @@ describe Ashikawa::Core::Graph do
     its(:database) { should eq database }
     its(:name) { should eq 'my_graph' }
     its(:revision) { should eq 'A113' }
+    its(:edge_definitions) { should eq [edge_definition] }
 
     it 'should delegate send_request to the database' do
       expect(database).to receive(:send_request).with('gharial/my_graph')
