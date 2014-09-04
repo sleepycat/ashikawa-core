@@ -1,5 +1,7 @@
 # -*- encoding : utf-8 -*-
 
+require 'ashikawa-core/vertex_collection'
+
 module Ashikawa
   module Core
     # A certain graph in the database.
@@ -68,9 +70,12 @@ module Ashikawa
       # to the list of vertex collections.
       #
       # @param [String] collection_name The name of the vertex collection
+      # @return [VertexCollection] The newly created collection
       def add_vertex_collection(collection_name)
         response = send_request("gharial/#@name/vertex", post: { collection: collection_name })
         parse_raw_graph(response)
+        raw_collection = send_request("collection/#{collection_name}")
+        VertexCollection.new(database, raw_collection, self)
       end
 
       # Gets a list of edge collections

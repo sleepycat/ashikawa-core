@@ -48,19 +48,38 @@ describe Ashikawa::Core::Graph do
         expect(subject.vertex_collections).to match_array %w{ponies dragons orphan}
       end
 
-      it 'should be able to add a vertex collection to the graph' do
-        updated_raw_graph = double('UpdatedRawGraph')
-        allow(updated_raw_graph).to receive(:[]).with('orphan_collections').and_return(['books'])
-        allow(updated_raw_graph).to receive(:[]).with('name').and_return('my_graph')
-        allow(updated_raw_graph).to receive(:[]).with('edge_definitions').and_return([edge_definition])
+      context 'adding a collection' do
+        let(:updated_raw_graph) { double('UpdatedRawGraph') }
+        let(:raw_vertex_collection) { double('RawVertexCollection') }
+        let(:new_vertex_collection) { instance_double('Ashikawa::Core::VertexCollection') }
 
-        expect(database).to receive(:send_request)
-          .with('gharial/my_graph/vertex', post: { collection: 'books' })
-          .and_return(updated_raw_graph)
+        before do
+          allow(updated_raw_graph).to receive(:[]).with('orphan_collections').and_return(['books'])
+          allow(updated_raw_graph).to receive(:[]).with('name').and_return('my_graph')
+          allow(updated_raw_graph).to receive(:[]).with('edge_definitions').and_return([edge_definition])
 
-        subject.add_vertex_collection 'books'
+          allow(database).to receive(:send_request)
+            .with('gharial/my_graph/vertex', post: { collection: 'books' })
+            .and_return(updated_raw_graph)
 
-        expect(subject.vertex_collections).to include 'books'
+          allow(database).to receive(:send_request)
+            .with('collection/books')
+            .and_return(raw_vertex_collection)
+
+          allow(Ashikawa::Core::VertexCollection).to receive(:new)
+            .with(database, raw_vertex_collection, subject)
+            .and_return(new_vertex_collection)
+        end
+
+        it 'should add the new collection to the vertex collections of the graph' do
+          subject.add_vertex_collection 'books'
+
+          expect(subject.vertex_collections).to include 'books'
+        end
+
+        it 'should return the newly created collection' do
+          expect(subject.add_vertex_collection('books')).to eq new_vertex_collection
+        end
       end
     end
 
