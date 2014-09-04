@@ -45,6 +45,12 @@ module Ashikawa
       #   graph.name #=> 'example_1
       attr_reader :name
 
+      # The revision of the Graph
+      #
+      # @return [String] The revision of the Graph
+      # @api public
+      attr_reader :revision
+
       # Initialize a new graph instance
       #
       # @param [Database] database A reference to the database this graph belongs to
@@ -115,6 +121,7 @@ module Ashikawa
       # @param [Hash] raw_graph The structure as returned from the database
       def parse_raw_graph(raw_graph)
         @name               = raw_graph['name'] || raw_graph['_key']
+        @revision           = raw_graph['_rev']
         @vertex_collections = extract_vertex_collections(raw_graph)
         @edge_collections   = extract_edge_collections(raw_graph)
       end

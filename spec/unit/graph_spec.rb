@@ -23,22 +23,19 @@ describe Ashikawa::Core::Graph do
 
     before do
       allow(raw_graph).to receive(:[]).with('name').and_return('my_graph')
+      allow(raw_graph).to receive(:[]).with('_rev').and_return('A113')
       allow(raw_graph).to receive(:[]).with('orphan_collections').and_return(['orphan'])
       allow(raw_graph).to receive(:[]).with('edge_definitions').and_return([edge_definition])
     end
 
-    it 'should know its database' do
-      expect(subject.database).to eq database
-    end
+    its(:database) { should eq database }
+    its(:name) { should eq 'my_graph' }
+    its(:revision) { should eq 'A113' }
 
     it 'should delegate send_request to the database' do
       expect(database).to receive(:send_request).with('gharial/my_graph')
 
       subject.send_request 'gharial/my_graph'
-    end
-
-    it 'should know the name of the graph' do
-      expect(subject.name).to eq 'my_graph'
     end
 
     it 'should extract the name from the _key if no name was provided' do
@@ -91,6 +88,7 @@ describe Ashikawa::Core::Graph do
         before do
           allow(updated_raw_graph).to receive(:[]).with('orphan_collections').and_return(['books'])
           allow(updated_raw_graph).to receive(:[]).with('name').and_return('my_graph')
+          allow(updated_raw_graph).to receive(:[]).with('_rev')
           allow(updated_raw_graph).to receive(:[]).with('edge_definitions').and_return([edge_definition])
 
           allow(database).to receive(:send_request)
