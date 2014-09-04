@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 
 require 'ashikawa-core/collection'
+require 'ashikawa-core/exceptions/client_error/resource_not_found/collection_not_in_graph'
 
 module Ashikawa
   module Core
@@ -20,11 +21,14 @@ module Ashikawa
       # @param [Database] database The database the connection belongs to
       # @param [Hash] raw_collection The raw collection returned from the server
       # @param [Graph] graph The graph from which this collection was fetched
+      # @raise [CollectionNotInGraphException] If the collection has not beed added to the graph yet
       # @note You should not create instance manually but rather use Graph#add_vertex_collection
       # @api public
       def initialize(database, raw_collection, graph)
         super(database, raw_collection)
         @graph = graph
+
+        raise CollectionNotInGraphException unless @graph.has_vertex_collection?(self.name)
       end
     end
   end

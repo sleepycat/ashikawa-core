@@ -18,8 +18,24 @@ describe Ashikawa::Core::VertexCollection do
   end
   let(:graph) { instance_double('Ashikawa::Core::Graph') }
 
+  context 'building a vertex collection' do
+    before do
+      allow(graph).to receive(:has_vertex_collection?).with('example_1').and_return(false)
+    end
+
+    it 'should raise an exception if the graph does not now about the collection yet' do
+      expect do
+        Ashikawa::Core::VertexCollection.new(database, raw_collection, graph)
+      end.to raise_exception(Ashikawa::Core::CollectionNotInGraphException)
+    end
+  end
+
   context 'an initialized vertex collection' do
     subject { Ashikawa::Core::VertexCollection.new(database, raw_collection, graph) }
+
+    before do
+      allow(graph).to receive(:has_vertex_collection?).with('example_1').and_return(true)
+    end
 
     it 'should be a subclass of Collection' do
       expect(subject).to be_kind_of Ashikawa::Core::Collection
