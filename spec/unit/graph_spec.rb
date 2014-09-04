@@ -51,6 +51,13 @@ describe Ashikawa::Core::Graph do
         expect(subject.vertex_collections).to match_array %w{ponies dragons orphan}
       end
 
+      it 'should now if a collection has already been added to the list of vertices' do
+        allow(subject).to receive(:vertex_collection_names).and_return(['ponies'])
+
+        expect(subject.has_vertex_collection?('dragons')).to be_falsy
+        expect(subject.has_vertex_collection?('ponies')).to be_truthy
+      end
+
       context 'fetching a single collection' do
         let(:existing_vertex_collection) { instance_double('Ashikawa::Core::VertexCollection') }
 

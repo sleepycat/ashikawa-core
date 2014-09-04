@@ -86,6 +86,14 @@ module Ashikawa
         VertexCollection.new(database, raw_collection, self)
       end
 
+      # Checks if a collection is present in the list of vertices
+      #
+      # @param [String] collection_name The name of the collection to query
+      # @return [Boolean] True if the collection is present, false otherwise
+      def has_vertex_collection?(collection_name)
+        vertex_collection_names.any? { |name| name == collection_name }
+      end
+
       # Gets a list of edge collections
       #
       # Due to the fact we need to fetch each of the collections by hand this will just return an
@@ -130,6 +138,14 @@ module Ashikawa
       # @return [Array] Names of all edge collections
       def extract_edge_collections(raw_graph)
         raw_graph['edge_definitions'].map { |edge_def| edge_def['collection'] }
+      end
+
+      # The list of names of the vertex collections
+      #
+      # @return [Array] The list of names
+      # @api private
+      def vertex_collection_names
+        @vertex_collections
       end
     end
   end
