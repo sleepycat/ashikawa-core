@@ -136,34 +136,24 @@ module Ashikawa
       def parse_raw_graph(raw_graph)
         @name               = raw_graph['name'] || raw_graph['_key']
         @revision           = raw_graph['_rev']
-        @vertex_collections = extract_vertex_collections(raw_graph)
-        @edge_collections   = extract_edge_collections(raw_graph)
         @edge_definitions   = raw_graph['edge_definitions']
+        @orphan_collections = raw_graph['orphan_collections']
+        @vertex_collections = extract_vertex_collections
+        @edge_collections   = extract_edge_collections
       end
 
       # Extracts the names of all the vertex collections from the raw graph
       #
-      # @param [Hash] raw_graph The structure as returned from the database
       # @return [Array] Names of all vertex collections
-      def extract_vertex_collections(raw_graph)
-        collections = raw_graph['orphan_collections']
-
-        from_to_keys            = -> (k,v) { k == 'from' || k == 'to' }
-        select_from_and_to_keys = -> (hsh) { hsh.select(&from_to_keys)}
-
-        collections += raw_graph['edge_definitions']
-          .map(&select_from_and_to_keys)
-          .map(&:values)
-
-        collections.flatten.uniq
+      def extract_vertex_collections
+        @orphan_collections | @edge_definitions.map { |edge_def| edge_def.values_at('from', 'to') }.flatten
       end
 
       # Extracts the names of all the edge collections from the raw graph
       #
-      # @param [Hash] raw_graph The structure as returned from the database
       # @return [Array] Names of all edge collections
-      def extract_edge_collections(raw_graph)
-        raw_graph['edge_definitions'].map { |edge_def| edge_def['collection'] }
+      def extract_edge_collections
+        @edge_definitions.map { |edge_def| edge_def['collection'] }
       end
 
       # The list of names of the vertex collections
