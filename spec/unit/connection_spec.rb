@@ -205,6 +205,40 @@ describe Ashikawa::Core::Connection do
       request_stub.verify_stubbed_calls
     end
 
+    context 'handle 404 in the gharial module' do
+      let(:request_url) { '/_db/_system/_api/gharial/vertex/42' }
+
+      it 'should raise GraphNotFoundException if the graph could not be found' do
+        request_stub.get(request_url) do
+          [404, response_headers, { "errorMessage" => "graph not found" }]
+        end
+
+        expect { subject.send_request 'gharial/vertex/42' }.to raise_error(Ashikawa::Core::GraphNotFoundException)
+
+        request_stub.verify_stubbed_calls
+      end
+
+      it 'should raise CollectionNotFoundException the collection could not be found' do
+        request_stub.get(request_url) do
+          [404, response_headers, { "errorMessage" => "collection not found" }]
+        end
+
+        expect { subject.send_request 'gharial/vertex/42' }.to raise_error(Ashikawa::Core::CollectionNotFoundException)
+
+        request_stub.verify_stubbed_calls
+      end
+
+      it 'should raise DocumentNotFoundException the document could not be found' do
+        request_stub.get(request_url) do
+          [404, response_headers, { "errorMessage" => "document not found" }]
+        end
+
+        expect { subject.send_request 'gharial/vertex/42' }.to raise_error(Ashikawa::Core::DocumentNotFoundException)
+
+        request_stub.verify_stubbed_calls
+      end
+    end
+
     it 'should raise an exception for unknown pathes' do
       request_stub.get('/_db/_system/_api/unknown_path/4590/333') do
         [404, response_headers, '']
