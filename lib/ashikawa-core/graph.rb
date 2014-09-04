@@ -74,6 +74,14 @@ module Ashikawa
       def add_vertex_collection(collection_name)
         response = send_request("gharial/#@name/vertex", post: { collection: collection_name })
         parse_raw_graph(response)
+        vertex_collection(collection_name)
+      end
+
+      # Fetches a vertex collection associated with graph from the database
+      #
+      # @param [String] collection_name The name of the collection
+      # @return [VertexCollection] The fetched VertexCollection
+      def vertex_collection(collection_name)
         raw_collection = send_request("collection/#{collection_name}")
         VertexCollection.new(database, raw_collection, self)
       end

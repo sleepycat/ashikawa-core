@@ -44,8 +44,30 @@ describe Ashikawa::Core::Graph do
     end
 
     context 'vertex collections' do
+      let(:raw_vertex_collection) { double('RawVertexCollection') }
+
+
       it 'should have a list of vertex collections' do
         expect(subject.vertex_collections).to match_array %w{ponies dragons orphan}
+      end
+
+      context 'fetching a single collection' do
+        let(:existing_vertex_collection) { instance_double('Ashikawa::Core::VertexCollection') }
+
+        before do
+          allow(database).to receive(:send_request)
+            .with('collection/places')
+            .and_return(raw_vertex_collection)
+
+          allow(Ashikawa::Core::VertexCollection).to receive(:new)
+            .with(database, raw_vertex_collection, subject)
+            .and_return(existing_vertex_collection)
+        end
+
+        it 'should get a single vertex collection' do
+          books_collection = subject.vertex_collection 'places'
+          expect(books_collection).to eq existing_vertex_collection
+        end
       end
 
       context 'adding a collection' do
