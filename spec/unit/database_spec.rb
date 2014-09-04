@@ -211,12 +211,17 @@ describe Ashikawa::Core::Database do
 
     context 'managing graphs' do
       let(:raw_graph) { double('RawGraph') }
+      let(:gharial_response) { double('GharialResponse') }
       let(:graph)     { instance_double(Ashikawa::Core::Graph) }
+
+      before do
+        allow(gharial_response).to receive(:[]).with('graph').and_return(raw_graph)
+      end
 
       it 'should fetch a single graph if it exists' do
         expect(connection).to receive(:send_request)
           .with('gharial/my_awesome_graph')
-          .and_return(raw_graph)
+          .and_return(gharial_response)
 
         expect(Ashikawa::Core::Graph).to receive(:new)
           .with(subject, raw_graph)
@@ -238,7 +243,7 @@ describe Ashikawa::Core::Database do
       it 'should create a graph' do
         expect(connection).to receive(:send_request)
           .with('gharial', post: { name: 'my_awesome_graph' })
-          .and_return(raw_graph)
+          .and_return(gharial_response)
 
         expect(Ashikawa::Core::Graph).to receive(:new)
           .with(subject, raw_graph)
@@ -256,7 +261,7 @@ describe Ashikawa::Core::Database do
         }
         expect(connection).to receive(:send_request)
           .with('gharial', post: create_params)
-          .and_return(raw_graph)
+          .and_return(gharial_response)
 
         expect(Ashikawa::Core::Graph).to receive(:new)
           .with(subject, raw_graph)
@@ -282,7 +287,7 @@ describe Ashikawa::Core::Database do
         }
         expect(connection).to receive(:send_request)
           .with('gharial', post: create_params)
-          .and_return(raw_graph)
+          .and_return(gharial_response)
 
         expect(Ashikawa::Core::Graph).to receive(:new)
           .with(subject, raw_graph)

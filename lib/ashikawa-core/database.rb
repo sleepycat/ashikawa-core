@@ -215,7 +215,7 @@ module Ashikawa
       def graph(graph_name)
         begin
           response = send_request("gharial/#{graph_name}")
-          Graph.new(self, response)
+          Graph.new(self, response['graph'])
         rescue Ashikawa::Core::GraphNotFoundException
           return create_graph(graph_name)
         end
@@ -239,7 +239,7 @@ module Ashikawa
       #     })
       def create_graph(graph_name, options = {})
         response = send_request('gharial', post: translate_params(graph_name, options))
-        Graph.new(self, response)
+        Graph.new(self, response['graph'])
       end
 
       # Fetches all graphs for this database

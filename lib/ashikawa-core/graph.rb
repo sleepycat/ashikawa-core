@@ -90,7 +90,7 @@ module Ashikawa
       # @return [VertexCollection] The newly created collection
       def add_vertex_collection(collection_name)
         response = send_request("gharial/#@name/vertex", post: { collection: collection_name })
-        parse_raw_graph(response)
+        parse_raw_graph(response['graph'])
         vertex_collection(collection_name)
       end
 

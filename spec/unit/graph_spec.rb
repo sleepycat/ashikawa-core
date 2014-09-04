@@ -98,7 +98,7 @@ describe Ashikawa::Core::Graph do
 
           allow(database).to receive(:send_request)
             .with('gharial/my_graph/vertex', post: { collection: 'books' })
-            .and_return(updated_raw_graph)
+            .and_return({ 'graph' => updated_raw_graph })
 
           allow(database).to receive(:send_request)
             .with('collection/books')
