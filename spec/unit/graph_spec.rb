@@ -14,6 +14,10 @@ describe Ashikawa::Core::Graph do
     }
   end
 
+  def collection_double(name)
+    instance_double('Ashikawa::Core::VertexCollection', name: name.to_s)
+  end
+
   context 'an initialized graph' do
     subject { Ashikawa::Core::Graph.new(database, raw_graph) }
 
@@ -46,9 +50,11 @@ describe Ashikawa::Core::Graph do
     context 'vertex collections' do
       let(:raw_vertex_collection) { double('RawVertexCollection') }
 
-
       it 'should have a list of vertex collections' do
-        expect(subject.vertex_collections).to match_array %w{ponies dragons orphan}
+        expected_vertex_collection = [collection_double(:ponies), collection_double(:orphan), collection_double(:dragons)]
+        allow(subject).to receive(:vertex_collection).and_return(*expected_vertex_collection)
+
+        expect(subject.vertex_collections).to match_array expected_vertex_collection
       end
 
       it 'should now if a collection has already been added to the list of vertices' do
@@ -101,9 +107,12 @@ describe Ashikawa::Core::Graph do
         end
 
         it 'should add the new collection to the vertex collections of the graph' do
+          books_collection = collection_double(:books)
+          allow(subject).to receive(:vertex_collection).and_return(books_collection)
+
           subject.add_vertex_collection 'books'
 
-          expect(subject.vertex_collections).to include 'books'
+          expect(subject.vertex_collections).to include books_collection
         end
 
         it 'should return the newly created collection' do

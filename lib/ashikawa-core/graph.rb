@@ -61,7 +61,11 @@ module Ashikawa
       #
       # @return [Enumerator] An Enumerator referencing the vertex collections
       def vertex_collections
-        @vertex_collections
+        Enumerator.new do |yielder|
+          vertex_collection_names.each do |collection_name|
+            yielder.yield vertex_collection(collection_name)
+          end
+        end
       end
 
       # Adds a vertex collection to this graph
