@@ -67,6 +67,11 @@ module Ashikawa
         parse_raw_graph(raw_graph)
       end
 
+      def delete(options = {})
+        drop_collections = options.fetch(:drop_collections) { false }
+        send_request("gharial/#@name", delete: { dropCollections: drop_collections })
+      end
+
       # Gets a list of vertex collections
       #
       # Due to the fact we need to fetch each of the collections by hand this will just return an

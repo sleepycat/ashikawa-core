@@ -49,6 +49,20 @@ describe Ashikawa::Core::Graph do
       expect(subject.name).to eq 'my_graph'
     end
 
+    context 'delete the graph' do
+      it 'should delete just the graph' do
+        expect(database).to receive(:send_request).with('gharial/my_graph', delete: { dropCollections: false })
+
+        subject.delete
+      end
+
+      it 'should delete the graph including all collections' do
+        expect(database).to receive(:send_request).with('gharial/my_graph', delete: { dropCollections: true })
+
+        subject.delete(drop_collections: true)
+      end
+    end
+
     context 'vertex collections' do
       let(:raw_vertex_collection) { double('RawVertexCollection') }
 
