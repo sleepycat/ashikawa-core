@@ -136,16 +136,25 @@ module Ashikawa
       # @param [Hash] directions The specification between which vertices the edges should be created
       # @option [Array<Symbol>] :from A list of collections names from which the edge directs
       # @option [Array<Symbol>] :to A list of collections names to which the edge directs
-      # @option [Array<Symbol>] :between A list of collections names between a bidirectional edge will be exist
       def add_edge_definition(collection_name, directions)
-        create_options = if directions.has_key?(:between)
-                           { from: directions[:between], to: directions[:between] }
-                         else
-                           directions.keep_if { |k,v| k == :from || k == :to }
-                         end
-        create_options[:collection] = collection_name
+        create_options = {
+          collection: collection_name,
+          from:       directions[:from],
+          to:         directions[:to]
+        }
 
-        send_request("gharial/#@name/edge", post: create_options)
+        response = send_request("gharial/#@name/edge", post: create_options)
+        parse_raw_graph(response['graph'])
+        edge_collection(collection_name)
+      end
+
+      # Fetches an edge collection from the database
+      #
+      # @param [String] collection_name The name of the desired edge
+      # @return [EdgeCollection] The edge collection for the given name
+      def edge_collection(collection_name)
+        response = send_request("collection/#{collection_name}")
+        EdgeCollection.new(database, response, self)
       end
 
       private

@@ -94,14 +94,13 @@ describe Ashikawa::Core::Graph do
         end
 
         it 'should get a single vertex collection' do
-          books_collection = subject.vertex_collection 'places'
-          expect(books_collection).to eq existing_vertex_collection
+          places_collection = subject.vertex_collection 'places'
+          expect(places_collection).to eq existing_vertex_collection
         end
       end
 
       context 'adding a collection' do
         let(:updated_raw_graph) { double('UpdatedRawGraph') }
-        let(:raw_vertex_collection) { double('RawVertexCollection') }
         let(:new_vertex_collection) { instance_double('Ashikawa::Core::VertexCollection') }
 
         before do
@@ -139,6 +138,8 @@ describe Ashikawa::Core::Graph do
     end
 
     context 'edge collections' do
+      let(:raw_edge_collection) { double('RawEdgeCollection') }
+
       it 'should have a list of edge collections' do
         expected_edge_collections = [edge_collection_double(:friends)]
         allow(subject).to receive(:edge_collection).and_return(*expected_edge_collections)
@@ -147,31 +148,70 @@ describe Ashikawa::Core::Graph do
       end
 
       context 'fetching a single edge collections' do
-        it 'should return a single edge collection'
+        let(:existing_edge_collection) { instance_double('Ashikawa::Core::EdgeCollection') }
+
+        before do
+          allow(database).to receive(:send_request)
+            .with('collection/friends')
+            .and_return(raw_edge_collection)
+
+          allow(Ashikawa::Core::EdgeCollection).to receive(:new)
+            .with(database, raw_edge_collection, subject)
+            .and_return(existing_edge_collection)
+        end
+
+        it 'should return a single edge collection' do
+          friends_colection = subject.edge_collection :friends
+          expect(friends_colection).to eq existing_edge_collection
+        end
       end
 
       context 'adding a definition' do
-        let(:updated_raw_graph) { double('Updated_Raw_Graph') }
-        let(:raw_edge_collection) { double('RawEdgeCollection') }
+        let(:updated_raw_graph) { double('UpdatedRawGraph') }
         let(:new_edge_collection) { instance_double('Ashikawa::Core::EdgeCollection') }
+        let(:new_edge_definition) do
+          {
+            'collection' => 'authorship',
+            'from'       => ['author'],
+            'to'         => ['books']
+          }
+        end
 
         before do
           allow(updated_raw_graph).to receive(:[]).with('name').and_return('my_graph')
           allow(updated_raw_graph).to receive(:[]).with('_rev')
           allow(updated_raw_graph).to receive(:fetch).with('orphanCollections').and_return(['orphans'])
           allow(updated_raw_graph).to receive(:fetch).with('edgeDefinitions').and_return([edge_definition])
+
+          allow(database).to receive(:send_request)
+            .with('gharial/my_graph/edge', post: { collection: :authorship, from: [:author], to: [:books]})
+            .and_return({ 'graph' => updated_raw_graph })
+
+          allow(subject).to receive(:edge_collection).and_return(new_edge_collection)
         end
 
         it 'should define the name and direction' do
           expect(database).to receive(:send_request)
             .with('gharial/my_graph/edge', post: { collection: :authorship, from: [:author], to: [:books]})
-            .and_return(updated_raw_graph)
+            .and_return({ 'graph' => updated_raw_graph })
 
           subject.add_edge_definition(:authorship, from: [:author], to: [:books])
         end
 
-        it 'should add the definition to the collection edge collections'
-        it 'should return the edge collection'
+        it 'should add the definition to the collection edge collections' do
+          allow(updated_raw_graph).to receive(:fetch).with('edgeDefinitions').and_return([
+            edge_definition,
+            new_edge_definition
+          ])
+
+          subject.add_edge_definition(:authorship, from: [:author], to: [:books])
+
+          expect(subject.edge_collections).to include new_edge_collection
+        end
+
+        it 'should return the edge collection' do
+          expect(subject.add_edge_definition(:authorship, from: [:author], to: [:books])).to eq new_edge_collection
+        end
       end
     end
   end

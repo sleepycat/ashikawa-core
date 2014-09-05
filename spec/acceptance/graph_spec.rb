@@ -17,7 +17,7 @@ describe 'Graphs' do
   let(:friends_with) { subject.add_edge_definition(:friends_with, from: [:ponies], to: [:ponies]) }
   let(:visited)      { subject.add_edge_definition(:visited, from: [:ponies], to: [:places]) }
 
-  before :each do
+  before do
     # required to create the required collections
     ponies
     places
@@ -25,7 +25,7 @@ describe 'Graphs' do
     visited
   end
 
-  after :each do
+  after do
     subject.delete(drop_collections: true)
   end
 
@@ -45,8 +45,7 @@ describe 'Graphs' do
 
     expect(subject.name).to eq 'ponyville'
     expect(subject.revision).not_to be_nil
-    expect(subject.edge_definitions).to eq edge_definitions
-    expect(subject.orphan_collections).to eq []
+    expect(subject.edge_definitions).to match_array edge_definitions
   end
 
   it 'should know the vertex collections' do
@@ -61,9 +60,10 @@ describe 'Graphs' do
 
   context 'connected vertices' do
     before :each do
-      # Undirected Graphs
-      subject.edge_collection(:friends_with).add(between: [rainbow_dash, pinkie_pie])
-      # Directed graphs
+      # There are only directed graphs
+      subject.edge_collection(:friends_with).add(from: pinkie_pie, to: rainbow_dash)
+      subject.edge_collection(:friends_with).add(from: rainbow_dash, to: pinkie_pie)
+
       subject.edge_collection(:visited).add(from: pinkie_pie, to: crystal_empire)
       subject.edge_collection(:visited).add(from: rainbow_dash, to: [cloudsdale, crystal_empire, manehatten])
     end
