@@ -145,6 +145,34 @@ describe Ashikawa::Core::Graph do
 
         expect(subject.edge_collections).to match_array expected_edge_collections
       end
+
+      context 'fetching a single edge collections' do
+        it 'should return a single edge collection'
+      end
+
+      context 'adding a definition' do
+        let(:updated_raw_graph) { double('Updated_Raw_Graph') }
+        let(:raw_edge_collection) { double('RawEdgeCollection') }
+        let(:new_edge_collection) { instance_double('Ashikawa::Core::EdgeCollection') }
+
+        before do
+          allow(updated_raw_graph).to receive(:[]).with('name').and_return('my_graph')
+          allow(updated_raw_graph).to receive(:[]).with('_rev')
+          allow(updated_raw_graph).to receive(:fetch).with('orphanCollections').and_return(['orphans'])
+          allow(updated_raw_graph).to receive(:fetch).with('edgeDefinitions').and_return([edge_definition])
+        end
+
+        it 'should define the name and direction' do
+          expect(database).to receive(:send_request)
+            .with('gharial/my_graph/edge', post: { collection: :authorship, from: [:author], to: [:books]})
+            .and_return(updated_raw_graph)
+
+          subject.add_edge_definition(:authorship, from: [:author], to: [:books])
+        end
+
+        it 'should add the definition to the collection edge collections'
+        it 'should return the edge collection'
+      end
     end
   end
 end
