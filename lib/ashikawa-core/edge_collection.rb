@@ -45,8 +45,9 @@ module Ashikawa
 
         from_to = product.call(directions[:from], directions[:to])
 
-        from_to.each do |from_vertex, to_vertex|
-          send_request("gharial/#{graph.name}/edge/#@name", post: { _from: from_vertex.id, _to: to_vertex.id })
+        from_to.map do |from_vertex, to_vertex|
+          response = send_request("gharial/#{graph.name}/edge/#@name", post: { _from: from_vertex.id, _to: to_vertex.id })
+          fetch(response['edge']['_key'])
         end
       end
     end

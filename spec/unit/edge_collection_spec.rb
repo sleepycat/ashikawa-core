@@ -18,7 +18,9 @@ describe Ashikawa::Core::EdgeCollection do
     }
   end
   let(:graph) { instance_double('Ashikawa::Core::Graph', name: 'my_graph') }
+  let(:new_edge) { instance_double('Ashikawa::Core::Edge') }
   let(:raw_edge) { double('RawEdge') }
+  let(:post_response) { { 'edge' => { '_key' => '123' } } }
 
   context 'an initialized edge collection' do
     subject { Ashikawa::Core::EdgeCollection.new(database, raw_collection, graph) }
@@ -39,13 +41,21 @@ describe Ashikawa::Core::EdgeCollection do
       before do
         allow(subject).to receive(:send_request)
           .with('gharial/my_graph/edge/relation', post: { _from: 'this_document_id', _to: 'that_document_id' })
+          .and_return(post_response)
+
+        allow(subject).to receive(:send_request)
+          .with('gharial/my_graph/edge/relation/123')
           .and_return(raw_edge)
+
+        allow(subject).to receive(:fetch)
+          .with('123')
+          .and_return(new_edge)
       end
 
       it 'should add a directed relation between to vertices' do
         expect(subject).to receive(:send_request)
           .with('gharial/my_graph/edge/relation', post: { _from: 'this_document_id', _to: 'that_document_id' })
-          .and_return(raw_edge)
+          .and_return(post_response)
 
         subject.add(from: this_document, to: that_document)
       end
@@ -53,16 +63,20 @@ describe Ashikawa::Core::EdgeCollection do
       it 'should add directed relations between a bunch of vertices' do
         expect(subject).to receive(:send_request)
           .with('gharial/my_graph/edge/relation', post: { _from: 'this_document_id', _to: 'that_document_id' })
-          .and_return(raw_edge)
+          .and_return(post_response)
 
         expect(subject).to receive(:send_request)
           .with('gharial/my_graph/edge/relation', post: { _from: 'this_document_id', _to: 'more_document_id' })
-          .and_return(raw_edge)
+          .and_return(post_response)
 
         subject.add(from: this_document, to: [that_document, more_document])
       end
 
-      it 'should return the edge document'
+      it 'should return the edge documents' do
+        created_edges = subject.add(from: this_document, to: that_document)
+
+        expect(created_edges).to eq [new_edge]
+      end
     end
   end
 end
