@@ -235,21 +235,29 @@ describe Ashikawa::Core::Collection do
 
     its(:content_type) { should be(:document) }
 
+    context 'building the content classes' do
+      it 'should build documents' do
+        expect(Ashikawa::Core::Document).to receive(:new)
+          .with(database, raw_document)
+
+        subject.build_content_class(raw_document)
+      end
+    end
+
     context 'when using the key' do
       let(:key) { 333 }
 
       it 'should receive a document by ID via fetch' do
         expect(database).to receive(:send_request)
           .with('document/60768679/333', {})
-        expect(Ashikawa::Core::Document).to receive(:new)
+        expect(subject).to receive(:build_content_class)
 
         subject.fetch(key)
       end
 
       it 'should receive a document by ID via []' do
-        expect(database).to receive(:send_request)
-          .with('document/60768679/333', {})
-        expect(Ashikawa::Core::Document).to receive(:new)
+        expect(subject).to receive(:fetch)
+          .with(key)
 
         subject[key]
       end
@@ -318,18 +326,25 @@ describe Ashikawa::Core::Collection do
 
     its(:content_type) { should be(:edge) }
 
+    context 'building the content classes' do
+      it 'should build documents' do
+        expect(Ashikawa::Core::Edge).to receive(:new)
+          .with(database, raw_document)
+
+        subject.build_content_class(raw_document)
+      end
+    end
+
     it 'should receive an edge by ID via fetch' do
       expect(database).to receive(:send_request)
         .with('edge/60768679/333', {})
-      expect(Ashikawa::Core::Edge).to receive(:new)
+      expect(subject).to receive(:build_content_class)
 
       subject.fetch(333)
     end
 
     it 'should receive an edge by ID via []' do
-      expect(database).to receive(:send_request)
-        .with('edge/60768679/333', {})
-      expect(Ashikawa::Core::Edge).to receive(:new)
+      expect(subject).to receive(:fetch).with(333)
 
       subject[333]
     end

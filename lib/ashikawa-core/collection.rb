@@ -354,7 +354,7 @@ module Ashikawa
       #   document = collection.fetch(12345)
       def fetch(document_key)
         response = send_request_for_content_key(document_key)
-        @content_class.new(@database, response)
+        build_content_class(response)
       end
 
       # Fetch a certain document by its key, return nil if the document does not exist
@@ -487,6 +487,15 @@ module Ashikawa
       #   people.volatile? #=> false
       def volatile?
         get_information_from_server(:properties, :isVolatile)
+      end
+
+      # Builds an instance for the content class
+      #
+      # @param [Hash] data The raw data to be used to instatiate the class
+      # @return [Document] The instatiated document
+      # @api private
+      def build_content_class(data)
+        @content_class.new(@database, data)
       end
 
       private

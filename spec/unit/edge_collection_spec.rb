@@ -43,7 +43,6 @@ describe Ashikawa::Core::EdgeCollection do
           .with('gharial/my_graph/edge/relation/', post: { _from: 'this_document_id', _to: 'that_document_id' })
           .and_return(post_response)
 
-
         allow(subject).to receive(:fetch)
           .with('123')
           .and_return(new_edge)
@@ -81,6 +80,14 @@ describe Ashikawa::Core::EdgeCollection do
         .with('gharial/my_graph/edge/relation/edge_key', {})
 
       subject.send(:send_request_for_this_collection, 'edge_key')
+    end
+
+    it 'should overwrite the #build_content_class to create edges with the graph attached' do
+      expect(Ashikawa::Core::Edge).to receive(:new)
+        .with(database, raw_edge, graph: graph)
+        .and_return(new_edge)
+
+      subject.build_content_class(raw_edge)
     end
   end
 end

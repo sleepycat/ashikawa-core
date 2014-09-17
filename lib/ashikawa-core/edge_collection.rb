@@ -51,6 +51,15 @@ module Ashikawa
         end
       end
 
+      # Builds a new edge object and passes the current graph to it
+      #
+      # @param [Hash] data The raw data to be used to instatiate the class
+      # @return [Edge] The instatiated edge
+      # @api private
+      def build_content_class(data)
+        Edge.new(@database, data, graph: graph)
+      end
+
       private
 
       # Send a request to the server through the gharial module
