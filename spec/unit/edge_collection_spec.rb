@@ -75,6 +75,31 @@ describe Ashikawa::Core::EdgeCollection do
       end
     end
 
+    context 'removing edges by example' do
+      let(:this_document) { instance_double('Ashikawa::Core::Document', id: 'this_document_id') }
+      let(:that_document) { instance_double('Ashikawa::Core::Document', id: 'that_document_id') }
+      let(:query)         { double('Query') }
+      let(:aql_string)    do
+        <<-AQL.gsub(/^[ \t]*/, '')
+        FOR e IN @@edge_collection
+          FILTER e._from == @from && e._to == @to
+          REMOVE e._key IN @@edge_collection
+        AQL
+      end
+      let(:bind_vars) { { :'@edge_collection' => 'relation', :from => 'this_document_id', :to => 'that_document_id' } }
+
+      before do
+        allow(database).to receive(:query).and_return(query)
+      end
+
+      it 'should remove the edges' do
+        expect(query).to receive(:execute)
+          .with(aql_string, bind_vars: bind_vars)
+
+        subject.remove(from: this_document, to: that_document)
+      end
+    end
+
     it 'should overwrite #send_request_for_this_collection to use gharial' do
       expect(subject).to receive(:send_request)
         .with('gharial/my_graph/edge/relation/edge_key', {})

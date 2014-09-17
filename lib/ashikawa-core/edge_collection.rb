@@ -9,6 +9,13 @@ module Ashikawa
     # @note This is basically just a regular collection with some additional attributes and methods to ease
     #       working with collections in the graph module.
     class EdgeCollection < Collection
+      # The prepared AQL statement to remove edges
+      REMOVE_EDGES_AQL_STATEMENT = <<-AQL.gsub(/^[ \t]*/, '')
+      FOR e IN @@edge_collection
+        FILTER e._from == @from && e._to == @to
+        REMOVE e._key IN @@edge_collection
+      AQL
+
       # The Graph instance this EdgeCollection was originally fetched from
       #
       # @return [Graph] The Graph instance the collection was fetched from
@@ -49,6 +56,24 @@ module Ashikawa
           response = send_request_for_this_collection('', post: { _from: from_vertex.id, _to: to_vertex.id })
           fetch(response['edge']['_key'])
         end
+      end
+
+      # Remove edges by example
+      #
+      # @note This will remove ALL edges between the given vertices. For more fine grained control delete the desired edges
+      #       through Edge#remove.
+      # @param [Hash] from_to Specifies the edge by its vertices to be removed
+      # @option from_to [Document] from The from part of the edge
+      # @option from_to [Document] to The to part of the edge
+      # @api public
+      def remove(from_to)
+        bind_vars = {
+          :@edge_collection => name,
+          :from             => from_to[:from].id,
+          :to               => from_to[:to].id
+        }
+
+        database.query.execute(REMOVE_EDGES_AQL_STATEMENT, bind_vars: bind_vars)
       end
 
       # Builds a new edge object and passes the current graph to it
