@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'unit/spec_helper'
 require 'ashikawa-core/graph'
+require 'ashikawa-core/document'
 require 'ashikawa-core/database'
 
 describe Ashikawa::Core::Graph do
@@ -47,6 +48,49 @@ describe Ashikawa::Core::Graph do
       allow(raw_graph).to receive(:[]).with('name').and_return(nil)
       allow(raw_graph).to receive(:[]).with('_key').and_return('my_graph')
       expect(subject.name).to eq 'my_graph'
+    end
+
+    context 'finding neighbors' do
+      let(:some_document) { instance_double('Ashikawa::Core::Document', key: 'somekey') }
+      let(:query)         { double('Query') }
+      let(:cursor)        { double('Cursor') }
+
+      before do
+        allow(database).to receive(:query).and_return(query)
+      end
+
+      it 'should return the cursor for the query' do
+        allow(query).to receive(:execute)
+          .and_return(cursor)
+
+        expect(subject.neighbors(some_document)).to eq cursor
+      end
+
+      it 'should run a neighbors AQL for all edge collections' do
+        aql_string = <<-AQL.gsub(/^[ \t]*/, '')
+        FOR n IN GRAPH_NEIGHBORS(@graph, { _key:@vertex_key }, {})
+          RETURN n.vertex
+        AQL
+        bind_vars = { :graph => 'my_graph', :vertex_key => 'somekey' }
+
+        expect(query).to receive(:execute)
+          .with(aql_string, bind_vars: bind_vars)
+
+        subject.neighbors(some_document)
+      end
+
+      it 'should run a neighbors AQL for a specific edge collection' do
+        aql_string = <<-AQL.gsub(/^[ \t]*/, '')
+        FOR n IN GRAPH_NEIGHBORS(@graph, { _key:@vertex_key }, {edgeCollectionRestriction: @edge_collection})
+          RETURN n.vertex
+        AQL
+        bind_vars = { :edge_collection => ['my-edges'], :graph => 'my_graph', :vertex_key => 'somekey' }
+
+        expect(query).to receive(:execute)
+          .with(aql_string, bind_vars: bind_vars)
+
+        subject.neighbors(some_document, edges: ['my-edges'])
+      end
     end
 
     context 'delete the graph' do

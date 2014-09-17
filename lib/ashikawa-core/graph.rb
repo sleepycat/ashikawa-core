@@ -16,6 +16,18 @@ module Ashikawa
       # Sending requests is delegated to the database
       def_delegator :@database, :send_request
 
+      # Prepared AQL statement for neighbors function on a specific edge collections
+      SPECIFIC_NEIGHBORS_AQL = <<-AQL.gsub(/^[ \t]*/, '')
+      FOR n IN GRAPH_NEIGHBORS(@graph, { _key:@vertex_key }, {edgeCollectionRestriction: @edge_collection})
+        RETURN n.vertex
+      AQL
+
+      # Prepared AQL statement for neighbors function on ALL edge collections
+      ALL_NEIGHBORS_AQL = <<-AQL.gsub(/^[ \t]*/, '')
+      FOR n IN GRAPH_NEIGHBORS(@graph, { _key:@vertex_key }, {})
+        RETURN n.vertex
+      AQL
+
       # The database the Graph belongs to
       #
       # @return [Database] The associated database
@@ -155,6 +167,27 @@ module Ashikawa
       def edge_collection(collection_name)
         response = send_request("collection/#{collection_name}")
         EdgeCollection.new(database, response, self)
+      end
+
+      # Return a Cursor representing the neighbors for the given document and optional edge collections
+      #
+      # @param [Document] vertex The start vertex
+      # @param [options] options Additional options like restrictions on the edge collections
+      # @option [Array<Symbol>] :edges A list of edge collection to restrict the neighbors function on
+      # @return [Cursor] The cursor to the query result
+      def neighbors(vertex, options = {})
+        bind_vars = {
+          graph: name,
+          vertex_key: vertex.key
+        }
+        aql_string = ALL_NEIGHBORS_AQL
+
+        if options.has_key?(:edges)
+          aql_string = SPECIFIC_NEIGHBORS_AQL
+          bind_vars[:edge_collection] = [options[:edges]].flatten
+        end
+
+        database.query.execute(aql_string, bind_vars: bind_vars)
       end
 
       private
