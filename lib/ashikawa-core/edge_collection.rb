@@ -46,9 +46,21 @@ module Ashikawa
         from_to = product.call(directions[:from], directions[:to])
 
         from_to.map do |from_vertex, to_vertex|
-          response = send_request("gharial/#{graph.name}/edge/#@name", post: { _from: from_vertex.id, _to: to_vertex.id })
+          response = send_request_for_this_collection('', post: { _from: from_vertex.id, _to: to_vertex.id })
           fetch(response['edge']['_key'])
         end
+      end
+
+      private
+
+      # Send a request to the server through the gharial module
+      #
+      # @param [String] path The requested path
+      # @param [Hash] method The desired HTTP Verb (defaults to GET) and its parameters
+      # @return [Hash] Response from the server
+      # @api private
+      def send_request_for_this_collection(path, method = {})
+        send_request("gharial/#{graph.name}/edge/#@name/#{path}", method)
       end
     end
   end

@@ -40,12 +40,9 @@ describe Ashikawa::Core::EdgeCollection do
 
       before do
         allow(subject).to receive(:send_request)
-          .with('gharial/my_graph/edge/relation', post: { _from: 'this_document_id', _to: 'that_document_id' })
+          .with('gharial/my_graph/edge/relation/', post: { _from: 'this_document_id', _to: 'that_document_id' })
           .and_return(post_response)
 
-        allow(subject).to receive(:send_request)
-          .with('gharial/my_graph/edge/relation/123')
-          .and_return(raw_edge)
 
         allow(subject).to receive(:fetch)
           .with('123')
@@ -54,7 +51,7 @@ describe Ashikawa::Core::EdgeCollection do
 
       it 'should add a directed relation between to vertices' do
         expect(subject).to receive(:send_request)
-          .with('gharial/my_graph/edge/relation', post: { _from: 'this_document_id', _to: 'that_document_id' })
+          .with('gharial/my_graph/edge/relation/', post: { _from: 'this_document_id', _to: 'that_document_id' })
           .and_return(post_response)
 
         subject.add(from: this_document, to: that_document)
@@ -62,11 +59,11 @@ describe Ashikawa::Core::EdgeCollection do
 
       it 'should add directed relations between a bunch of vertices' do
         expect(subject).to receive(:send_request)
-          .with('gharial/my_graph/edge/relation', post: { _from: 'this_document_id', _to: 'that_document_id' })
+          .with('gharial/my_graph/edge/relation/', post: { _from: 'this_document_id', _to: 'that_document_id' })
           .and_return(post_response)
 
         expect(subject).to receive(:send_request)
-          .with('gharial/my_graph/edge/relation', post: { _from: 'this_document_id', _to: 'more_document_id' })
+          .with('gharial/my_graph/edge/relation/', post: { _from: 'this_document_id', _to: 'more_document_id' })
           .and_return(post_response)
 
         subject.add(from: this_document, to: [that_document, more_document])
@@ -77,6 +74,13 @@ describe Ashikawa::Core::EdgeCollection do
 
         expect(created_edges).to eq [new_edge]
       end
+    end
+
+    it 'should overwrite #send_request_for_this_collection to use gharial' do
+      expect(subject).to receive(:send_request)
+        .with('gharial/my_graph/edge/relation/edge_key', {})
+
+      subject.send(:send_request_for_this_collection, 'edge_key')
     end
   end
 end
