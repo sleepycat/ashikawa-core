@@ -63,5 +63,14 @@ describe Ashikawa::Core::Edge do
     subject { Ashikawa::Core::Edge.new(database, raw_data, additional_data) }
 
     its(['more_info']) { should eq(more_info) }
+
+    context 'initializing with a graph' do
+      let(:graph) { double('Ashikawa::Core::Graph') }
+      let(:additional_data_with_graph) { { graph: graph,  more_info: more_info } }
+      subject { Ashikawa::Core::Edge.new(database, raw_data, additional_data_with_graph) }
+
+      its(['more_info']) { should eq(more_info) }
+      its(:graph) { should eq(graph) }
+    end
   end
 end

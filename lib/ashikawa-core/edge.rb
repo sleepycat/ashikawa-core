@@ -26,17 +26,25 @@ module Ashikawa
       #   document.to_id # => 'my_fancy_collection/2345678'
       attr_reader :to_id
 
+      # The optional graph this edge belongs to
+      #
+      # @return [Graph] The Graph instance the edge was fetched from
+      # @api public
+      attr_reader :graph
+
       # Initialize an Edge with the database and raw data
       #
       # @param [Database] _database
       # @param [Hash] raw_edge
       # @param [Hash] _additional_data
+      # @option _additional_data [Graph] graph The graph this edge is associated with
       # @api public
       # @example Create an Edge
       #   document = Ashikawa::Core::Edge.new(database, raw_edge)
       def initialize(_database, raw_edge, _additional_data = {})
         @from_id = raw_edge['_from']
         @to_id = raw_edge['_to']
+        @graph = _additional_data.delete(:graph)
         super
       end
 
