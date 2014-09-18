@@ -57,6 +57,22 @@ describe Ashikawa::Core::Document do
     end
   end
 
+  describe 'initialized with a garaph' do
+    let(:graph) { double('Ashikawa::Core::Graph', name: 'my-graph') }
+    let(:additional_data_with_graph) { { graph: graph, more_info: more_info } }
+    subject { Ashikawa::Core::Document.new(database, raw_data, additional_data_with_graph) }
+
+    its(['more_info']) { should eq(more_info) }
+    its(:graph) { should eq(graph) }
+
+    it 'should send requests through the graph module' do
+      expect(database).to receive(:send_request)
+        .with("gharial/my-graph/vertex/#{id}", {})
+
+      subject.send(:send_request_for_document, {})
+    end
+  end
+
   describe 'initialized document with ID' do
     subject { Ashikawa::Core::Document.new(database, raw_data) }
 
