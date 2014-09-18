@@ -7,7 +7,7 @@ rvm:
   - 2.1.2
   - jruby-1.7.12
 env:
-  - ARANGODB_DISABLE_AUTHENTIFICATION=false VERSION=2.1
+  - ARANGODB_DISABLE_AUTHENTIFICATION=false VERSION=2.2
 script: "bundle exec rake ci"
 addons:
   code_climate:
