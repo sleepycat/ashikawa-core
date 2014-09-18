@@ -56,7 +56,11 @@ module Ashikawa
       # @return [Hash] The parsed response from the server
       # @api private
       def send_request_for_document(opts)
-        @database.send_request("edge/#{@id}", opts)
+        if graph
+          @database.send_request("gharial/#{graph.name}/edge/#{@id}", opts)
+        else
+          @database.send_request("edge/#{@id}", opts)
+        end
       end
     end
   end
