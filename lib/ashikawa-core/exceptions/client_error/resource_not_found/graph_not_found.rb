@@ -16,4 +16,3 @@ module Ashikawa
     end
   end
 end
-

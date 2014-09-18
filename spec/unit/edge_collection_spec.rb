@@ -116,4 +116,3 @@ describe Ashikawa::Core::EdgeCollection do
     end
   end
 end
-

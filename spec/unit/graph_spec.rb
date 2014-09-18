@@ -10,8 +10,8 @@ describe Ashikawa::Core::Graph do
   let(:edge_definition) do
     {
       'collection' => 'friends',
-      'from'       => ['ponies'],
-      'to'         => ['dragons', 'ponies']
+      'from'       => %w(ponies),
+      'to'         => %w(dragons ponies)
     }
   end
 
@@ -71,7 +71,7 @@ describe Ashikawa::Core::Graph do
         FOR n IN GRAPH_NEIGHBORS(@graph, { _key:@vertex_key }, {})
           RETURN n.vertex
         AQL
-        bind_vars = { :graph => 'my_graph', :vertex_key => 'somekey' }
+        bind_vars = { graph: 'my_graph', vertex_key: 'somekey' }
 
         expect(query).to receive(:execute)
           .with(aql_string, bind_vars: bind_vars)
@@ -84,7 +84,7 @@ describe Ashikawa::Core::Graph do
         FOR n IN GRAPH_NEIGHBORS(@graph, { _key:@vertex_key }, {edgeCollectionRestriction: @edge_collection})
           RETURN n.vertex
         AQL
-        bind_vars = { :edge_collection => ['my-edges'], :graph => 'my_graph', :vertex_key => 'somekey' }
+        bind_vars = { edge_collection: ['my-edges'], graph: 'my_graph', vertex_key: 'somekey' }
 
         expect(query).to receive(:execute)
           .with(aql_string, bind_vars: bind_vars)
@@ -110,14 +110,20 @@ describe Ashikawa::Core::Graph do
     context 'vertex collections' do
       let(:raw_vertex_collection) { double('RawVertexCollection') }
 
+      its(:vertex_collection_names) { should match_array %w(ponies dragons orphan) }
+
       it 'should have a list of vertex collections' do
-        expected_vertex_collection = [collection_double(:ponies), collection_double(:orphan), collection_double(:dragons)]
+        expected_vertex_collection = [
+          collection_double(:ponies),
+          collection_double(:orphan),
+          collection_double(:dragons)
+        ]
         allow(subject).to receive(:vertex_collection).and_return(*expected_vertex_collection)
 
         expect(subject.vertex_collections).to match_array expected_vertex_collection
       end
 
-      it 'should now if a collection has already been added to the list of vertices' do
+      it 'should know if a collection has already been added to the list of vertices' do
         allow(subject).to receive(:vertex_collection_names).and_return(['ponies'])
 
         expect(subject.has_vertex_collection?('dragons')).to be_falsy
@@ -184,6 +190,8 @@ describe Ashikawa::Core::Graph do
     context 'edge collections' do
       let(:raw_edge_collection) { double('RawEdgeCollection') }
 
+      its(:edge_collection_names) { should match_array %w(friends) }
+
       it 'should have a list of edge collections' do
         expected_edge_collections = [edge_collection_double(:friends)]
         allow(subject).to receive(:edge_collection).and_return(*expected_edge_collections)
@@ -228,7 +236,7 @@ describe Ashikawa::Core::Graph do
           allow(updated_raw_graph).to receive(:fetch).with('edgeDefinitions').and_return([edge_definition])
 
           allow(database).to receive(:send_request)
-            .with('gharial/my_graph/edge', post: { collection: :authorship, from: [:author], to: [:books]})
+            .with('gharial/my_graph/edge', post: { collection: :authorship, from: [:author], to: [:books] })
             .and_return({ 'graph' => updated_raw_graph })
 
           allow(subject).to receive(:edge_collection).and_return(new_edge_collection)
@@ -236,7 +244,7 @@ describe Ashikawa::Core::Graph do
 
         it 'should define the name and direction' do
           expect(database).to receive(:send_request)
-            .with('gharial/my_graph/edge', post: { collection: :authorship, from: [:author], to: [:books]})
+            .with('gharial/my_graph/edge', post: { collection: :authorship, from: [:author], to: [:books] })
             .and_return({ 'graph' => updated_raw_graph })
 
           subject.add_edge_definition(:authorship, from: [:author], to: [:books])

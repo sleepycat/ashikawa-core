@@ -98,6 +98,13 @@ module Ashikawa
         end
       end
 
+      # The list of names of the vertex collections
+      #
+      # @return [Array] Names of all vertex collections
+      def vertex_collection_names
+        @orphan_collections | @edge_definitions.map { |edge_def| edge_def.values_at('from', 'to') }.flatten
+      end
+
       # Adds a vertex collection to this graph
       #
       # If the collection does not yet exist it will be created. If it already exists it will just be added
@@ -136,10 +143,17 @@ module Ashikawa
       # @return [Enumerator] An Enumerator referencing the edge collections
       def edge_collections
         Enumerator.new do |yielder|
-          @edge_collections.each do |collection_name|
+          edge_collection_names.each do |collection_name|
             yielder.yield edge_collection(collection_name)
           end
         end
+      end
+
+      # The list of names of the edge collections
+      #
+      # @return [Array] Names of all edge collections
+      def edge_collection_names
+        @edge_definitions.map { |edge_def| edge_def['collection'] }
       end
 
       # Adds an edge definition to this Graph
@@ -195,35 +209,12 @@ module Ashikawa
       # Parses the raw graph structure as returned from the database
       #
       # @param [Hash] raw_graph The structure as returned from the database
+      # @api private
       def parse_raw_graph(raw_graph)
         @name               = raw_graph['name'] || raw_graph['_key']
         @revision           = raw_graph['_rev']
         @edge_definitions   = raw_graph.fetch('edgeDefinitions') { [] }
         @orphan_collections = raw_graph.fetch('orphanCollections') { [] }
-        @vertex_collections = extract_vertex_collections
-        @edge_collections   = extract_edge_collections
-      end
-
-      # Extracts the names of all the vertex collections from the raw graph
-      #
-      # @return [Array] Names of all vertex collections
-      def extract_vertex_collections
-        @orphan_collections | @edge_definitions.map { |edge_def| edge_def.values_at('from', 'to') }.flatten
-      end
-
-      # Extracts the names of all the edge collections from the raw graph
-      #
-      # @return [Array] Names of all edge collections
-      def extract_edge_collections
-        @edge_definitions.map { |edge_def| edge_def['collection'] }
-      end
-
-      # The list of names of the vertex collections
-      #
-      # @return [Array] The list of names
-      # @api private
-      def vertex_collection_names
-        @vertex_collections
       end
     end
   end

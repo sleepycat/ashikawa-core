@@ -408,7 +408,7 @@ module Ashikawa
       # @example Create a new document from raw data
       #   collection.create_edge(node_a, node_b, {'name' => 'incredible edge'})
       def create_edge(from, to, attributes)
-        warn "[DEPRECATION] `create_edge` is deprecated.  Please use `EdgeCollection#add` instead."
+        warn '[DEPRECATION] `create_edge` is deprecated.  Please use `EdgeCollection#add` instead.'
         raise "Can't create an edge in a document collection" if @content_type == :document
         response = send_request("edge?collection=#{@id}&from=#{from.id}&to=#{to.id}", post: attributes)
         Edge.new(@database, response, attributes)

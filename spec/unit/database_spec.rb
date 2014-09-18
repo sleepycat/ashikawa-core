@@ -271,8 +271,8 @@ describe Ashikawa::Core::Database do
           edge_definitions: [
             {
               collection: 'visited',
-              from: [ 'ponies' ],
-              to: [ 'places' ]
+              from: ['ponies'],
+              to: ['places']
             }
           ]
         }
@@ -283,7 +283,7 @@ describe Ashikawa::Core::Database do
       it 'should create a single graph with list of orphan_collections' do
         create_params = {
           name: 'my_awesome_graph',
-          orphanCollections: [ 'i_am_alone' ]
+          orphanCollections: ['i_am_alone']
         }
         expect(connection).to receive(:send_request)
           .with('gharial', post: create_params)
@@ -294,7 +294,7 @@ describe Ashikawa::Core::Database do
           .and_return(graph)
 
         options = {
-          orphan_collections: [ 'i_am_alone' ]
+          orphan_collections: ['i_am_alone']
         }
 
         expect(subject.create_graph('my_awesome_graph', options)).to eq graph

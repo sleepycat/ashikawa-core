@@ -210,7 +210,7 @@ describe Ashikawa::Core::Connection do
 
       it 'should raise GraphNotFoundException if the graph could not be found' do
         request_stub.get(request_url) do
-          [404, response_headers, { "errorMessage" => "graph not found" }]
+          [404, response_headers, { 'errorMessage' => 'graph not found' }]
         end
 
         expect { subject.send_request 'gharial/vertex/42' }.to raise_error(Ashikawa::Core::GraphNotFoundException)
@@ -220,7 +220,7 @@ describe Ashikawa::Core::Connection do
 
       it 'should raise CollectionNotFoundException the collection could not be found' do
         request_stub.get(request_url) do
-          [404, response_headers, { "errorMessage" => "collection not found" }]
+          [404, response_headers, { 'errorMessage' => 'collection not found' }]
         end
 
         expect { subject.send_request 'gharial/vertex/42' }.to raise_error(Ashikawa::Core::CollectionNotFoundException)
@@ -230,7 +230,7 @@ describe Ashikawa::Core::Connection do
 
       it 'should raise DocumentNotFoundException the document could not be found' do
         request_stub.get(request_url) do
-          [404, response_headers, { "errorMessage" => "document not found" }]
+          [404, response_headers, { 'errorMessage' => 'document not found' }]
         end
 
         expect { subject.send_request 'gharial/vertex/42' }.to raise_error(Ashikawa::Core::DocumentNotFoundException)

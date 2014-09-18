@@ -28,7 +28,7 @@ module Ashikawa
         super(database, raw_collection)
         @graph = graph
 
-        raise CollectionNotInGraphException unless self.graph.has_vertex_collection?(self.name)
+        raise CollectionNotInGraphException unless @graph.has_vertex_collection?(name)
       end
     end
   end

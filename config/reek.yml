@@ -63,6 +63,7 @@ TooManyMethods:
 TooManyStatements:
   enabled: true
   exclude:
+  - Ashikawa::Core::Database#translate_params
   - Ashikawa::Core::FaradayFactory#self.create_connection
   - Ashikawa::Core::FaradayFactory#faraday_for
   - Ashikawa::Core::ErrorResponse#on_complete

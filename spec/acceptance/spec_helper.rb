@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'ashikawa-core'
 require 'logging'
 
-RANDOM_DB_PREFIX = "ashikawa_spec_db_"
+RANDOM_DB_PREFIX = 'ashikawa_spec_db_'
 
 PORT = ENV.fetch('ARANGODB_PORT', 8529)
 USERNAME = ENV.fetch('ARANGODB_USERNAME', 'root')
