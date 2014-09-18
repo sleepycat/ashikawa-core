@@ -36,7 +36,6 @@ describe Ashikawa::Core::EdgeCollection do
     context 'adding edges' do
       let(:this_document) { instance_double('Ashikawa::Core::Document', id: 'this_document_id') }
       let(:that_document) { instance_double('Ashikawa::Core::Document', id: 'that_document_id') }
-      let(:more_document) { instance_double('Ashikawa::Core::Document', id: 'more_document_id') }
 
       before do
         allow(subject).to receive(:send_request)
@@ -56,22 +55,10 @@ describe Ashikawa::Core::EdgeCollection do
         subject.add(from: this_document, to: that_document)
       end
 
-      it 'should add directed relations between a bunch of vertices' do
-        expect(subject).to receive(:send_request)
-          .with('gharial/my_graph/edge/relation/', post: { _from: 'this_document_id', _to: 'that_document_id' })
-          .and_return(post_response)
-
-        expect(subject).to receive(:send_request)
-          .with('gharial/my_graph/edge/relation/', post: { _from: 'this_document_id', _to: 'more_document_id' })
-          .and_return(post_response)
-
-        subject.add(from: this_document, to: [that_document, more_document])
-      end
-
       it 'should return the edge documents' do
         created_edges = subject.add(from: this_document, to: that_document)
 
-        expect(created_edges).to eq [new_edge]
+        expect(created_edges).to eq new_edge
       end
     end
 

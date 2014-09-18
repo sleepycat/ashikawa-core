@@ -36,26 +36,17 @@ module Ashikawa
 
       # Create one or more edges between documents with certain attributes
       #
-      # @param [Document, Array<Document>] from One or more documents to connect from
-      # @param [Document, Array<Document>] to One ore more documents to connect to
+      # @param [Document] from The outbound vertex
+      # @param [Document] to The inbound vertex
       # @param [Hash] attributes Additional attributes to add to all created edges
-      # @return [Array<Edge>] A list of all created edges
+      # @return [Edge] The created Edge
       # @api public
       # @example Create an edge between two vertices
       #   edges = edge_collection.add(from: vertex_a, to: vertex_b)
-      # @example Create multiple edges between vertices
-      #   edges = edge_collection.add(from: vertex_a, to: [vertex_b, vertex_c])
-      # @example Create an edge with additional attributes
-      #   edges = edge_collection.add(from: vertex_a, to: vertex_b, { type: 'connection', weight: 10 })
       def add(directions)
-        product = -> (v, *rest) { [v].flatten.compact.product(rest.flatten.compact) }
-
-        from_to = product.call(directions[:from], directions[:to])
-
-        from_to.map do |from_vertex, to_vertex|
-          response = send_request_for_this_collection('', post: { _from: from_vertex.id, _to: to_vertex.id })
-          fetch(response['edge']['_key'])
-        end
+        from_vertex, to_vertex = directions.values_at(:from, :to)
+        response = send_request_for_this_collection('', post: { _from: from_vertex.id, _to: to_vertex.id })
+        fetch(response['edge']['_key'])
       end
 
       # Remove edges by example

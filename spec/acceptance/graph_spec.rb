@@ -65,7 +65,9 @@ describe 'Graphs' do
       subject.edge_collection(:friends_with).add(from: rainbow_dash, to: pinkie_pie)
 
       subject.edge_collection(:visited).add(from: pinkie_pie, to: crystal_empire)
-      subject.edge_collection(:visited).add(from: rainbow_dash, to: [cloudsdale, crystal_empire, manehatten])
+      subject.edge_collection(:visited).add(from: rainbow_dash, to: cloudsdale)
+      subject.edge_collection(:visited).add(from: rainbow_dash, to: crystal_empire)
+      subject.edge_collection(:visited).add(from: rainbow_dash, to: manehatten)
     end
 
     it 'should know all their neighbors' do
