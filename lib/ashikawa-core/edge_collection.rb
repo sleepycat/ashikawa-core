@@ -87,7 +87,7 @@ module Ashikawa
 
       private
 
-      # Send a request to the server through the gharial module
+      # Send a request to the server through the Graph module
       #
       # @param [String] path The requested path
       # @param [Hash] method The desired HTTP Verb (defaults to GET) and its parameters

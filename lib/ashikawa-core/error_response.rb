@@ -101,17 +101,17 @@ module Ashikawa
               when %r{\A(/_db/[^/]+)?/_api/document} then DocumentNotFoundException
               when %r{\A(/_db/[^/]+)?/_api/collection} then CollectionNotFoundException
               when %r{\A(/_db/[^/]+)?/_api/index} then IndexNotFoundException
-              when %r{\A(/_db/[^/]+)?/_api/gharial} then resource_not_found_in_gharial_scope
+              when %r{\A(/_db/[^/]+)?/_api/gharial} then resource_not_found_in_graph_scope
               else ResourceNotFound
         end
       end
 
-      # Raise fitting ResourceNotFoundException within the gharial module
+      # Raise fitting ResourceNotFoundException within the Graph module
       #
       # @raise [DocumentNotFoundException, CollectionNotFoundException, GraphNotFoundException, ResourceNotFound]
       # @return nil
       # @api private
-      def resource_not_found_in_gharial_scope
+      def resource_not_found_in_graph_scope
         raise case @body['errorMessage']
               when 'graph not found' then GraphNotFoundException
               when 'collection not found' then CollectionNotFoundException
