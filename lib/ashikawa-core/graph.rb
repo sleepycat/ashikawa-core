@@ -43,7 +43,7 @@ module Ashikawa
       #   graph.database #=> #<Database: ...>
       attr_reader :database
 
-      # The name of the database
+      # The name of the graph
       #
       # @return [String] The name of the graph
       # @api public
@@ -142,7 +142,7 @@ module Ashikawa
         end
       end
 
-      # Adds a edge definition to this Graph
+      # Adds an edge definition to this Graph
       #
       # @param [Symbol] collection_name The name of the resulting edge collection
       # @param [Hash] directions The specification between which vertices the edges should be created

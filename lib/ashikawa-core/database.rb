@@ -207,23 +207,21 @@ module Ashikawa
         Transaction.new(self, action, collections)
       end
 
-      # Fetches a single graph from this database or creates it if does not exist yet.
+      # Fetch a single graph from this database or creates it if does not exist yet.
       #
-      # @param [String] name The name of the Graph
+      # @param [String] graph_name The name of the Graph
       # @return [Graph] The requested graph
       # @api public
       def graph(graph_name)
-        begin
-          response = send_request("gharial/#{graph_name}")
-          Graph.new(self, response['graph'])
-        rescue Ashikawa::Core::GraphNotFoundException
-          return create_graph(graph_name)
-        end
+        response = send_request("gharial/#{graph_name}")
+        Graph.new(self, response['graph'])
+      rescue Ashikawa::Core::GraphNotFoundException
+        return create_graph(graph_name)
       end
 
-      # Creates a new Graph for this database.
+      # Create a new Graph for this database.
       #
-      # @param [String] name The name of the Graph
+      # @param [String] graph_name The name of the Graph
       # @option options [Array<Hash>] :edge_definitions A list of edge definitions
       # @option options [Array<String>] :orphan_collections A list of orphan collections
       # @return [Graph] The graph that was created
@@ -242,7 +240,7 @@ module Ashikawa
         Graph.new(self, response['graph'])
       end
 
-      # Fetches all graphs for this database
+      # Fetch all graphs for this database
       def graphs
         response = send_request('gharial')
         response['graphs'].map { |raw_graph| Graph.new(self, raw_graph) }

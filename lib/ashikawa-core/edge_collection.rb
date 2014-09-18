@@ -60,8 +60,8 @@ module Ashikawa
 
       # Remove edges by example
       #
-      # @note This will remove ALL edges between the given vertices. For more fine grained control delete the desired edges
-      #       through Edge#remove.
+      # @note This will remove ALL edges between the given vertices. For more fine grained control delete
+      #       the desired edges through Edge#remove.
       # @param [Hash] from_to Specifies the edge by its vertices to be removed
       # @option from_to [Document] from The from part of the edge
       # @option from_to [Document] to The to part of the edge
