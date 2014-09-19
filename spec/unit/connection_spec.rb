@@ -21,6 +21,19 @@ describe Ashikawa::Core::Connection do
     end
   end
 
+  it 'should include include the x-arango-version header in each request' do
+    [:get, :post, :put, :delete].each do |http_verb|
+      request_stub.send(http_verb, '/_db/_system/_api/my/path') do |request|
+        expect(request[:request_headers][:'X-Arango-Version']).to eq '20200'
+        [200, response_headers, JSON.generate({ 'name' => 'dude' })]
+      end
+
+      subject.send_request 'my/path', http_verb => {}
+
+      request_stub.verify_stubbed_calls
+    end
+  end
+
   it 'should send a get request' do
     request_stub.get('/_db/_system/_api/my/path') do
       [200, response_headers, JSON.generate({ 'name' => 'dude' })]

@@ -3,6 +3,7 @@ require 'forwardable'
 require 'faraday'
 require 'equalizer'
 require 'ashikawa-core/error_response'
+require 'ashikawa-core/x_arango_version'
 require 'ashikawa-core/faraday_factory'
 
 module Ashikawa
