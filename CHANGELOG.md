@@ -1,3 +1,16 @@
+# Version 0.13.0
+
+**Codename: Galadriel**
+
+* Support for the [new Graph module](http://docs.arangodb.org/HttpGharial/README.html)  in Arango 2.2 (#55)
+* Fixed badge URL for Inch (#130)
+* **Deprecated** `Collection#create_edge` in favor of `EdgeCollection#add`
+* Sending the `X-Arango-Version` HTTP header with each request (#82)
+* Development only:
+  * Removed Rubinius from Travis
+  * You will need ArangoDB 2.2 for development
+  * Automatically removed auto-generated databases for acceptance specs
+
 # Version 0.12.0
 
 **Codename: V for Verifying**
