@@ -11,6 +11,7 @@ describe Ashikawa::Core::FaradayFactory do
     before do
       allow(Faraday).to receive(:new).with(api_string).and_yield(config_block)
       allow(config_block).to receive(:request).with(:json)
+      allow(config_block).to receive(:request).with(:x_arango_version)
       allow(config_block).to receive(:response).with(:error_response)
       allow(config_block).to receive(:response).with(:json)
       allow(config_block).to receive(:adapter).with(Faraday.default_adapter)

@@ -15,7 +15,7 @@ module Ashikawa
       }
 
       # Request middlewares that will be prepended
-      DEFAULT_REQUEST_MIDDLEWARES = [:json]
+      DEFAULT_REQUEST_MIDDLEWARES = [:json, :x_arango_version]
 
       # Response middlewares that will be prepended
       DEFAULT_RESPONSE_MIDDLEWARES = [:error_response, :json]
