@@ -35,16 +35,25 @@ module Ashikawa
       #   document.revision # => 3456789
       attr_reader :revision
 
+      # The optional graph this document belongs to
+      #
+      # @return [Graph] The Graph instance the document was fetched from
+      # @api public
+      attr_reader :graph
+
       # Initialize a Document with the database and raw data
       #
       # @param [Database] database
       # @param [Hash] raw_document
       # @param [Hash] additional_data
+      # @option _additional_data [Graph] graph The graph this document is associated with
       # @api public
       # @example Create a document
       #   document = Ashikawa::Core::Document.new(database, raw_document)
       def initialize(database, raw_document, additional_data = {})
         @database = database
+        @graph    = additional_data.delete(:graph)
+
         raw_document.merge!(clean_up_additional_data(additional_data))
         parse_raw_document(raw_document)
       end
@@ -154,7 +163,11 @@ module Ashikawa
       # @return [Hash] The parsed response from the server
       # @api private
       def send_request_for_document(opts = {})
-        @database.send_request("document/#{@id}", opts)
+        if graph
+          @database.send_request("gharial/#{graph.name}/vertex/#{@id}", opts)
+        else
+          @database.send_request("document/#{@id}", opts)
+        end
       end
 
       # Clean up the raw data hash to have string keys

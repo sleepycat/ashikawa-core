@@ -1,4 +1,6 @@
 # -*- encoding : utf-8 -*-
+require 'unit/spec_helper'
+
 require 'ashikawa-core/exceptions/no_collection_provided'
 require 'ashikawa-core/exceptions/client_error'
 require 'ashikawa-core/exceptions/client_error/authentication_failed'
@@ -6,7 +8,9 @@ require 'ashikawa-core/exceptions/client_error/bad_syntax'
 require 'ashikawa-core/exceptions/client_error/resource_not_found'
 require 'ashikawa-core/exceptions/client_error/resource_not_found/document_not_found'
 require 'ashikawa-core/exceptions/client_error/resource_not_found/collection_not_found'
+require 'ashikawa-core/exceptions/client_error/resource_not_found/collection_not_in_graph'
 require 'ashikawa-core/exceptions/client_error/resource_not_found/index_not_found'
+require 'ashikawa-core/exceptions/client_error/resource_not_found/graph_not_found'
 require 'ashikawa-core/exceptions/server_error'
 require 'ashikawa-core/exceptions/server_error/json_error'
 
@@ -46,6 +50,14 @@ end
 
 describe Ashikawa::Core::IndexNotFoundException do
   its(:to_s) { should include 'does not exist' }
+end
+
+describe Ashikawa::Core::GraphNotFoundException do
+  its(:to_s) { should include 'does not exist' }
+end
+
+describe Ashikawa::Core::CollectionNotInGraphException do
+  its(:to_s) { should include 'not been added to the graph yet' }
 end
 
 describe Ashikawa::Core::ServerError do

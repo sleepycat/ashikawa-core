@@ -4,6 +4,7 @@ require 'ashikawa-core/exceptions/client_error/resource_not_found'
 require 'ashikawa-core/exceptions/client_error/resource_not_found/index_not_found'
 require 'ashikawa-core/exceptions/client_error/resource_not_found/document_not_found'
 require 'ashikawa-core/exceptions/client_error/resource_not_found/collection_not_found'
+require 'ashikawa-core/exceptions/client_error/resource_not_found/graph_not_found'
 require 'ashikawa-core/exceptions/client_error/bad_syntax'
 require 'ashikawa-core/exceptions/client_error/authentication_failed'
 require 'ashikawa-core/exceptions/server_error'
@@ -100,8 +101,23 @@ module Ashikawa
               when %r{\A(/_db/[^/]+)?/_api/document} then DocumentNotFoundException
               when %r{\A(/_db/[^/]+)?/_api/collection} then CollectionNotFoundException
               when %r{\A(/_db/[^/]+)?/_api/index} then IndexNotFoundException
+              when %r{\A(/_db/[^/]+)?/_api/gharial} then resource_not_found_in_graph_scope
               else ResourceNotFound
         end
+      end
+
+      # Raise fitting ResourceNotFoundException within the Graph module
+      #
+      # @raise [DocumentNotFoundException, CollectionNotFoundException, GraphNotFoundException, ResourceNotFound]
+      # @return nil
+      # @api private
+      def resource_not_found_in_graph_scope
+        raise case @body['errorMessage']
+              when 'graph not found' then GraphNotFoundException
+              when 'collection not found' then CollectionNotFoundException
+              when 'document not found' then DocumentNotFoundException
+              else ResourceNotFound
+              end
       end
 
       # Read the error message for the request

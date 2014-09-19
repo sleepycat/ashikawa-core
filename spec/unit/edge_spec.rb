@@ -55,6 +55,13 @@ describe Ashikawa::Core::Edge do
       subject['last_name'] = new_last_name
       subject.save
     end
+
+    it 'should send requests to the edge endpoint' do
+      expect(database).to receive(:send_request)
+        .with("edge/#{id}", {})
+
+      subject.send(:send_request_for_document, {})
+    end
   end
 
   describe 'initializing edge with additional data' do
@@ -63,5 +70,21 @@ describe Ashikawa::Core::Edge do
     subject { Ashikawa::Core::Edge.new(database, raw_data, additional_data) }
 
     its(['more_info']) { should eq(more_info) }
+
+    context 'initializing with a graph' do
+      let(:graph) { double('Ashikawa::Core::Graph', name: 'my-graph') }
+      let(:additional_data_with_graph) { { graph: graph,  more_info: more_info } }
+      subject { Ashikawa::Core::Edge.new(database, raw_data, additional_data_with_graph) }
+
+      its(['more_info']) { should eq(more_info) }
+      its(:graph) { should eq(graph) }
+
+      it 'should send requests through the graph module' do
+        expect(database).to receive(:send_request)
+          .with("gharial/my-graph/edge/#{id}", {})
+
+        subject.send(:send_request_for_document, {})
+      end
+    end
   end
 end

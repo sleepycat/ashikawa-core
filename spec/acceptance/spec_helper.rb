@@ -5,6 +5,8 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'ashikawa-core'
 require 'logging'
 
+RANDOM_DB_PREFIX = 'ashikawa_spec_db_'
+
 PORT = ENV.fetch('ARANGODB_PORT', 8529)
 USERNAME = ENV.fetch('ARANGODB_USERNAME', 'root')
 PASSWORD = ENV.fetch('ARANGODB_PASSWORD', '')
@@ -33,7 +35,11 @@ end
 def database_with_random_name
   # This results in a database that has a valid name according to:
   # https://www.arangodb.org/manuals/2/NamingConventions.html#DatabaseNames
-  database_with_name("a#{rand.to_s[2, 10]}")
+  database_with_name("#{RANDOM_DB_PREFIX}#{rand.to_s[2, 10]}")
+end
+
+def random_databases
+  SYSTEM_DATABASE.all_databases.grep(/^#{RANDOM_DB_PREFIX}/).map(&method(:database_with_name))
 end
 
 # The database for the general specs
@@ -50,11 +56,18 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  config.before(:each) do
+  config.before(:suite) do
     begin
       DATABASE.create
     rescue Ashikawa::Core::ClientError
     end
+  end
+
+  config.before(:each) do
     DATABASE.truncate
+  end
+
+  config.after(:suite) do
+    random_databases.each(&:drop)
   end
 end
