@@ -236,11 +236,20 @@ describe Ashikawa::Core::Collection do
     its(:content_type) { should be(:document) }
 
     context 'building the content classes' do
+      let(:additional_attributes) { double('Hash') }
+
       it 'should build documents' do
         expect(Ashikawa::Core::Document).to receive(:new)
-          .with(database, raw_document)
+          .with(database, raw_document, {})
 
         subject.build_content_class(raw_document)
+      end
+
+      it 'should accept additional attributes to be passed to the content class' do
+        expect(Ashikawa::Core::Document).to receive(:new)
+          .with(database, raw_document, additional_attributes)
+
+        subject.build_content_class(raw_document, additional_attributes)
       end
     end
 
@@ -301,8 +310,8 @@ describe Ashikawa::Core::Collection do
       allow(database).to receive(:send_request)
         .with('document?collection=60768679', post: raw_document)
         .and_return(response)
-      expect(Ashikawa::Core::Document).to receive(:new)
-        .with(database, response, raw_document)
+      expect(subject).to receive(:build_content_class)
+        .with(response, raw_document)
         .and_return(document)
 
       subject.create_document(raw_document)
@@ -329,7 +338,7 @@ describe Ashikawa::Core::Collection do
     context 'building the content classes' do
       it 'should build documents' do
         expect(Ashikawa::Core::Edge).to receive(:new)
-          .with(database, raw_document)
+          .with(database, raw_document, {})
 
         subject.build_content_class(raw_document)
       end
