@@ -2,6 +2,7 @@
 require 'unit/spec_helper'
 require 'ashikawa-core/vertex_collection'
 require 'ashikawa-core/graph'
+require 'ashikawa-core/document'
 require 'ashikawa-core/database'
 
 describe Ashikawa::Core::VertexCollection do
@@ -17,6 +18,8 @@ describe Ashikawa::Core::VertexCollection do
     }
   end
   let(:graph) { instance_double('Ashikawa::Core::Graph') }
+  let(:new_document) { instance_double('Ashikawa::Core::Document') }
+  let(:raw_document) { double('RawDocument') }
 
   context 'building a vertex collection' do
     before do
@@ -43,6 +46,26 @@ describe Ashikawa::Core::VertexCollection do
 
     it 'should have a reference to its graph' do
       expect(subject.graph).to eq graph
+    end
+
+    context 'building documents' do
+      let(:additional_attributes) { { moar: 'data' } }
+
+      it 'should overwrite the #build_content_class to create documents with the graph attached' do
+        expect(Ashikawa::Core::Document).to receive(:new)
+          .with(database, raw_document, graph: graph)
+          .and_return(new_document)
+
+        subject.build_content_class(raw_document)
+      end
+
+      it 'should overwrite the #build_content_class to create edges with the graph attached' do
+        expect(Ashikawa::Core::Document).to receive(:new)
+          .with(database, raw_document, graph: graph, moar: 'data')
+          .and_return(new_document)
+
+        subject.build_content_class(raw_document, additional_attributes)
+      end
     end
   end
 end

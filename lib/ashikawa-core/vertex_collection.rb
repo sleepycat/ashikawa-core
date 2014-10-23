@@ -30,6 +30,16 @@ module Ashikawa
 
         raise CollectionNotInGraphException unless @graph.has_vertex_collection?(name)
       end
+
+      # Builds a new document object and passes the current graph to it
+      #
+      # @param [Hash] data The raw data to be used to instatiate the class
+      # @param [Hash] additional_atttributes Initial attributes to be passed to the document
+      # @return [Edge] The instatiated edge
+      # @api private
+      def build_content_class(data, additional_atttributes = {})
+        Document.new(@database, data, additional_atttributes.merge(graph: graph))
+      end
     end
   end
 end
