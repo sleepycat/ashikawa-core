@@ -70,10 +70,11 @@ module Ashikawa
       # Builds a new edge object and passes the current graph to it
       #
       # @param [Hash] data The raw data to be used to instatiate the class
+      # @param [Hash] additional_atttributes Initial attributes to be passed to the Edge
       # @return [Edge] The instatiated edge
       # @api private
-      def build_content_class(data)
-        Edge.new(@database, data, graph: graph)
+      def build_content_class(data, additional_atttributes = {})
+        Edge.new(@database, data, additional_atttributes.merge(graph: graph))
       end
 
       private
