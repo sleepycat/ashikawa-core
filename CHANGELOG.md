@@ -1,3 +1,8 @@
+# Version 0.13.1
+
+* **Important Bugfix: Please update immediately**
+* Fixes associating documents with the graph if loaded through a `VertexCollection` (#137)
+
 # Version 0.13.0
 
 **Codename: Galadriel**

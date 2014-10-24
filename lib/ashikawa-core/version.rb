@@ -2,7 +2,7 @@
 module Ashikawa
   module Core
     # Current version of Ashikawa::Core
-    VERSION = '0.13.0'
+    VERSION = '0.13.1'
 
     # The lowest supported ArangoDB major version
     ARANGODB_MAJOR_VERSION = 2
