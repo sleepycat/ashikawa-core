@@ -94,12 +94,24 @@ describe Ashikawa::Core::EdgeCollection do
       subject.send(:send_request_for_this_collection, 'edge_key')
     end
 
-    it 'should overwrite the #build_content_class to create edges with the graph attached' do
-      expect(Ashikawa::Core::Edge).to receive(:new)
-        .with(database, raw_edge, graph: graph)
-        .and_return(new_edge)
+    context 'building edge documents' do
+      let(:additional_attributes) { { moar: 'data' } }
 
-      subject.build_content_class(raw_edge)
+      it 'should overwrite the #build_content_class to create edges with the graph attached' do
+        expect(Ashikawa::Core::Edge).to receive(:new)
+          .with(database, raw_edge, graph: graph)
+          .and_return(new_edge)
+
+        subject.build_content_class(raw_edge)
+      end
+
+      it 'should overwrite the #build_content_class to create edges with the graph attached' do
+        expect(Ashikawa::Core::Edge).to receive(:new)
+          .with(database, raw_edge, graph: graph, moar: 'data')
+          .and_return(new_edge)
+
+        subject.build_content_class(raw_edge, additional_attributes)
+      end
     end
   end
 end

@@ -392,7 +392,7 @@ module Ashikawa
       def create_document(attributes)
         raise "Can't create a document in an edge collection" if @content_type == :edge
         response = send_request_for_content(post: attributes)
-        Document.new(@database, response, attributes)
+        build_content_class(response, attributes)
       end
 
       # Create a new edge between two documents with certain attributes
@@ -492,10 +492,11 @@ module Ashikawa
       # Builds an instance for the content class
       #
       # @param [Hash] data The raw data to be used to instatiate the class
+      # @param [Hash] additional_attributes Initial attributes to be passed to the underlying content class
       # @return [Document] The instatiated document
       # @api private
-      def build_content_class(data)
-        @content_class.new(@database, data)
+      def build_content_class(data, additional_attributes = {})
+        @content_class.new(@database, data, additional_attributes)
       end
 
       private
