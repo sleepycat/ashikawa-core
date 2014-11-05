@@ -7,7 +7,7 @@
 
 **Codename: Galadriel**
 
-* Support for the [new Graph module](http://docs.arangodb.org/HttpGharial/README.html)  in Arango 2.2 (#55)
+* Support for the [new Graph module](http://docs.arangodb.com/HttpGharial/README.html)  in Arango 2.2 (#55)
 * Fixed badge URL for Inch (#130)
 * **Deprecated** `Collection#create_edge` in favor of `EdgeCollection#add`
 * Sending the `X-Arango-Version` HTTP header with each request (#82)

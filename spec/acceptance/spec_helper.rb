@@ -34,7 +34,7 @@ end
 
 def database_with_random_name
   # This results in a database that has a valid name according to:
-  # https://www.arangodb.org/manuals/2/NamingConventions.html#DatabaseNames
+  # https://docs.arangodb.com/NamingConventions/DatabaseNames.html
   database_with_name("#{RANDOM_DB_PREFIX}#{rand.to_s[2, 10]}")
 end
 

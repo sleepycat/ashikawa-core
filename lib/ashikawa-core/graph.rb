@@ -10,7 +10,7 @@ module Ashikawa
     # @note All CRUD operations on related collections (edges and vertices) must be performed
     #       through their corresponding graph class. Not doing so will eventually lead to inconsistency
     #       and data corruption.
-    # @see http://docs.arangodb.org/HttpGharial/README.html
+    # @see http://docs.arangodb.com/HttpGharial/README.html
     class Graph
       extend Forwardable
 
